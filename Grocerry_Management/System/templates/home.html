@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #ddd;
+            padding: 0.5rem;
+        }
+
+        nav a {
+            margin: 0 1rem;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        section {
+            padding: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        form {
+            margin-top: 1rem;
+        }
+
+        button {
+            background-color: #333;
+            color: white;
+            padding: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #productTableBody {
+            background-color: #fff; /* White background */
+        }
+
+        /*   Style for alternating rows */
+        #productTableBody tr:nth-child(even) {
+            background-color: #f2f2f2; /* Light gray background for even rows */
+        }
+
+        /* Style for table header */
+        #productTableBody th {
+            background-color: #333; /* Dark background for header */
+            color: white;
+        }
+
+        /* Hover effect for table rows */
+        #productTableBody tr:hover {
+            background-color: #ddd; /* Darker background on hover */
+        }
+
+        /* Style for product name cells */
+        #productTableBody td:nth-child(2) {
+            color: #0066cc; /* Change text color of product names */
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Grocery Management System</h1>
+    </header>
+
+    <nav>
+        <a href="#" onclick="showHome()">Home</a>
+        <a href="#" onclick="showManageProduct()">Manage Products</a>
+        <a href="#" onclick="showCustomerPage()">Customer Page</a>
+    </nav>
+
+    <section id="home">
+        <h2>Welcome to our Grocery Management System!</h2>
+        <!-- Add more content as needed -->
+    </section>
+
+    <section id="manageProduct" style="display: none;">
+        <h2>Manage Products</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody">
+                <!-- Product details will be displayed here -->
+            </tbody>
+        </table>
+
+        <form id="addProductForm">
+            <label for="manageProductName">Product Name:</label>
+            <input type="text" id="manageProductName" required>
+            <button type="button" onclick="addProduct()">Add Product</button>
+        </form>
+    </section>
+
+    <section id="customerPage" style="display: none;">
+        <h2>Customer Page</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="customerTableBody">
+              <!-- Product details will be displayed here -->
+          </tbody>
+      </table>
+
+      <form id="addproductocustomer">
+          <label for="customerProductName">Product Name:</label>
+          <input type="text" id="customerProductName" required>
+          <button type="button" onclick="addProductToCustomer()">Add Product</button>
+      </form>
+  </section>    
+
+    <script>
+        function showHome() {
+            document.getElementById('home').style.display = 'block';
+            document.getElementById('manageProduct').style.display = 'none';
+            document.getElementById('customerPage').style.display = 'none';
+        }
+
+        function showManageProduct() {
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('manageProduct').style.display = 'block';
+            document.getElementById('customerPage').style.display = 'none';
+            // You can fetch and display product data dynamically here
+        }
+
+        function showCustomerPage() {
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('manageProduct').style.display = 'none';
+            document.getElementById('customerPage').style.display = 'block';
+            // Add logic for billing and product details here
+        }
+
+        function addProduct() {
+            // Implement logic to add product to the table
+            var productName = document.getElementById('manageProductName').value;
+            var productTableBody = document.getElementById('productTableBody');
+            var newRow = productTableBody.insertRow();
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            cell1.innerHTML = 'Generated ID'; // You can generate an ID dynamically
+            cell2.innerHTML = productName;
+            cell3.innerHTML = '<button onclick="deleteProduct(this)">Delete</button>';
+        }
+
+        function addProductToCustomer() {
+            // Update the function name to match the form's "onclick" attribute
+            var productName = document.getElementById('customerProductName').value;
+            var customerTableBody = document.getElementById('customerTableBody');
+            var newRow = customerTableBody.insertRow();
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            cell1.innerHTML = 'Generated ID'; // You can generate an ID dynamically
+            cell2.innerHTML = productName;
+            cell3.innerHTML = '<button onclick="deleteProduct(this)">Delete</button>';
+        }
+
+        function deleteProduct(button) {
+            // Implement logic to delete a product from the table
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
+</body>
+
+</html>
