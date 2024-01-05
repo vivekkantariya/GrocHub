@@ -4,6 +4,9 @@ from django.shortcuts import render
 def homeView(request, undefined_path=None):
     return render(request, "home.html")
 
+def loginView(request):
+    return render(request, "loginpage.html")
+
 def manageProductView(request):
     return render(request, "home.html", {'section': 'manage_product'})
 
