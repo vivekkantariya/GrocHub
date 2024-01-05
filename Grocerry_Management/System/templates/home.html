@@ -5,92 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grocery Management System</title>
+    <link rel="stylesheet" href="home.css">
+
+    <!-- text -->
+    <link href="https://fonts.googleapis.com/css?family=Days One" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Michroma" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Rajdhani" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Audiowide" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Michroma" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Jost" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Poiret One" rel="stylesheet" type="text/css">
+
+
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
 
-        header {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 1rem;
-        }
-
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #ddd;
-            padding: 0.5rem;
-        }
-
-        nav a {
-            margin: 0 1rem;
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-        }
-
-        section {
-            padding: 2rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 0.5rem;
-            text-align: left;
-        }
-
-        form {
-            margin-top: 1rem;
-        }
-
-        button {
-            background-color: #333;
-            color: white;
-            padding: 0.5rem;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #555;
-        }
-
-        #productTableBody {
-            background-color: #fff; /* White background */
-        }
-
-        /*   Style for alternating rows */
-        #productTableBody tr:nth-child(even) {
-            background-color: #f2f2f2; /* Light gray background for even rows */
-        }
-
-        /* Style for table header */
-        #productTableBody th {
-            background-color: #333; /* Dark background for header */
-            color: white;
-        }
-
-        /* Hover effect for table rows */
-        #productTableBody tr:hover {
-            background-color: #ddd; /* Darker background on hover */
-        }
-
-        /* Style for product name cells */
-        #productTableBody td:nth-child(2) {
-            color: #0066cc; /* Change text color of product names */
-            font-weight: bold;
-        }
     </style>
 </head>
 
@@ -106,8 +35,20 @@
     </nav>
 
     <section id="home">
-        <h2>Welcome to our Grocery Management System!</h2>
         <!-- Add more content as needed -->
+        <div class="hcontainer">
+            <div class="text">
+                <h2>Welcome to our Grocery Management System!</h2>
+
+            </div>
+            <div class="btn">
+                <div class="button-container">
+                    <a href="#" class="button">Add Customer</a>
+                    <a href="#" class="button">Add Product</a>
+                    <a href="#" class="button">Today's Transaction</a>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section id="manageProduct" style="display: none;">
@@ -143,16 +84,16 @@
                 </tr>
             </thead>
             <tbody id="customerTableBody">
-              <!-- Product details will be displayed here -->
-          </tbody>
-      </table>
+                <!-- Product details will be displayed here -->
+            </tbody>
+        </table>
 
-      <form id="addproductocustomer">
-          <label for="customerProductName">Product Name:</label>
-          <input type="text" id="customerProductName" required>
-          <button type="button" onclick="addProductToCustomer()">Add Product</button>
-      </form>
-  </section>    
+        <form id="addproductocustomer">
+            <label for="customerProductName">Product Name:</label>
+            <input type="text" id="customerProductName" required>
+            <button type="button" onclick="addProductToCustomer()">Add Product</button>
+        </form>
+    </section>
 
     <script>
         function showHome() {

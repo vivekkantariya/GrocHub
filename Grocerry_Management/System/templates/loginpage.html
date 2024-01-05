@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css?family=Days One" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Jost" rel="stylesheet" type="text/css">
+
+
   <title>Admin Login</title>
+
   <style>
     body {
       font-family: 'Arial', sans-serif;
-      background-color: #f8f9fa;
+      background-color: #344e41;
       margin: 0;
       display: flex;
       align-items: center;
@@ -16,12 +23,19 @@
     }
 
     form {
-      background-color: #fff;
+      background-color: #558157;
       padding: 30px;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
       max-width: 400px;
       width: 100%;
+    }
+
+    form h2 {
+      text-align: center;
+      color: #233823;
+      font-size: 28px;
+      font-family: 'Days One', sans-serif;
     }
 
     .mb-3 {
@@ -30,26 +44,31 @@
 
     .form-label {
       font-weight: bold;
-      color: #495057;
+      color: black;
+      letter-spacing: 1px;
+      font-family: 'Jost', sans-serif;
+      font-size: 18px;
     }
 
     .form-control {
       width: 100%;
+      height: 40px;
       padding: 1rem;
       box-sizing: border-box;
       border: 1px solid #ced4da;
       border-radius: 0.25rem;
       transition: border-color 0.2s ease-in-out;
+      font-size: 16px;
     }
 
     .form-control:focus {
       border-color: #007bff;
       outline: 0;
-      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      box-shadow: 0 0 15  px #233823;
     }
 
     .btn-primary {
-      background-color: #007bff;
+      background-color: #233823;
       color: #fff;
       padding: 1rem;
       border: none;
@@ -59,14 +78,15 @@
     }
 
     .btn-primary:hover {
-      background-color: #0056b3;
+      background-color: #344a3b;
     }
   </style>
 </head>
+
 <body>
 
   <form>
-    <h2 style="text-align: center; color: #007bff;">Admin Login</h2>
+    <h2>Admin Login</h2>
     <div class="mb-3">
       <label for="exampleInputEmail1" class="form-label">Email address</label>
       <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
@@ -79,4 +99,5 @@
   </form>
 
 </body>
+
 </html>
