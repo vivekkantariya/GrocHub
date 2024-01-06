@@ -21,6 +21,18 @@ header {
     font-size: 25px;
 }
 
+@media screen and (max-width: 868px) {
+    header{
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    header{
+        font-size: 15px;
+    }
+}
+
 nav {
     display: flex;
     justify-content: center;
@@ -106,23 +118,16 @@ button:hover {
     font-weight: bold;
 }
 
-.action-buttons {
-    position: fixed;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
-    text-align: center;
-}
 
-.action-buttons button {
-    margin-bottom: 10px;
-}
+
+
+/* home style */
 
 #home .hcontainer {
     width: 100%;
     height: max-content;
     background-color: black;
-    background: url("System/image/bg_home.jpg") no-repeat center;
+    background: url("/GrocHub/Grocerry_Management/System/image/bg_home.jpg")no-repeat center;
     /* filter: brightness(30%); */
     display: flex;
     justify-content: space-around;
@@ -216,4 +221,5 @@ button:hover {
         width: 170px;
         font-size: 20px;
     }
+    
 }
