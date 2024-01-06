@@ -5,18 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grocery Management System</title>
-    <link rel="stylesheet" href="home.css">
 
-    <!-- text -->
-    <link href="https://fonts.googleapis.com/css?family=Days One" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Michroma" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Rajdhani" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Audiowide" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Michroma" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Jost" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Poiret One" rel="stylesheet" type="text/css">
-
-
+    <link href="https://fonts.googleapis.com/css2?family=Days+One|Michroma|Rajdhani|Audiowide|Jost|Poiret+One" rel="stylesheet">
 
     <style>
 
@@ -29,9 +19,9 @@
     </header>
 
     <nav>
-        <a href="#" onclick="showHome()">Home</a>
-        <a href="#" onclick="showManageProduct()">Manage Products</a>
-        <a href="#" onclick="showCustomerPage()">Customer Page</a>
+        <a href="{% url 'home' %}" onclick="showHome()">Home</a>
+        <a href="{% url 'manage_products' %}" onclick="showManageProduct()">Manage Products</a>
+        <a href="{% url 'customer_page' %}" onclick="showCustomerPage()">Customer Page</a>
     </nav>
 
     <section id="home">
@@ -40,13 +30,6 @@
             <div class="text">
                 <h2>Welcome to our Grocery Management System!</h2>
 
-            </div>
-            <div class="btn">
-                <div class="button-container">
-                    <a href="#" class="button">Add Customer</a>
-                    <a href="#" class="button">Add Product</a>
-                    <a href="#" class="button">Today's Transaction</a>
-                </div>
             </div>
         </div>
     </section>
@@ -94,6 +77,57 @@
             <button type="button" onclick="addProductToCustomer()">Add Product</button>
         </form>
     </section>
+
+    <section id="viewProfiles" style="display: none;">
+        <h2>View Customer Profiles</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Passport Photo</th>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Address</th>
+                    <!-- Add more fields as needed -->
+                </tr>
+            </thead>
+            <tbody id="customerProfilesTableBody">
+                <!-- Customer details will be displayed here -->
+            </tbody>
+        </table>
+    </section>
+
+    <section id="todaysTransaction" style="display: none;">
+        <h2>Today's Transactions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Product Purchased</th>
+                    <th>Quantity</th>
+                    <!-- Add more transaction details as needed -->
+                </tr>
+            </thead>
+            <tbody id="todaysTransactionTableBody">
+                <!-- Transaction details will be displayed here -->
+            </tbody>
+        </table>
+    </section>
+
+    <section id="addProductToDatabasebtn" style="display: none;">
+        <h2>Add Product to Database</h2>
+        <form id="addProductToDatabaseForm">
+            <label for="productName">Product Name:</label>
+            <input type="text" id="productName" required>
+            <!-- Add more input fields for category, price, etc. -->
+            <button type="button" onclick="addProductToDatabasebtn()">Add Product</button>
+        </form>
+    </section>
+    
+    <div id="actionButtons" class="action-buttons">
+        <button onclick="showViewProfiles()">View Profiles</button>
+        <button onclick="showTodaysTransaction()">Today's Transaction</button>
+        <button onclick="showAddProductToDatabase()">Add Product to Database</button>
+    </div>
 
     <script>
         function showHome() {
@@ -144,9 +178,36 @@
 
         function deleteProduct(button) {
             // Implement logic to delete a product from the table
-            var row = button.parentNode.parentNode;
+            var row = button.parentNode.parentNode;0
             row.parentNode.removeChild(row);
         }
+
+        function showViewProfiles() {
+            window.location.href = 'view_profile.html';
+
+        }
+
+        function showTodaysTransaction() {
+            window.location.href = 'transaction.html';
+
+        }
+
+        function showAddProductToDatabase() {
+            window.location.href = 'addproductpage.html';
+        }
+
+        function addProductToDatabasebtn() {
+            // Implement logic to add product to the database
+            var productName = document.getElementById('productName').value;
+            // Get other product details and perform necessary actions
+            // Reset the form or close the section after adding the product
+            document.getElementById('addProductToDatabaseForm').reset();
+        }
+
+        document.querySelector('nav a:nth-child(1)').addEventListener('click', showHome);
+        document.querySelector('nav a:nth-child(2)').addEventListener('click', showManageProduct);
+        document.querySelector('nav a:nth-child(3)').addEventListener('click', showCustomerPage);
+
     </script>
 </body>
 

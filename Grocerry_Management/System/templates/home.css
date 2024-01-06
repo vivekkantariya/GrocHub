@@ -106,16 +106,23 @@ button:hover {
     font-weight: bold;
 }
 
+.action-buttons {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    text-align: center;
+}
 
-
-
-/* home style */
+.action-buttons button {
+    margin-bottom: 10px;
+}
 
 #home .hcontainer {
     width: 100%;
     height: max-content;
     background-color: black;
-    background: url("/GrocHub/Grocerry_Management/System/image/bg_home.jpg")no-repeat center;
+    background: url("System/image/bg_home.jpg") no-repeat center;
     /* filter: brightness(30%); */
     display: flex;
     justify-content: space-around;
