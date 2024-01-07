@@ -1,3 +1,4 @@
+from django.urls import path, reverse_lazy
 from django.shortcuts import render, redirect
 from .forms import ProductForm
 from .models import Product
@@ -16,11 +17,9 @@ def customerPageView(request):
     return render(request, "home.html", {'section': 'customer_page'})
 
 def transactionView(request):
-    # Your logic for displaying transaction data
     return render(request, 'transaction.html')
 
 def profileView(request):
-    # Your logic for displaying customer profiles
     return render(request, 'view_profile.html')
 
 def add_product(request):
@@ -35,7 +34,7 @@ def add_product(request):
             )
             product_instance.save()
 
-            return redirect('success_page')  # Redirect to a success page
+            return redirect('addproductpage.html')  # Redirect to a success page
     else:
         form = ProductForm()
 
