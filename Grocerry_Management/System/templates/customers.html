@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Customer Information</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 20px;
+            }
+    
+            h2 {
+                text-align: center;
+                color: #333;
+            }
+    
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+    
+            th, td {
+                padding: 12px;
+                text-align: left;
+                border: 1px solid #ddd;
+            }
+    
+            th {
+                background-color: #f2f2f2;
+            }
+    
+            img {
+                max-width: 50px;
+                max-height: 50px;
+                border-radius: 50%;
+            }
+        </style>
+    </head>
+<body>
+
+<h2>Customer Information</h2>
+
+<table border="3">
+    <thead>
+        <tr>
+            <th>Customer Name</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>Passport Size Photo</th>
+            <th>Last Transaction</th>
+            <!-- Add more columns as needed -->
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Assume data is fetched from the database and looped through -->
+        <!-- <?php
+            // Replace this with actual database fetch logic
+            $customerData = [
+                ["John Doe", "123-456-7890", "123 Main St, City", "john_photo.jpg", "2024-01-08"],
+                // Add more rows as needed
+            ];
+
+            foreach ($customerData as $customer) {
+                echo "<tr>";
+                echo "<td>{$customer[0]}</td>";
+                echo "<td>{$customer[1]}</td>";
+                echo "<td>{$customer[2]}</td>";
+                echo "<td><img src='{$customer[3]}' alt='Passport Photo' width='50'></td>";
+                echo "<td>{$customer[4]}</td>";
+                // Add more columns as needed
+                echo "</tr>";
+            }
+        ?> -->
+    </tbody>
+</table>
+
+</body>
+</html>

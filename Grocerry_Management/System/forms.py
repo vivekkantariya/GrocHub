@@ -1,10 +1,11 @@
 from django import forms
+from .models import Product
 
 class ProductForm(forms.Form):
-    product_name = forms.CharField(label='Product Name', max_length=100)
-    category = forms.CharField(label='Category', max_length=100)
-    price = forms.DecimalField(label='Price', min_value=0, decimal_places=2)
-
+    class Meta:
+        model = Product
+        fields = ['name', 'price']
+        
 class TransactionForm(forms.Form):
     customer_name = forms.CharField(label='Customer Name', max_length=255)
     product_purchased = forms.CharField(label='Product Purchased', max_length=255)
