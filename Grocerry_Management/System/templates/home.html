@@ -255,7 +255,7 @@ button:hover {
     <nav>
         <a href="#" onclick="showHome()">Home</a>
         <a href="#" onclick="showManageProduct()">Manage Products</a>
-        <a href="#" onclick="showCustomerPage()">Customer Page</a>
+        <a href="#" onclick="showCustomerPage()">Manage Customer</a>
     </nav>
 
     <section id="home">
@@ -267,9 +267,11 @@ button:hover {
             </div>
             <div class="btn">
                 <div class="button-container">
-                    <a href="view_profile.html" class="button">Add Customer</a>
-                    <a href="addproductpage.html" class="button">Add Product</a>
+                    <a href="analysis.html" class="button">Analysis</a>
+                    <a href="view_profile.html" class="button">Customer's Profile</a>
+                    <a href="productpage.html" class="button">Product's List</a>
                     <a href="transaction.html" class="button">Today's Transaction</a>
+                    <a href="billing.html" class="button">BillForm</a>
                 </div>
             </div>
         </div>
@@ -302,9 +304,11 @@ button:hover {
         <table>
             <thead>
                 <tr>
-                    <th>Product ID</th>
-                    <th>Product Name</th>
-                    <th>Action</th>
+                    <th>Customer Name</th>
+                    <th>Passport Photo</th>
+                    <th>Phone Number</th>
+                    <th>Address</th>
+                    <th>Last Transaction</th>
                 </tr>
             </thead>
             <tbody id="customerTableBody">
