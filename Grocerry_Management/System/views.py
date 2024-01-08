@@ -19,8 +19,8 @@ def customerPageView(request):
 def transactionView(request):
     return render(request, 'transaction.html')
 
-def profileView(request):
-    return render(request, 'view_profile.html')
+def AnalysisView(request):
+    return render(request, 'analysis.html')
 
 def add_product(request):
     if request.method == 'POST':
@@ -34,8 +34,8 @@ def add_product(request):
             )
             product_instance.save()
 
-            return redirect('addproductpage.html')  # Redirect to a success page
+            return redirect('productpage.html')  # Redirect to a success page
     else:
         form = ProductForm()
 
-    return render(request, 'addproductpage.html', {'form': form})
+    return render(request, 'productpage.html', {'form': form})
