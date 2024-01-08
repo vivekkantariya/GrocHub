@@ -19,7 +19,231 @@
 
 
     <style>
+/* css Reset */
 
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #344e41;
+    background-color: #737373;
+}
+
+header {
+    background-color: #02261a;
+    background-color: #6a7885;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    font-size: 25px;
+}
+
+@media screen and (max-width: 868px) {
+    header {
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    header {
+        font-size: 15px;
+    }
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: #ddd;
+    padding: 0.5rem;
+}
+
+nav a {
+    margin: 8px 18px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 22px;
+    font-family: 'Jost', sans-serif;
+}
+
+nav a:hover {
+    transform: scale(1.09);
+}
+
+
+section {
+    padding: 2rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+form {
+    margin-top: 1rem;
+}
+
+button {
+    background-color: #333;
+    color: white;
+    padding: 0.5rem;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+#productTableBody {
+    background-color: #fff;
+    /* White background */
+}
+
+/*   Style for alternating rows */
+#productTableBody tr:nth-child(even) {
+    background-color: #f2f2f2;
+    /* Light gray background for even rows */
+}
+
+/* Style for table header */
+#productTableBody th {
+    background-color: #333;
+    /* Dark background for header */
+    color: white;
+}
+
+/* Hover effect for table rows */
+#productTableBody tr:hover {
+    background-color: #ddd;
+    /* Darker background on hover */
+}
+
+/* Style for product name cells */
+#productTableBody td:nth-child(2) {
+    color: #0066cc;
+    /* Change text color of product names */
+    font-weight: bold;
+}
+
+
+
+
+/* home style */
+
+#home .hcontainer {
+    width: 100%;
+    height: max-content;
+    background-color: black;
+    background: url("https://i.ibb.co/3TB8w4J/bg-home.jpg") no-repeat center;
+    /* filter: brightness(30%); */
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+
+#home .hcontainer .text {
+    /* margin: 50px; */
+    width: 550px;
+    height: 80%;
+    /* background-color: black; */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#home .hcontainer .text h2 {
+    margin: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 45px;
+    font-family: 'Days One', sans-serif;
+}
+
+@media screen and (max-width: 868px) {
+    #home .hcontainer .text h2 {
+        margin: 20px;
+        font-size: 35px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    #home .hcontainer .text h2 {
+        margin: 20px;
+        font-size: 30px;
+    }
+}
+
+#home .hcontainer .btn {
+    margin: 50px;
+    width: 400px;
+    height: 80%;
+    /* background-color: black; */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#home .hcontainer .btn .button-container {
+
+    text-align: center;
+    margin-top: 20px;
+}
+
+#home .hcontainer .btn .button-container .button {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    width: 230px;
+    text-decoration: none;
+    color: #fff;
+    color: black;
+    background-color: #588157;
+    background-color: #8c8d8f;
+    border-radius: 5px;
+    font-size: 24px;
+    cursor: pointer;
+    margin-bottom: 30px;
+    font-family: 'Jost', sans-serif;
+}
+
+#home .hcontainer .btn .button-container .button:hover {
+    background-color: #385441;
+    background-color: #afafb1;
+}
+
+@media screen and (max-width: 868px) {
+    #home .hcontainer .btn .button-container .button {
+        width: 190px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    #home .hcontainer .btn .button-container .button {
+        width: 170px;
+        font-size: 20px;
+    }
+}
     </style>
 </head>
 
