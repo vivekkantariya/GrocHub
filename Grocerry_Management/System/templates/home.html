@@ -16,9 +16,12 @@
     <link href="https://fonts.googleapis.com/css?family=Jost" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Poiret One" rel="stylesheet" type="text/css">
 
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
 
 
-    <style>
+    
+
+<style>
 
 * {
     margin: 0px;
@@ -31,12 +34,12 @@ body {
     margin: 0;
     padding: 0;
     background-color: #344e41;
-    background-color: #737373;
+    /* background-color: #737373; */
 }
 
 header {
     background-color: #02261a;
-    background-color: #6a7885;
+    /* background-color: #6a7885; */
     color: white;
     text-align: center;
     padding: 1rem;
@@ -217,18 +220,20 @@ button:hover {
     text-decoration: none;
     color: #fff;
     color: black;
-    background-color: #588157;
-    background-color: #8c8d8f;
+    background-color: #97bb97;
+    /* background-color: #8c8d8f; */
     border-radius: 5px;
     font-size: 24px;
     cursor: pointer;
     margin-bottom: 30px;
     font-family: 'Jost', sans-serif;
+    transition: all 0.3s ease-in-out;
+
 }
 
 #home .hcontainer .btn .button-container .button:hover {
-    background-color: #385441;
-    background-color: #afafb1;
+    background-color: #608d6f;
+    /* background-color: #afafb1; */
 }
 
 @media screen and (max-width: 868px) {
@@ -243,6 +248,129 @@ button:hover {
         font-size: 20px;
     }
 }
+
+
+
+
+/* Manage Products */
+
+#manageProduct h2{
+    font-size: 32px;
+    color: white;
+    font-family: 'Raleway', sans-serif;
+}
+
+#manageProduct table {
+    width: 95%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+}
+
+#manageProduct thead {
+    background-color: #f2f2f2;
+}
+
+#manageProduct th {
+    font-size: 20px;
+
+}
+
+#manageProduct th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+#manageProduct tbody tr:nth-child(even) {
+    background-color: #5881571d;
+
+}
+
+#manageProduct tbody tr:hover {
+    background-color: #58815741;
+
+
+}
+
+#manageProduct td button {
+    padding: 5px 10px;
+    height: 30px;
+    cursor: pointer;
+    background-color: #588157;
+    background-color: #97bb97;
+    font-size: 16px;
+    font-weight: bolder;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    width: 100px;
+    transition: all 0.3s ease-in-out;
+
+}
+
+#manageProduct td button:hover {
+    background-color: #385441;
+    background-color: #608d6f;
+
+
+}
+
+
+/* add product */
+#addProductForm {
+    margin-top: 30px;
+}
+
+#addProductForm label {
+    /* display: block; */
+    margin-bottom: 5px;
+    color: white;
+    font-size: 22px;
+    font-family: 'Raleway', sans-serif;
+
+}
+
+#addProductForm input {
+    width: 170px;
+    padding: 6px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+#addProductForm button {
+    background-color: #588157;
+    background-color: #97bb97;
+
+    color: black;
+    font-size: 16px;
+    padding: 9px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: all 0.3s ease-in-out;
+
+}
+
+#addProductForm button:hover {
+    background-color: #77bd8d;
+    background-color: #608d6f;
+
+}
+
+
+
+
+
+
+
+
+
     </style>
 </head>
 
@@ -276,6 +404,11 @@ button:hover {
         </div>
     </section>
 
+
+
+
+
+<!-- manageProduct -->
     <section id="manageProduct" style="display: none;">
         <h2>Manage Products</h2>
         <table>
@@ -298,6 +431,11 @@ button:hover {
         </form>
     </section>
 
+
+
+
+
+<!-- manage Customer -->
     <section id="customerPage" style="display: none;">
         <h2>Customer Page</h2>
         <table>
@@ -321,6 +459,11 @@ button:hover {
             <button type="button" onclick="addProductToCustomer()">Add Product</button>
         </form>
     </section>
+
+
+
+
+
 
     <script>
         function showHome() {

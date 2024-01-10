@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,85 +8,174 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #344e41;
         }
+
+        #container {
+            margin: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 22px;
+            color: white;
+        }
+
+        input[type="tel"],
+        textarea {
+            width: 40%;
+            padding: 6px 15px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #ffffff26;
+            font-size: 18px;
+        }
+
+        #customerName.input_text {
+            width: 40%;
+            padding: 6px 15px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #ffffff26;
+            font-size: 18px;
+}
+
+
+        textarea {
+            resize: vertical;
+        }
+
+
+
+
+        h2 {
+            /* text-align: center; */
+            font-size: 32px;
+            color: white;
+            font-family: 'Raleway', sans-serif;
+            background: #608d6f;
+            padding: 10px 16px;
+            border-radius: 10px;
+        }
+
 
         table {
             width: 100%;
+            background: white;
             border-collapse: collapse;
             margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
         }
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
+        thead {
             background-color: #f2f2f2;
         }
 
-        #productSuggestions {
-            position: absolute;
-            border: 1px solid #ccc;
-            max-height: 150px;
-            overflow-y: auto;
-            display: none;
-            width: 100%;
-            box-sizing: border-box;
+        th {
+            font-size: 20px;
         }
 
-        #productSuggestions ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
+        td {
+            font-size: 20px;
         }
 
-        #productSuggestions li {
-            padding: 8px;
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #5881571d;
+        }
+
+        tbody tr:hover {
+            background-color: #58815741;
+        }
+
+
+
+
+        label#grandTotal {
+            display: block;
+            margin-bottom: 5px;
+            color: white;
+            font-size: 22px;
+            font-family: 'Raleway', sans-serif;
+            margin-bottom:20px ;
+        }
+
+
+        button {
+            background-color: #97bb97;
+
+            color: black;
+            font-size: 16px;
+            padding: 9px 15px;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
-            background-color: #f9f9f9;
+            /* margin-left: 10px; */
+            transition: all 0.3s ease-in-out;
         }
 
-        #grandTotal {
-            font-weight: bold;
+        button:hover {
+            background-color: #608d6f;
+
         }
     </style>
 </head>
+
 <body>
+    <div id="container">
+
     <h2>Billing Information</h2>
 
-    <form id="billingForm">
-        <label for="customerName">Customer Name:</label>
-        <input type="text" id="customerName" name="customerName" required>
+        <form id="billingForm">
+            <label for="customerName">Customer Name:</label>
+            <input type="text" id="customerName" class="input_text" name="customerName" required>
 
-        <label for="phoneNumber">Phone Number:</label>
-        <input type="tel" id="phoneNumber" name="phoneNumber" required>
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="tel" id="phoneNumber" name="phoneNumber" required>
 
-        <label for="address">Address:</label>
-        <textarea id="address" name="address" rows="4" required></textarea>
+            <label for="address">Address:</label>
+            <textarea id="address" name="address" rows="4" required></textarea>
 
-        <h3>Product Details</h3>
+            <hr>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody id="productDetails">
-                <!-- Product details will be added dynamically using JavaScript -->
-            </tbody>
-        </table>
+            <h2>Product Details</h2>
 
-        <p id="grandTotal">Grand Total: $0.00</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="productDetails">
+                    <!-- Product details will be added dynamically using JavaScript -->
+                </tbody>
+            </table>
 
-        <button type="button" onclick="addProductRow()">Add Product</button>
-        <button type="button" onclick="calculateGrandTotal()">Calculate Grand Total</button>
-    </form>
+            <label id="grandTotal">Grand Total: ₹0.00</label>
+
+            <!-- <p id="grandTotal">Grand Total: $0.00</p> -->
+
+            <button type="button" onclick="addProductRow()">Add Product</button>
+            <button type="button" onclick="calculateGrandTotal()">Calculate Grand Total</button>
+        </form>
+    </div>
 
     <script>
         function addProductRow() {
@@ -96,7 +186,7 @@
                 <td><input type="text" name="productName[]" required></td>
                 <td><input type="number" name="productPrice[]" min="0.01" step="0.01" required></td>
                 <td><input type="number" name="productQuantity[]" min="1" required></td>
-                <td>$0.00</td>
+                <td>₹0.00</td>
             `;
 
             productDetails.appendChild(newRow);
@@ -111,11 +201,11 @@
                 var quantity = parseInt(row.querySelector("[name='productQuantity[]']").value) || 0;
                 var total = price * quantity;
 
-                row.querySelector("td:last-child").textContent = "$" + total.toFixed(2);
+                row.querySelector("td:last-child").textContent = "₹" + total.toFixed(2);
                 grandTotal += total;
             });
         }
-        
+
         var productNameInput = document.getElementsByName("productName[]")[0];
         var productSuggestions = document.getElementById("productSuggestions");
 
@@ -167,4 +257,5 @@
         });
     </script>
 </body>
+
 </html>
