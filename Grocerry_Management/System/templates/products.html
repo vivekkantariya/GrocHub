@@ -1,44 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product's List</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #fafafa;
+            color: #333;
+        }
+
+        header {
+            background-color: #4caf50;
+            /* Rich blue background */
+            color: white;
+            text-align: center;
+            padding: 2em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 0.5em;
+            font-weight: bold;
+            color: #000000;
+            /* Orange accent color for headers */
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            /* White background for the table */
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #1e88e5;
+            /* Green header background */
+            color: white;
+            font-weight: bold;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f0f8ff;
+            /* Light blue alternating row color */
+        }
+
+        /* Add hover effect to table rows */
+        tbody tr:hover {
+            background-color: #e0f7fa;
+            /* Light blue hover color */
+        }
+
+        /* Style the header text */
+        header h1 {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Add a subtle border-radius to the table */
+        table {
+            border-radius: 8px;
+        }
+
+        /* Style the table header cells */
+        thead th {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+            background-color: #1e88e5;
+            /* Darker green header background */
+            color: white;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+        }
+
+        /* Add some spacing between table cells */
+        td {
+            padding: 15px;
+        }
+
+        /* Style the alternating row colors */
+        tbody tr:nth-child(even) {
+            background-color: #f0f8ff;
+            /* Light blue alternating row color */
+        }
+
+        /* Add a subtle box-shadow to the table */
+        table {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style the header with a gradient background */
+        header {
+            background: linear-gradient(to right, #4caf50, #2e7d32);
+            /* Gradient background */
+            color: white;
+            text-align: center;
+            padding: 2em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Style the body with a subtle background pattern */
+        body {
+            background-color: #fafafa;
+            background-image: linear-gradient(45deg, #ffffff 25%, #f5f5f5 25%, #f5f5f5 50%, #ffffff 50%, #ffffff 75%, #f5f5f5 75%, #f5f5f5 100%);
+            background-size: 60px 60px;
+        }
+
+        /* Responsive design adjustments */
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
-
-<style>
-    body {
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    header {
-        background-color: #333;
-        color: white;
-        text-align: center;
-        padding: 1em;
-    }
-
-    table {
-        width: 80%;
-        margin: 20px auto;
-        border-collapse: collapse;
-    }
-
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-</style>
-
 
 <body>
 
     <header>
-        <h1>Product's List</h1>
+        <h1>Product's List
+            <a href="addproduct.html"><button id="addProductButton">Add Product</button></a>
+        </h1>
     </header>
 
     <table>
@@ -47,31 +145,19 @@
                 <th>Product ID</th>
                 <th>Product Name</th>
                 <th>Price</th>
-                <!-- Add more columns as needed -->
             </tr>
         </thead>
         <tbody>
-            {% for product in products %}
-                <tr>
-                    <td>{{ product.id }}</td>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.price }}</td>
-                    <!-- Add more columns as needed -->
-                </tr>
+            {% for product in product %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
 
 </body>
-var xhr = new XMLHttpRequest();
-            xhr.open("GET", "{% url 'manage_products' %}", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    // Reload the page to update the product list
-                    location.reload();
-                }
-            };
-            xhr.send("manageProductName=" + productName + "&manageProductPrice=" + productPrice);
-</html>
 
+</html>

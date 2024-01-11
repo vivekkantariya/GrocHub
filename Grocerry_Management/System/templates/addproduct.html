@@ -1,16 +1,63 @@
-function addProduct() {
-    // Implement logic to add product to the table
-    var productName = document.getElementById('manageProductName').value;
-    var productPrice = document.getElementById('manageProductPrice').value;
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "{% url 'productpage' %}", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            // Reload the page to update the product list
-            location.reload();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
         }
-    };
-    xhr.send("manageProductName=" + productName + "&manageProductPrice=" + productPrice);
-}
+
+        form {
+            max-width: 400px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Add Product</h2>
+
+    <form action="addproduct.html" method="post">
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" name="productName" required>
+
+        <label for="productPrice">Price:</label>
+        <input type="number" id="productPrice" name="productPrice" step="0.01" required>
+
+        <label for="productQuantity">Quantity:</label>
+        <input type="number" id="productQuantity" name="productQuantity" required>
+
+        <button type="submit">Add Product</button>
+    </form>
+
+</body>
+</html>

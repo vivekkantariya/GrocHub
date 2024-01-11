@@ -1,17 +1,23 @@
 from django.urls import path
-from .views import homeView, manageProductView, customer_list, loginView, addproductView, transactionView, AnalysisView, BillingView
-
+from .views import homeView, product_list, customer_list, loginView, addproductView, addcustomerView, add_customerView, add_product, transactionView, AnalysisView, BillingView
+from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
 
 urlpatterns = [
     path('', homeView, name='home'),
-    path('manage-products/', manageProductView, name='manage_products'),
-    path('home/manageproduct/', manageProductView, name='manageproducts'),
     path('loginpage/',loginView, name='loginpage'),
-    path('productpage.html/', addproductView, name='productlist'),
+    path('products.html/', product_list, name='productlist'),
     path('transaction.html/', transactionView, name='transactions'),
+    path('addproduct.html/', addproductView, name='addproduct'),
+    path('products.html/addproduct.html/', addproductView, name='addproduct'),
+    path('customers.html/addcustomer.html/', addcustomerView, name='addcustomer'),
+    path('addcustomer.html/', addcustomerView, name='addcustomer'),
+path('customers.html/addcustomer.html/add_customer', add_customerView, name='add_customerView'),
+    path('success', add_customerView, name='customers'),
+    path('add_customer/', views.add_customerView, name='add_customer'),
+
     path('analysis.html/', AnalysisView, name='analysis'),
     path('billing.html/', BillingView, name='billing'),
     path('customers.html/', customer_list, name='customers'),
