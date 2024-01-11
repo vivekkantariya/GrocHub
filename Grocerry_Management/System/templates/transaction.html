@@ -16,18 +16,26 @@
 
 <style>
     body {
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        background-color: #344e41;
     }
 
-    header {
-        background-color: #333;
-        color: white;
-        text-align: center;
-        padding: 1em;
-    }
+    #container {
+            margin: 25px;
+        }
+
+
+    h1 {
+            /* text-align: center; */
+            font-size: 32px;
+            color: white;
+            font-family: 'Raleway', sans-serif;
+            background: #608d6f;
+            padding: 10px 16px;
+            border-radius: 10px;
+        }
+
+
 
     table {
         width: 80%;
@@ -35,17 +43,22 @@
         border-collapse: collapse;
     }
 
-    th, td {
+    th,
+    td {
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
     }
+
+
+
 </style>
 
 <body>
-    <header>
-        <h1>Today's Transactions</h1>
-    </header>
+
+    <div id="container">
+
+    <h1>Today's Transactions</h1>
 
     <table>
         <thead>
@@ -61,6 +74,7 @@
             <!-- You can populate this section dynamically using JavaScript -->
         </tbody>
     </table>
+    </div>
 
     <!-- Add any other content or elements as needed -->
 
