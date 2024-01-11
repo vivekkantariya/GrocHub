@@ -15,236 +15,252 @@
     <link href="https://fonts.googleapis.com/css?family=Michroma" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Jost" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Poiret One" rel="stylesheet" type="text/css">
-
-
-
     <style>
-
-* {
-    margin: 0px;
-    padding: 0px;
-}
-
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #344e41;
-    background-color: #737373;
-}
-
-header {
-    background-color: #02261a;
-    background-color: #6a7885;
-    color: white;
-    text-align: center;
-    padding: 1rem;
-    font-size: 25px;
-}
-
-@media screen and (max-width: 868px) {
-    header {
-        font-size: 20px;
-    }
-}
-
-@media screen and (max-width: 450px) {
-    header {
-        font-size: 15px;
-    }
-}
-
-nav {
-    display: flex;
-    justify-content: center;
-    background-color: #ddd;
-    padding: 0.5rem;
-}
-
-nav a {
-    margin: 8px 18px;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    font-size: 22px;
-    font-family: 'Jost', sans-serif;
-}
-
-nav a:hover {
-    transform: scale(1.09);
-}
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
 
 
-section {
-    padding: 2rem;
-}
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #344e41;
+            background-color: #737373;
+        }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-}
+        header {
+            background-color: #02261a;
+            background-color: #6a7885;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 25px;
+        }
 
-th,
-td {
-    border: 1px solid #ddd;
-    padding: 0.5rem;
-    text-align: left;
-}
+        @media screen and (max-width: 868px) {
+            header {
+                font-size: 20px;
+            }
+        }
 
-form {
-    margin-top: 1rem;
-}
+        @media screen and (max-width: 450px) {
+            header {
+                font-size: 15px;
+            }
+        }
 
-button {
-    background-color: #333;
-    color: white;
-    padding: 0.5rem;
-    border: none;
-    cursor: pointer;
-}
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #ddd;
+            padding: 0.5rem;
+        }
 
-button:hover {
-    background-color: #555;
-}
+        nav a {
+            margin: 8px 18px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 22px;
+            font-family: 'Jost', sans-serif;
+        }
 
-#productTableBody {
-    background-color: #fff;
-    /* White background */
-}
-
-/*   Style for alternating rows */
-#productTableBody tr:nth-child(even) {
-    background-color: #f2f2f2;
-    /* Light gray background for even rows */
-}
-
-/* Style for table header */
-#productTableBody th {
-    background-color: #333;
-    /* Dark background for header */
-    color: white;
-}
-
-/* Hover effect for table rows */
-#productTableBody tr:hover {
-    background-color: #ddd;
-    /* Darker background on hover */
-}
-
-/* Style for product name cells */
-#productTableBody td:nth-child(2) {
-    color: #0066cc;
-    /* Change text color of product names */
-    font-weight: bold;
-}
+        nav a:hover {
+            transform: scale(1.09);
+        }
 
 
+        section {
+            padding: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        form {
+            margin-top: 1rem;
+        }
+
+        button {
+            background-color: #333;
+            color: white;
+            padding: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #productTableBody {
+            background-color: #fff;
+            /* White background */
+        }
+
+        /*   Style for alternating rows */
+        #productTableBody tr:nth-child(even) {
+            background-color: #f2f2f2;
+            /* Light gray background for even rows */
+        }
+
+        /* Style for table header */
+        #productTableBody th {
+            background-color: #333;
+            /* Dark background for header */
+            color: white;
+        }
+
+        /* Hover effect for table rows */
+        #productTableBody tr:hover {
+            background-color: #ddd;
+            /* Darker background on hover */
+        }
+
+        /* Style for product name cells */
+        #productTableBody td:nth-child(2) {
+            color: #0066cc;
+            /* Change text color of product names */
+            font-weight: bold;
+        }
+
+        #manageProduct h2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #manageProduct h2 button {
+            background-color: #8c8d8f;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #manageProduct h2 button:hover {
+            background-color: #afafb1;
+        }
+
+        /* home style */
+
+        #home .hcontainer {
+            width: 100%;
+            height: max-content;
+            background-color: black;
+            background: url("https://i.ibb.co/3TB8w4J/bg-home.jpg") no-repeat center;
+            /* filter: brightness(30%); */
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            align-items: center;
+        }
 
 
-/* home style */
+        #home .hcontainer .text {
+            /* margin: 50px; */
+            width: 550px;
+            height: 80%;
+            /* background-color: black; */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-#home .hcontainer {
-    width: 100%;
-    height: max-content;
-    background-color: black;
-    background: url("https://i.ibb.co/3TB8w4J/bg-home.jpg") no-repeat center;
-    /* filter: brightness(30%); */
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    align-items: center;
-}
+        #home .hcontainer .text h2 {
+            margin: 25px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 45px;
+            font-family: 'Days One', sans-serif;
+        }
 
+        @media screen and (max-width: 868px) {
+            #home .hcontainer .text h2 {
+                margin: 20px;
+                font-size: 35px;
+            }
+        }
 
-#home .hcontainer .text {
-    /* margin: 50px; */
-    width: 550px;
-    height: 80%;
-    /* background-color: black; */
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+        @media screen and (max-width: 450px) {
+            #home .hcontainer .text h2 {
+                margin: 20px;
+                font-size: 30px;
+            }
+        }
 
-#home .hcontainer .text h2 {
-    margin: 25px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 45px;
-    font-family: 'Days One', sans-serif;
-}
+        #home .hcontainer .btn {
+            margin: 50px;
+            width: 400px;
+            height: 80%;
+            /* background-color: black; */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-@media screen and (max-width: 868px) {
-    #home .hcontainer .text h2 {
-        margin: 20px;
-        font-size: 35px;
-    }
-}
+        #home .hcontainer .btn .button-container {
 
-@media screen and (max-width: 450px) {
-    #home .hcontainer .text h2 {
-        margin: 20px;
-        font-size: 30px;
-    }
-}
+            text-align: center;
+            margin-top: 20px;
+        }
 
-#home .hcontainer .btn {
-    margin: 50px;
-    width: 400px;
-    height: 80%;
-    /* background-color: black; */
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+        #home .hcontainer .btn .button-container .button {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            width: 230px;
+            text-decoration: none;
+            color: #fff;
+            color: black;
+            background-color: #588157;
+            background-color: #8c8d8f;
+            border-radius: 5px;
+            font-size: 24px;
+            cursor: pointer;
+            margin-bottom: 30px;
+            font-family: 'Jost', sans-serif;
+        }
 
-#home .hcontainer .btn .button-container {
+        #home .hcontainer .btn .button-container .button:hover {
+            background-color: #385441;
+            background-color: #afafb1;
+        }
 
-    text-align: center;
-    margin-top: 20px;
-}
+        @media screen and (max-width: 868px) {
+            #home .hcontainer .btn .button-container .button {
+                width: 190px;
+            }
+        }
 
-#home .hcontainer .btn .button-container .button {
-    display: block;
-    margin: 0 auto;
-    padding: 10px 20px;
-    width: 230px;
-    text-decoration: none;
-    color: #fff;
-    color: black;
-    background-color: #588157;
-    background-color: #8c8d8f;
-    border-radius: 5px;
-    font-size: 24px;
-    cursor: pointer;
-    margin-bottom: 30px;
-    font-family: 'Jost', sans-serif;
-}
-
-#home .hcontainer .btn .button-container .button:hover {
-    background-color: #385441;
-    background-color: #afafb1;
-}
-
-@media screen and (max-width: 868px) {
-    #home .hcontainer .btn .button-container .button {
-        width: 190px;
-    }
-}
-
-@media screen and (max-width: 450px) {
-    #home .hcontainer .btn .button-container .button {
-        width: 170px;
-        font-size: 20px;
-    }
-}
+        @media screen and (max-width: 450px) {
+            #home .hcontainer .btn .button-container .button {
+                width: 170px;
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
+
+{% load crispy_forms_tags %}
 
 <body>
     <header>
@@ -267,39 +283,49 @@ button:hover {
             <div class="btn">
                 <div class="button-container">
                     <a href="analysis.html" class="button">Analysis</a>
-                    <a href="customers.html" class="button">Customer's Profile</a>
-                    <a href="productpage.html" class="button">Product's List</a>
-                    <a href="transaction.html" class="button">Today's Transaction</a>
                     <a href="billing.html" class="button">BillForm</a>
+                    <a href="addcustomer.html" class="button">Add Customer</a>
+                    <a href="addproduct.html" class="button">Add Product</a>
+                    <a href="transaction.html" class="button">Today's Transaction</a>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="manageProduct" style="display: none;">
-        <h2>Manage Products</h2>
+        <h2>Manage Products
+            <button onclick="addProduct()">Add Product</button>
+            <button onclick="editProduct()">Edit Product</button>
+        </h2>
         <table>
             <thead>
                 <tr>
                     <th>Product ID</th>
                     <th>Product Name</th>
+                    <th>Product Price</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody id="productTableBody">
-                <!-- Product details will be displayed here -->
+                {% for product in Products %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>
+                        <!-- <button onclick="deleteProduct(this, {{ product.id }})">Delete</button> -->
+                    </td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
-
-        <form id="addProductForm">
-            <label for="manageProductName">Product Name:</label>
-            <input type="text" id="manageProductName" required>
-            <button type="button" onclick="addProduct()">Add Product</button>
-        </form>
     </section>
 
     <section id="customerPage" style="display: none;">
-        <h2>Customer Page</h2>
+        <h2>Customer Page
+            <button onclick="addCustomer()">Add Product</button>
+            <button onclick="editCustomer()">Edit Product</button>
+        </h2>
         <table>
             <thead>
                 <tr>
@@ -311,15 +337,20 @@ button:hover {
                 </tr>
             </thead>
             <tbody id="customerTableBody">
-                <!-- Product details will be displayed here -->
+                {% for customer in Customers %}
+                <tr>
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.phone_number }}</td>
+                    <td>{{ customer.address }}</td>
+                    <td>{{ customer.last_transaction }}</td>
+                    <td>{{ customer.passport_photo }}</td>
+                    <td>
+                        <!-- <button onclick="deleteProduct(this, {{ customer. }})">Delete</button> -->
+                    </td>
+                </tr>
+                {% endfor %}            
             </tbody>
         </table>
-
-        <form id="addproductocustomer">
-            <label for="customerProductName">Product Name:</label>
-            <input type="text" id="customerProductName" required>
-            <button type="button" onclick="addProductToCustomer()">Add Product</button>
-        </form>
     </section>
 
     <script>
@@ -330,30 +361,15 @@ button:hover {
         }
 
         function showManageProduct() {
-            document.getElementById('home').style.display = 'none';
-            document.getElementById('manageProduct').style.display = 'block';
-            document.getElementById('customerPage').style.display = 'none';
-            // You can fetch and display product data dynamically here
+            window.location.href = 'products.html';
         }
 
         function showCustomerPage() {
-            document.getElementById('home').style.display = 'none';
-            document.getElementById('manageProduct').style.display = 'none';
-            document.getElementById('customerPage').style.display = 'block';
-            // Add logic for billing and product details here
+            window.location.href = 'customers.html';
         }
 
         function addProduct() {
-            // Implement logic to add product to the table
-            var productName = document.getElementById('manageProductName').value;
-            var productTableBody = document.getElementById('productTableBody');
-            var newRow = productTableBody.insertRow();
-            var cell1 = newRow.insertCell(0);
-            var cell2 = newRow.insertCell(1);
-            var cell3 = newRow.insertCell(2);
-            cell1.innerHTML = 'Generated ID'; // You can generate an ID dynamically
-            cell2.innerHTML = productName;
-            cell3.innerHTML = '<button onclick="deleteProduct(this)">Delete</button>';
+            window.location.href = 'addproduct.html';
         }
 
         function addProductToCustomer() {

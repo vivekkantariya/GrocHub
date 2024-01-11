@@ -1,0 +1,51 @@
+<!DOCTYPE html> 
+<html> 
+
+<head> 
+	<title>Chart JS Line Chart </title> 
+	<script src= 
+"https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"> 
+	</script> 
+	<script src= 
+"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.2/chart.umd.js"> 
+	</script> 
+
+</head> 
+
+<body> 
+	<div> 
+		<h1 style="color:green;"> 
+			GeeksforGeeks 
+		</h1> 
+		
+		<h3>Chart JS Line Chart </h3> 
+		
+		<div> 
+			<canvas id="lineChartID"></canvas> 
+		</div> 
+	</div> 
+
+	<script> 
+
+		// line chart 
+		new Chart($("#lineChartID"), { 
+			type: 'line', 
+			data: { 
+				labels: [ 
+					'January', 'February', 'March', 
+					'April', 'May', 'June', 'July' 
+				], 
+				datasets: [{ 
+					label: 'My Dataset', 
+					data: [65, 71, 62, 81, 34, 55, 47 
+					],// End data 
+					borderColor: 'green', 
+					fill: false, 
+					tension: 0.1 
+				}]// End datasets 
+			}// End data			 
+		}); 
+	</script> 
+</body> 
+
+</html> 

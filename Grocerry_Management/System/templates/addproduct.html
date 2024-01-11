@@ -1,0 +1,16 @@
+function addProduct() {
+    // Implement logic to add product to the table
+    var productName = document.getElementById('manageProductName').value;
+    var productPrice = document.getElementById('manageProductPrice').value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "{% url 'productpage' %}", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            // Reload the page to update the product list
+            location.reload();
+        }
+    };
+    xhr.send("manageProductName=" + productName + "&manageProductPrice=" + productPrice);
+}

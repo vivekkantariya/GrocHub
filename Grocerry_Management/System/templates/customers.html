@@ -1,81 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Customer Information</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-                margin: 20px;
-            }
-    
-            h2 {
-                text-align: center;
-                color: #333;
-            }
-    
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer's List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            margin: 20px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ecf0f1;
+        }
+
+        th {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        tbody tr:hover {
+            background-color: #ecf0f1;
+            transition: background-color 0.3s;
+        }
+
+        img {
+            max-width: 50px;
+            max-height: 50px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Responsive styles */
+        @media screen and (max-width: 600px) {
             table {
+                border: 1px solid #ecf0f1;
+            }
+
+            th,
+            td {
+                display: block;
                 width: 100%;
-                border-collapse: collapse;
-                margin-top: 20px;
+                box-sizing: border-box;
             }
-    
-            th, td {
-                padding: 12px;
-                text-align: left;
-                border: 1px solid #ddd;
-            }
-    
+
             th {
-                background-color: #f2f2f2;
+                text-align: center;
+                background-color: #3498db;
             }
-    
-            img {
-                max-width: 50px;
-                max-height: 50px;
-                border-radius: 50%;
+
+            thead {
+                display: none;
             }
-        </style>
-    </head>
+
+            td {
+                margin-bottom: 10px;
+                background-color: #fff;
+            }
+        }
+    </style>
+</head>
+
 <body>
+    <h1>Customer List</h1>
 
-<h2>Customer Information</h2>
 
-<table border="3">
-    <thead>
-        <tr>
-            <th>Customer Name</th>
-            <th>Phone Number</th>
-            <th>Address</th>
-            <th>Passport Size Photo</th>
-            <th>Last Transaction</th>
-            <!-- Add more columns as needed -->
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Assume data is fetched from the database and looped through -->
-        <!-- <?php
-            // Replace this with actual database fetch logic
-            $customerData = [
-                ["John Doe", "123-456-7890", "123 Main St, City", "john_photo.jpg", "2024-01-08"],
-                // Add more rows as needed
-            ];
-
-            foreach ($customerData as $customer) {
-                echo "<tr>";
-                echo "<td>{$customer[0]}</td>";
-                echo "<td>{$customer[1]}</td>";
-                echo "<td>{$customer[2]}</td>";
-                echo "<td><img src='{$customer[3]}' alt='Passport Photo' width='50'></td>";
-                echo "<td>{$customer[4]}</td>";
-                // Add more columns as needed
-                echo "</tr>";
-            }
-        ?> -->
-    </tbody>
-</table>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>Last Transaction</th>
+                <th>Passport Photo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customer %}
+            <tr>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.phone_number }}</td>
+                <td>{{ customer.address }}</td>
+                <td>{{ customer.last_transaction }}</td>
+                <td><img src="{{ customer.passport_photo.url }}" alt="Passport Photo" width="50" height="50"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 </body>
+
 </html>

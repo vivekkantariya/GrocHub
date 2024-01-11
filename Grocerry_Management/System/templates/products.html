@@ -63,4 +63,15 @@
     </table>
 
 </body>
+var xhr = new XMLHttpRequest();
+            xhr.open("GET", "{% url 'manage_products' %}", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Reload the page to update the product list
+                    location.reload();
+                }
+            };
+            xhr.send("manageProductName=" + productName + "&manageProductPrice=" + productPrice);
 </html>
+
