@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     homeView, product_list, customer_list, loginView,
     addproductView, addcustomerView, add_customerView, add_productView,
-    transactionView, AnalysisView, bill_view, get_product_suggestions
+    transactionView, AnalysisView, bill_view, get_product_suggestions, generate_bill
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -21,6 +21,7 @@ urlpatterns = [
     path('transaction.html/', transactionView, name='transactions'),
     path('analysis.html/', AnalysisView, name='analysis'),
     path('billing.html', bill_view, name='billing'),
+    path('generate_bill/', generate_bill, name='generate_bill'),
 
     path('get_product_suggestions/', get_product_suggestions, name='get_product_suggestions'),
     path('<path:undefined_path>/', homeView, name='undefined_path'),

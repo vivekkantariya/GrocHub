@@ -110,6 +110,8 @@
         <h2>Billing Information</h2>
 
         <form id="billingForm">
+            {% csrf_token %}
+
             <label for="customerName">Customer Name:</label>
             <input type="text" id="customerName" name="customerName" required>
 
@@ -233,10 +235,24 @@
                 function generateBill(event) {
                     event.preventDefault();
 
-                    // Add your logic to handle form submission (e.g., sending data to the server)
-                    alert('Bill generated successfully!');
+                    var formData = new FormData(document.getElementById('billingForm'));
+
+                    // Send the form data to the server
+                    $.ajax({
+                        url: '/generate_bill/',  // Update the URL to your Django view
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            alert('Bill generated successfully!');  // You can handle the success response as needed
+                        },
+                        error: function () {
+                            alert('Error generating the bill. Please try again.');  // Handle the error case
+                        }
+                    });
                 }
-            });
+            })
         </script>
     </div>
 </body>
