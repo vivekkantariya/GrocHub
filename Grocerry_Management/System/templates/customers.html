@@ -6,157 +6,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer's List</title>
     <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            background-color: #fafafa;
-            color: #333;
+            background-color: #344e41;
+            /* background-color: #737373; */
         }
 
         header {
-            background-color: #4caf50;
+            background-color: #02261a;
+            /* background-color: #6a7885; */
             color: white;
             text-align: center;
-            padding: 2em;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            font-size: 25px;
         }
 
-        h1 {
-            font-size: 3em;
-            margin-bottom: 0.5em;
-            font-weight: bold;
-            color: #000000;
+        .container {
+            margin: 25px;
         }
+
+        h2 {
+            font-size: 32px;
+            color: white;
+            font-family: 'Raleway', sans-serif;
+        }
+
+
 
         table {
-            width: 90%;
-            margin: 20px auto;
+            width: 95%;
+            background: white;
             border-collapse: collapse;
-            border: 1px solid #ddd;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+        }
+
+        thead {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            font-size: 20px;
+        }
+
+        td {
+            font-size: 20px;
         }
 
         th,
         td {
-            padding: 15px;
-            text-align: left;
             border: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #1e88e5;
-            color: white;
-            font-weight: bold;
+            padding: 10px;
+            text-align: left;
         }
 
         tbody tr:nth-child(even) {
-            background-color: #f0f8ff;
+            background-color: #5881571d;
         }
 
         tbody tr:hover {
-            background-color: #e0f7fa;
+            background-color: #58815741;
         }
 
-        header h1 {
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
 
-        table {
-            border-radius: 8px;
-        }
-
-        thead th {
-            padding: 15px;
-            text-align: left;
-            border: 1px solid #ddd;
-            background-color: #1e88e5;
-            color: white;
-            font-weight: bold;
-            border-radius: 8px 8px 0 0;
-        }
-
-        td {
-            padding: 15px;
-        }
-
-        tbody tr:nth-child(even) {
-            background-color: #f0f8ff;
-        }
-
-        table {
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        }
-
-        header {
-            background: linear-gradient(to right, #4caf50, #2e7d32);
-            color: white;
-            text-align: center;
-            padding: 2em;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        body {
-            background-color: #fafafa;
-            background-image: linear-gradient(45deg, #ffffff 25%, #f5f5f5 25%, #f5f5f5 50%, #ffffff 50%, #ffffff 75%, #f5f5f5 75%, #f5f5f5 100%);
-            background-size: 60px 60px;
-        }
-
-        @media (max-width: 768px) {
-            table {
-                width: 100%;
-            }
-        }
-
-        #addCustomerButton {
-            background-color: #007bff;
-            color: #ffffff;
-            padding: 20px 20px;
-            font-size: 0.4em;
+        /* add product btn */
+        button {
+            background-color: #588157;
+            background-color: #97bb97;
+            width: 150px;
+            color: black;
+            font-size: 16px;
+            padding: 9px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            position: absolute;
-            right: 80px ;
+            margin-left: 10px;
+            transition: all 0.3s ease-in-out;
+
         }
 
-        #addCustomerButton:hover {
-            background-color: #0056b3;
-        }
+        button:hover {
+            background-color: #77bd8d;
+            background-color: #608d6f;
 
+        }
     </style>
 </head>
 
 <body>
-    <h1>Customer List
-        <a href="addcustomer.html"><button id="addCustomerButton">Add Customer</button></a>
-    </h1>
+    <header>
+        <h1>Customer List
+            <a href="addcustomer.html"><button id="addCustomerButton">Add Customer</button></a>
+        </h1>
+    </header>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Phone Number</th>
-                <th>Address</th>
-                <th>Last Transaction</th>
-                <th>Passport Photo</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for customer in customer %}
-            <tr>
-                <td>{{ customer.name }}</td>
-                <td>{{ customer.phone_number }}</td>
-                <td>{{ customer.address }}</td>
-                <td>{{ customer.last_transaction }}</td>
-                <td><img src="{{ customer.passport_photo.url }}" alt="Passport Photo" width="50" height="50"></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
+    <div class="container">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Address</th>
+                    <th>Last Transaction</th>
+                    <th>Passport Photo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customer %}
+                <tr>
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.phone_number }}</td>
+                    <td>{{ customer.address }}</td>
+                    <td>{{ customer.last_transaction }}</td>
+                    <td><img src="{{ customer.passport_photo.url }}" alt="Passport Photo" width="50" height="50"></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 </body>
 

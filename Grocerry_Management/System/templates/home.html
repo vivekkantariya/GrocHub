@@ -19,29 +19,28 @@
 
 
     <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
 
-* {
-    margin: 0px;
-    padding: 0px;
-}
 
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #344e41;
+            /* background-color: #737373; */
+        }
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #344e41;
-    background-color: #737373;
-}
-
-header {
-    background-color: #02261a;
-    background-color: #6a7885;
-    color: white;
-    text-align: center;
-    padding: 1rem;
-    font-size: 25px;
-}
+        header {
+            background-color: #02261a;
+            /* background-color: #6a7885; */
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 25px;
+        }
 
         @media screen and (max-width: 868px) {
             header {
@@ -140,26 +139,8 @@ header {
             font-weight: bold;
         }
 
-        #manageProduct h2 {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
 
-        #manageProduct h2 button {
-            background-color: #8c8d8f;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
 
-        #manageProduct h2 button:hover {
-            background-color: #afafb1;
-        }
 
         /* home style */
 
@@ -227,27 +208,29 @@ header {
             margin-top: 20px;
         }
 
-#home .hcontainer .btn .button-container .button {
-    display: block;
-    margin: 0 auto;
-    padding: 10px 20px;
-    width: 230px;
-    text-decoration: none;
-    color: #fff;
-    color: black;
-    background-color: #588157;
-    background-color: #8c8d8f;
-    border-radius: 5px;
-    font-size: 24px;
-    cursor: pointer;
-    margin-bottom: 30px;
-    font-family: 'Jost', sans-serif;
-}
+        #home .hcontainer .btn .button-container .button {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            width: 230px;
+            text-decoration: none;
+            color: #fff;
+            color: black;
+            background-color: #97bb97;
+            /* background-color: #8c8d8f; */
+            border-radius: 5px;
+            font-size: 24px;
+            cursor: pointer;
+            margin-bottom: 30px;
+            font-family: 'Jost', sans-serif;
+            transition: all 0.3s ease-in-out;
 
-#home .hcontainer .btn .button-container .button:hover {
-    background-color: #385441;
-    background-color: #afafb1;
-}
+        }
+
+        #home .hcontainer .btn .button-container .button:hover {
+            background-color: #608d6f;
+            /* background-color: #afafb1; */
+        }
 
         @media screen and (max-width: 868px) {
             #home .hcontainer .btn .button-container .button {
@@ -255,12 +238,12 @@ header {
             }
         }
 
-@media screen and (max-width: 450px) {
-    #home .hcontainer .btn .button-container .button {
-        width: 170px;
-        font-size: 20px;
-    }
-}
+        @media screen and (max-width: 450px) {
+            #home .hcontainer .btn .button-container .button {
+                width: 170px;
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 
@@ -300,7 +283,7 @@ header {
 
 
 
-<!-- manageProduct -->
+    <!-- manageProduct -->
     <section id="manageProduct" style="display: none;">
         <h2>Manage Products
             <button onclick="addProduct()">Add Product</button>
@@ -334,7 +317,7 @@ header {
 
 
 
-<!-- manage Customer -->
+    <!-- manage Customer -->
     <section id="customerPage" style="display: none;">
         <h2>Customer Page
             <button onclick="addCustomer()">Add Product</button>
@@ -362,7 +345,7 @@ header {
                         <!-- <button onclick="deleteProduct(this, {{ customer. }})">Delete</button> -->
                     </td>
                 </tr>
-                {% endfor %}            
+                {% endfor %}
             </tbody>
         </table>
     </section>
