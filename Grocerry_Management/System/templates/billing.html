@@ -9,6 +9,7 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #344e41;
+            margin: 0;
         }
 
         #container {
@@ -23,6 +24,7 @@
         }
 
         input[type="tel"],
+        input[type="text"],
         textarea {
             width: 40%;
             padding: 6px 15px;
@@ -34,6 +36,7 @@
             font-size: 18px;
         }
 
+<<<<<<< HEAD
         #customerName.input_text {
             width: 40%;
             padding: 6px 15px;
@@ -46,15 +49,13 @@
         }
 
 
+=======
+>>>>>>> 1378ec4da8607415c72d295800324ff562a8f780
         textarea {
             resize: vertical;
         }
 
-
-
-
         h2 {
-            /* text-align: center; */
             font-size: 32px;
             color: white;
             font-family: 'Raleway', sans-serif;
@@ -62,7 +63,6 @@
             padding: 10px 16px;
             border-radius: 10px;
         }
-
 
         table {
             width: 100%;
@@ -72,19 +72,10 @@
             border-radius: 8px;
             overflow: hidden;
             margin-bottom: 30px;
-            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
         }
 
         thead {
             background-color: #f2f2f2;
-        }
-
-        th {
-            font-size: 20px;
-        }
-
-        td {
-            font-size: 20px;
         }
 
         th,
@@ -102,7 +93,10 @@
             background-color: #58815741;
         }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1378ec4da8607415c72d295800324ff562a8f780
         label#grandTotal {
             display: block;
             margin-bottom: 5px;
@@ -112,23 +106,19 @@
             margin-bottom: 20px;
         }
 
-
         button {
             background-color: #97bb97;
-
             color: black;
             font-size: 16px;
             padding: 9px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            /* margin-left: 10px; */
             transition: all 0.3s ease-in-out;
         }
 
         button:hover {
             background-color: #608d6f;
-
         }
     </style>
 </head>
@@ -139,8 +129,13 @@
         <h2>Billing Information</h2>
 
         <form id="billingForm">
+            {% csrf_token %}
+
             <label for="customerName">Customer Name:</label>
-            <input type="text" id="customerName" class="input_text" name="customerName" required>
+            <input type="text" id="customerName" name="customerName" required>
+
+            <label for="customerEmail">Email Address:</label>
+            <input type="text" id="customerEmail" name="customerEmail" required>
 
             <label for="phoneNumber">Phone Number:</label>
             <input type="tel" id="phoneNumber" name="phoneNumber" required>
@@ -152,108 +147,133 @@
 
             <h2>Product Details</h2>
 
-            <table>
+            <!-- Inside the form in your billing.html page -->
+            <label for="productName">Product Name:</label>
+            <input type="text" id="productName" name="productName" required autocomplete="off">
+            <div id="productSuggestions"></div>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" required>
+
+            <button type="button" id="addProductBtn">Add Product</button>
+
+            <table id="productTable">
                 <thead>
                     <tr>
                         <th>Product Name</th>
-                        <th>Price</th>
                         <th>Quantity</th>
-                        <th>Total</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
-                <tbody id="productDetails">
-                    <!-- Product details will be added dynamically using JavaScript -->
-                </tbody>
+                <tbody></tbody>
             </table>
 
-            <label id="grandTotal">Grand Total: ₹0.00</label>
+            <label id="grandTotal">Grand Total: $0.00</label>
 
-            <!-- <p id="grandTotal">Grand Total: $0.00</p> -->
-
-            <button type="button" onclick="addProductRow()">Add Product</button>
-            <button type="button" onclick="calculateGrandTotal()">Calculate Grand Total</button>
+            <button type="submit">Generate Bill</button>
         </form>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script>
+
+            document.addEventListener('DOMContentLoaded', function () {
+                // Add event listener to the "Add Product" button
+                document.getElementById('addProductBtn').addEventListener('click', addProduct);
+
+                // Add event listener to the form submission
+                document.getElementById('billingForm').addEventListener('submit', generateBill);
+
+                // Function to add a product to the table
+                function addProduct() {
+                    var productName = document.getElementById('productName').value;
+                    var quantity = document.getElementById('quantity').value;
+
+                    // Validate input
+                    if (productName.trim() === '' || quantity <= 0) {
+                        alert('Please enter valid product details.');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '/get_product_suggestions/',
+                        data: { search: productName },
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.length > 0) {
+                                // Assuming the server returns product details like price
+                                var productDetails = data[0];
+                                var quantity = document.getElementById('quantity').value || 1;
+
+                                // Add the product to the table
+                                var tableBody = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+                                var newRow = tableBody.insertRow(tableBody.rows.length);
+
+                                var cell1 = newRow.insertCell(0);
+                                var cell2 = newRow.insertCell(1);
+                                var cell3 = newRow.insertCell(2);
+                                var cell4 = newRow.insertCell(3);
+                                var cell5 = newRow.insertCell(4);
+
+                                cell1.innerHTML = productDetails.name;
+                                cell2.innerHTML = quantity;
+                                cell3.innerHTML = '$' + productDetails.price.toFixed(2);
+                                cell4.innerHTML = '$' + (quantity * productDetails.price).toFixed(2);
+                                cell5.innerHTML = '<button type="button" onclick="removeProduct(this)">Remove</button>';
+
+                                // Update grand total
+                                updateGrandTotal();
+                            } else {
+                                alert('Product not found.');
+                            }
+                        }
+                    });
+                }
+
+                // Function to remove a product from the table
+                window.removeProduct = function (button) {
+                    var row = button.parentNode.parentNode;
+                    row.parentNode.removeChild(row);
+
+                    // Update grand total
+                    updateGrandTotal();
+                };
+
+                // Function to update the grand total
+                function updateGrandTotal() {
+                    var total = 0;
+                    var table = document.getElementById('productTable');
+                    for (var i = 1; i < table.rows.length; i++) {
+                        total += parseFloat(table.rows[i].cells[3].innerHTML.replace('$', ''));
+                    }
+
+                    document.getElementById('grandTotal').innerHTML = 'Grand Total: $' + total.toFixed(2);
+                }
+
+                // Function to handle form submission
+                function generateBill(event) {
+                    event.preventDefault();
+
+                    var formData = new FormData(document.getElementById('billingForm'));
+
+                    // Send the form data to the server
+                    $.ajax({
+                        url: '/generate_bill/',  // Update the URL to your Django view
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            alert('Bill generated successfully!');  // You can handle the success response as needed
+                        },
+                        error: function () {
+                            alert('Error generating the bill. Please try again.');  // Handle the error case
+                        }
+                    });
+                }
+            })
+        </script>
     </div>
-
-    <script>
-        function addProductRow() {
-            var productDetails = document.getElementById("productDetails");
-
-            var newRow = document.createElement("tr");
-            newRow.innerHTML = `
-                <td><input type="text" name="productName[]" required></td>
-                <td><input type="number" name="productPrice[]" min="0.01" step="0.01" required></td>
-                <td><input type="number" name="productQuantity[]" min="1" required></td>
-                <td>₹0.00</td>
-            `;
-
-            productDetails.appendChild(newRow);
-        }
-
-        function calculateGrandTotal() {
-            var productRows = document.querySelectorAll("#productDetails tr");
-            var grandTotal = 0;
-
-            productRows.forEach(function (row) {
-                var price = parseFloat(row.querySelector("[name='productPrice[]']").value) || 0;
-                var quantity = parseInt(row.querySelector("[name='productQuantity[]']").value) || 0;
-                var total = price * quantity;
-
-                row.querySelector("td:last-child").textContent = "₹" + total.toFixed(2);
-                grandTotal += total;
-            });
-        }
-
-        var productNameInput = document.getElementsByName("productName[]")[0];
-        var productSuggestions = document.getElementById("productSuggestions");
-
-        productNameInput.addEventListener("input", function () {
-            var inputText = productNameInput.value.trim();
-
-            if (inputText === "") {
-                productSuggestions.style.display = "none";
-                return;
-            }
-
-            // Simulating database query here, replace with actual implementation
-            var suggestions = getMatchingProducts(inputText);
-
-            // Display suggestions
-            displaySuggestions(suggestions);
-        });
-
-        function getMatchingProducts(query) {
-            // Simulate database query, replace with actual implementation
-            var productsInDatabase = ["Water", "Watermelon", "Apple", "Banana", "Orange"];
-            return productsInDatabase.filter(product => product.toLowerCase().includes(query.toLowerCase()));
-        }
-
-        function displaySuggestions(suggestions) {
-            var suggestionsList = document.createElement("ul");
-            suggestionsList.innerHTML = "";
-
-            suggestions.forEach(function (product) {
-                var listItem = document.createElement("li");
-                listItem.textContent = product;
-                listItem.addEventListener("click", function () {
-                    productNameInput.value = product;
-                    productSuggestions.style.display = "none";
-                });
-                suggestionsList.appendChild(listItem);
-            });
-
-            productSuggestions.innerHTML = "";
-            productSuggestions.appendChild(suggestionsList);
-            productSuggestions.style.display = "block";
-        }
-
-        // Close suggestion list when clicking outside
-        document.addEventListener("click", function (event) {
-            if (!event.target.matches("#productSuggestions *")) {
-                productSuggestions.style.display = "none";
-            }
-        });
-    </script>
 </body>
 
 </html>

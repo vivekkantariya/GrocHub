@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
-from .forms import CustomerForm, ProductForm
+from .forms import CustomerForm, ProductForm, BillForm
 from .models import Product, Customer
+from django.core.mail import send_mail, EmailMessage
+from django.shortcuts import render
+from .forms import BillForm
+from .models import Product
 from django.http import JsonResponse
 
 
@@ -8,77 +12,113 @@ from django.http import JsonResponse
 def homeView(request, undefined_path=None):
     return render(request, "home.html")
 
+
 def loginView(request):
     return render(request, "loginpage.html")
+
 
 def product_list(request):
     products = Product.objects.all()
     return render(request, 'products.html', {'product': products})
-    
+
+
 def customer_list(request):
     customers = Customer.objects.all()
     return render(request, 'customers.html', {'customer': customers})
 
+
 def addproductView(request):
     return render(request, 'addproduct.html')
 
+
 def addcustomerView(request):
     return render(request, 'addcustomer.html')
+
 
 def add_customerView(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('customers.html')  # Redirect to a success page
+            return redirect('customerslist')
+        else:
+            return render(request, 'addcustomer.html', {'form': form})
     else:
         form = CustomerForm()
-    return render(request, 'addcustomer.html', {'form': form})
-    
+        return render(request, 'addcustomer.html', {'form': form})
+
+
+def add_productView(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('productl   ist')  # Redirect to the correct URL
+        else:
+            return render(request, 'addproduct.html', {'form': form})
+    else:
+        form = ProductForm()
+        return render(request, 'addproduct.html', {'form': form})
+
+
 def transactionView(request):
     return render(request, 'transaction.html')
+
 
 def AnalysisView(request):
     return render(request, 'analysis.html')
 
-def BillingView(request):
+
+def send_email(to_email, subject, message):
+    send_mail(subject, message, 'grochub1@yahoo.com',
+              [to_email], fail_silently=False)
+
+
+def bill_view(request):
     return render(request, 'billing.html')
 
-def add_product(request):
+
+def get_product_suggestions(request):
+    search_term = request.GET.get('search', '')
+
+    # Fetch product suggestions from the database
+    products = Product.objects.filter(name__icontains=search_term)[:5]
+
+    # Return a JSON response with product details (including price)
+    suggestions = [{'name': product.name, 'price': float(
+        product.price)} for product in products]
+
+    return JsonResponse(suggestions, safe=False)
+
+def generate_bill(request):
     if request.method == 'POST':
-        name = request.POST.get('manageProductName')
-        price = request.POST.get('manageProductPrice')
-        product = Product.objects.create(name=name, price=price)
+        form = BillForm(request.POST)
+        if form.is_valid():
+            customer_email = form.cleaned_data['customer_email']
+            products = form.cleaned_data['products']
 
-        return JsonResponse({'id': product.id, 'name': product.name, 'price': product.price})
+            bill_content = f"Thank you for your purchase!\n\nProducts: {', '.join([product.name for product in products])}\nTotal: ${sum([product.price for product in products]):.2f}"
+
+            # Print debug information
+            print(f"Sending email to: {customer_email}")
+            print(f"Email content: {bill_content}")
+
+            # Send the email
+            send_email_with_attachment(customer_email, 'Your Grocery Bill', bill_content)
+
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
     else:
-        return JsonResponse({'error': 'Invalid request method'})
+        return JsonResponse({'success': False, 'errors': 'Invalid request method'})
 
-
-# <!-- var xhr = new XMLHttpRequest();
-#             xhr.open("GET", "{% url 'manage_products' %}", true);
-#             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-#             xhr.onreadystatechange = function () {
-#                 if (xhr.readyState == 4 && xhr.status == 200) {
-#                     // Reload the page to update the product list
-#                     location.reload();
-#                 }
-#             };
-# #             xhr.send("manageProductName=" + productName + "&manageProductPrice=" + productPrice); -->
-
-# function addProduct() {
-#     // Implement logic to add product to the table
-#     var productName = document.getElementById('manageProductName').value;
-#     var productPrice = document.getElementById('manageProductPrice').value;
-
-#     var xhr = new XMLHttpRequest();
-#     xhr.open("POST", "{% url 'productpage' %}", true);
-#     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-#     xhr.onreadystatechange = function () {
-#         if (xhr.readyState == 4 && xhr.status == 200) {
-#             // Reload the page to update the product list
-#             location.reload();
-#         }
-#     };
-#     xhr.send("manageProductName=" + productName + "&manageProductPrice=" + productPrice);
-# }
+# In the send_email_with_attachment function
+def send_email_with_attachment(to_email, subject, message):
+    try:
+        email = EmailMessage(subject, message, 'grochub1@yahoo.com', [to_email])
+        email.send(fail_silently=False)
+        print("Email sent successfully")
+        return True
+    except Exception as e:
+        print(f"Error sending email: {str(e)}")
+        return False

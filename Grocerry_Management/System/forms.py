@@ -15,3 +15,8 @@ class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
         fields = ['name', 'phone_number', 'address', 'last_transaction', 'passport_photo']
+
+class BillForm(forms.Form):
+    customer_name = forms.CharField(max_length=100)
+    customer_email = forms.EmailField()
+    products = forms.ModelMultipleChoiceField(queryset=Product.objects.all(), widget=forms.CheckboxSelectMultiple)
