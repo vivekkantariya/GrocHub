@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,45 +8,160 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #344e41;
+        }
+
+        .container {
+            margin: 25px;
+            background-color: #7eaf964c;
+            padding: 20px;
+            border-radius: 20px;
         }
 
         form {
+<<<<<<< HEAD
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+=======
             max-width: 400px;
             margin: auto;   
+>>>>>>> 1378ec4da8607415c72d295800324ff562a8f780
         }
+
+        .input {
+            display: block;
+            width: 55%;
+        }
+
+        .submit {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 50px;
+            width: 300px;
+            flex-wrap: wrap;
+        }
+        .submit img{
+            width: 220px;
+            height: 220px;
+        }
+
+        h2 {
+            /* text-align: center; */
+            font-size: 32px;
+            color: white;
+            font-family: 'Raleway', sans-serif;
+            background: #608d6f;
+            padding: 10px 16px;
+            border-radius: 10px;
+        }
+
 
         label {
             display: block;
             margin-bottom: 8px;
+            font-size: 22px;
+            color: white;
         }
 
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 12px;
+        input,
+        textarea {
+            width: 90%;
+            padding: 6px 15px;
+            margin-bottom: 20px;
             box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #ffffff26;
+            font-size: 20px;
         }
+
 
         button {
-            background-color: #4caf50;
-            color: white;
-            padding: 10px 15px;
+            margin-top: 10px;
+            width: 200px;
+            height: 45px;
+            background-color: #97bb97;
+            display: block;
+            color: black;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 9px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
+            transition: all 0.3s ease-in-out;
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #608d6f;
+
+        }
+
+
+        @media screen and (max-width: 750px) {
+            .input {
+                width: 70%;
+            }
+
+            .submit {
+                margin-left: 0px;
+            }
+
+            .container {
+                margin: 15px;
+            }
+
+
+            input,
+            textarea {
+                width: 100%;
+            }
+
+        }
+
+        @media screen and (max-width: 450px) {
+            .input {
+                width: 100%;
+            }
+
+            h2{
+                font-size: 26px;
+            }
+
+            .container {
+                margin: 5px;
+                padding: 14px;
+            }
+            input,
+            textarea {
+                width: 100%;
+                padding: 5px 10px;
+                font-size: 14px;
+            }
+
+            button {
+            width: 150px;
+            height: 35px;
+            font-size: 16px;
+            }
+
         }
     </style>
 </head>
+
 <body>
 
-    <h2>Add Product</h2>
+    <div class="container">
 
+<<<<<<< HEAD
+        <h2>Add Product</h2>
+
+        <form action="addproduct.html" method="post">
+
+            <div class="input">
+=======
     <form action="{% url 'add_productView' %}" method="post">
         {% csrf_token %} <!-- Include the CSRF token here -->
         {{ form.errors }}
@@ -55,9 +171,27 @@
 
         <label for="price">Price:</label>
         <input type="number" id="price" name="price" step="0.01" required>
+>>>>>>> 1378ec4da8607415c72d295800324ff562a8f780
 
-        <button type="submit">Add Product</button>
-    </form>
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName" name="productName" required>
 
+                <label for="productPrice">Price:</label>
+                <input type="number" id="productPrice" name="productPrice" step="0.01" required>
+
+                <label for="productQuantity">Quantity:</label>
+                <input type="number" id="productQuantity" name="productQuantity" required>
+
+            </div>
+
+            <div class="submit">
+                <img src="https://i.ibb.co/jv3wy7G/sslogo.jpg" alt="">
+                <button type="submit">Add Product</button>
+            </div>
+
+        </form>
+
+    </div>
 </body>
+
 </html>
