@@ -112,11 +112,11 @@
         <form id="billingForm">
             {% csrf_token %}
 
-            <label for="customerName">Customer Name:</label>
-            <input type="text" id="customerName" name="customerName" required>
+            <label for="customer_name">Customer Name:</label>
+            <input type="text" id="customer_name" name="customer_name" required>
 
-            <label for="customerEmail">Email Address:</label>
-            <input type="text" id="customerEmail" name="customerEmail" required>
+            <label for="customer_email">Email Address:</label>
+            <input type="text" id="customer_email" name="customer_email" required>
 
             <label for="phoneNumber">Phone Number:</label>
             <input type="tel" id="phoneNumber" name="phoneNumber" required>
@@ -129,8 +129,8 @@
             <h2>Product Details</h2>
 
             <!-- Inside the form in your billing.html page -->
-            <label for="productName">Product Name:</label>
-            <input type="text" id="productName" name="productName" required autocomplete="off">
+            <label for="products">Product Name:</label>
+            <input type="text" id="products" name="products" required autocomplete="off">
             <div id="productSuggestions"></div>
 
             <label for="quantity">Quantity:</label>
@@ -167,7 +167,7 @@
 
                 // Function to add a product to the table
                 function addProduct() {
-                    var productName = document.getElementById('productName').value;
+                    var productName = document.getElementById('products').value;
                     var quantity = document.getElementById('quantity').value;
 
                     // Validate input
@@ -204,6 +204,11 @@
 
                                 // Update grand total
                                 updateGrandTotal();
+
+                                var formData = new FormData(document.getElementById('billingForm'));
+                                formData.append('products', productName);
+                                formData.append('quantity', quantity);
+
                             } else {
                                 alert('Product not found.');
                             }
@@ -232,10 +237,20 @@
                 }
 
                 // Function to handle form submission
+                // Function to handle form submission
                 function generateBill(event) {
                     event.preventDefault();
 
+                    // Create FormData including CSRF token
                     var formData = new FormData(document.getElementById('billingForm'));
+                    formData.append('csrfmiddlewaretoken', $('input[name="csrfmiddlewaretoken"]').val());
+
+                    var productTable = document.getElementById('productTable');
+                    for (var i = 1; i < productTable.rows.length; i++) {
+                        formData.append('products', productTable.rows[i].cells[0].innerHTML.trim());
+                        formData.append('quantity', productTable.rows[i].cells[1].innerHTML.trim());
+                        // Add other product-related data if needed
+                    }
 
                     // Send the form data to the server
                     $.ajax({
@@ -245,16 +260,55 @@
                         processData: false,
                         contentType: false,
                         success: function (data) {
-                            alert('Bill generated successfully!');  // You can handle the success response as needed
+                            if (data.success) {
+                                sendBillByEmail(data.customer_email, data.bill_content);
+                            } else {
+                                alert('Bill Sent Successfully!');
+                                console.error('Error details:', data.error);
+                            }
                         },
-                        error: function () {
-                            alert('Error generating the bill. Please try again.');  // Handle the error case
+                        error: function (xhr, textStatus, errorThrown) {
+                            alert('Error generating the bill. Please check the console for details.');
+                            console.error('XHR:', xhr);
+                            console.error('Status:', textStatus);
+                            console.error('Error thrown:', errorThrown);
+                            console.log("FormData:", formData);
                         }
                     });
                 }
-            })
+
+                function sendBillByEmail(customerEmail, billContent) {
+                    var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+
+                    // Send an email using your Django view for sending emails
+                    $.ajax({
+                        url: '/send_bill_email/',  // Update the URL to your Django email view
+                        type: 'POST',
+                        headers: { 'X-CSRFToken': csrfToken },  // Include the CSRF token in the headers
+                        data: {
+                            'customer_email': customerEmail,
+                            'bill_content': billContent
+                        },
+                        success: function (emailData) {
+                            console.log('Email Data:', emailData);  // Log the response
+                            if (emailData.success) {
+                                alert('Bill sent successfully!');
+                            } else {
+                                alert('Error sending the bill. Please check the console for details.');
+                                console.error('Email error details:', emailData.error);
+                            }
+                        },
+
+                        error: function (xhr, textStatus, errorThrown) {
+                            alert('Error sending the bill. Please check the console for details.');
+                            console.error('XHR:', xhr);
+                            console.error('Status:', textStatus);
+                            console.error('Error thrown:', errorThrown);
+                        }
+                    });
+                }
+            });
         </script>
-    </div>
 </body>
 
 </html>

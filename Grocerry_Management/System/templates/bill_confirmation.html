@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Confirmation</title>
+</head>
+<body>
+    <h2>Thank you for your purchase!</h2>
+    <p>Customer Email: {{ customer_email }}</p>
+    
+    <h3>Products Purchased:</h3>
+    <ul>
+        {% for product in products %}
+            <li>{{ product.name }} - ${{ product.price }}</li>
+        {% endfor %}
+    </ul>
+
+    <p>Total: ${{ total_price }}</p>
+</body>
+</html>

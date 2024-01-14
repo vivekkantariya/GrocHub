@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product, Customer
+from .models import Product, Customer, Bill
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -16,7 +16,7 @@ class CustomerForm(forms.ModelForm):
         model = Customer
         fields = ['name', 'phone_number', 'address', 'last_transaction', 'passport_photo']
 
-class BillForm(forms.Form):
-    customer_name = forms.CharField(max_length=100)
-    customer_email = forms.EmailField()
-    products = forms.ModelMultipleChoiceField(queryset=Product.objects.all(), widget=forms.CheckboxSelectMultiple)
+class BillForm(forms.ModelForm):
+    class Meta:
+        model = Bill  # Specify your Bill model here
+        fields = ['customer_name', 'customer_email']

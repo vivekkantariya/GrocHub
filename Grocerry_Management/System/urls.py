@@ -18,8 +18,8 @@ urlpatterns = [
     path('products.html/addproduct.html/', add_productView, name='add_productView'),
     path('customers.html/addcustomer.html/', add_customerView, name='add_customerView'),
 
-    path('transaction.html/', transactionView, name='transactions'),
-    path('analysis.html/', AnalysisView, name='analysis'),
+    path('transaction.html', transactionView, name='transactions'),
+    path('analysis.html', AnalysisView, name='analysis'),
     path('billing.html', bill_view, name='billing'),
     path('generate_bill/', generate_bill, name='generate_bill'),
 

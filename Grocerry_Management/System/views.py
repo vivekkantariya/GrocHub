@@ -1,3 +1,4 @@
+from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect
 from .forms import CustomerForm, ProductForm, BillForm
 from .models import Product, Customer
@@ -53,7 +54,7 @@ def add_productView(request):
         form = ProductForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('productl   ist')  # Redirect to the correct URL
+            return redirect('productlist')  # Redirect to the correct URL
         else:
             return render(request, 'addproduct.html', {'form': form})
     else:
@@ -90,35 +91,58 @@ def get_product_suggestions(request):
 
     return JsonResponse(suggestions, safe=False)
 
+
 def generate_bill(request):
     if request.method == 'POST':
         form = BillForm(request.POST)
         if form.is_valid():
             customer_email = form.cleaned_data['customer_email']
-            products = form.cleaned_data['products']
+            # Get list of selected products
+            products = request.POST.getlist('products')
+            # Get list of corresponding quantities
+            quantities = request.POST.getlist('quantity')
 
-            bill_content = f"Thank you for your purchase!\n\nProducts: {', '.join([product.name for product in products])}\nTotal: ${sum([product.price for product in products]):.2f}"
+            # Validate product names and retrieve product details
+            valid_products = []
+            total_price = 0
+            for product_name, quantity in zip(products, quantities):
+                product = Product.objects.filter(
+                    name__iexact=product_name).first()
+                if product:
+                    valid_products.append({'name': product.name, 'quantity': int(
+                        quantity), 'price': float(product.price)})
+                    total_price += float(product.price) * int(quantity)
+                else:
+                    return JsonResponse({'success': False, 'errors': [f'"{product_name}" is not a valid value.']})
 
-            # Print debug information
-            print(f"Sending email to: {customer_email}")
-            print(f"Email content: {bill_content}")
+            # Additional logic for storing the transaction can be added here
 
-            # Send the email
-            send_email_with_attachment(customer_email, 'Your Grocery Bill', bill_content)
+            # Send email with the bill details
+            email_subject = 'Your Bill Details'
+            email_message = f'Thank you for your purchase!\n\n'
+            email_message += 'Products:\n'
+            for product in valid_products:
+                email_message += f'{product["name"]} - Quantity: {product["quantity"]} - Price: ${product["price"]}\n'
+            email_message += f'\nTotal Price: ${total_price}'
 
-            return JsonResponse({'success': True})
+            send_email_with_attachment(
+                customer_email, email_subject, email_message)
+
+            # Return a JSON response with success and customer email
+            return JsonResponse({'success': True, 'customer_email': customer_email})
         else:
             return JsonResponse({'success': False, 'errors': form.errors})
     else:
         return JsonResponse({'success': False, 'errors': 'Invalid request method'})
 
-# In the send_email_with_attachment function
+
 def send_email_with_attachment(to_email, subject, message):
     try:
         email = EmailMessage(subject, message, 'grochub1@yahoo.com', [to_email])
         email.send(fail_silently=False)
         print("Email sent successfully")
-        return True
+        return JsonResponse({'success': True, 'message': 'Email sent successfully'})
     except Exception as e:
-        print(f"Error sending email: {str(e)}")
-        return False
+        error_message = str(e)
+        print(f"Error sending email: {error_message}")
+        return JsonResponse({'success': False, 'error': error_message})
