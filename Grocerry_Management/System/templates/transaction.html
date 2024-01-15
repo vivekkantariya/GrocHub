@@ -63,20 +63,23 @@
                     <th>Customer Name</th>
                     <th>Product Purchased</th>
                     <th>Quantity</th>
+                    <th>Time</th>
                     <!-- Add more transaction details as needed -->
                 </tr>
             </thead>
             <tbody id="todaysTransactionTableBody">
-                <!-- Transaction details will be displayed here -->
-                <!-- You can populate this section dynamically using JavaScript -->
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.customer_name }}</td>
+                    <td>{{ transaction.product_purchased }}</td>
+                    <td>{{ transaction.quantity }}</td>
+                    <td>{{ transaction.timestamp }}</td>
+                    <!-- Add more transaction details as needed -->
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
-
-    <!-- Add any other content or elements as needed -->
-
-    <!-- Include your JavaScript file if needed -->
-    <!-- <script src="your-script.js"></script> -->
 </body>
 
 </html>

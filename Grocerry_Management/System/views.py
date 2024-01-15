@@ -5,8 +5,12 @@ from .models import Product, Customer
 from django.core.mail import send_mail, EmailMessage
 from django.shortcuts import render
 from .forms import BillForm
-from .models import Product
+from .models import Product, Transaction
 from django.http import JsonResponse
+from django.utils import timezone
+from datetime import timedelta
+
+
 
 
 # Create your views here.
@@ -63,8 +67,11 @@ def add_productView(request):
 
 
 def transactionView(request):
-    return render(request, 'transaction.html')
+    # Get transactions from the last 24 hours
+    start_time = timezone.now() - timedelta(days=1)
+    transactions = Transaction.objects.filter(timestamp__gte=start_time)
 
+    return render(request, 'transaction.html', {'transactions': transactions})
 
 def AnalysisView(request):
     return render(request, 'analysis.html')

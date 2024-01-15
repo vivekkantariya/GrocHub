@@ -99,58 +99,34 @@
 
     <div class="container">
 
-<<<<<<< HEAD
         <h2>Add Customer</h2>
 
         <form action="{% url 'add_customerView' %}" method="post" enctype="multipart/form-data">
             <div class="input">
-            {% csrf_token %} <!-- Include the CSRF token here -->
+                {% csrf_token %} <!-- Include the CSRF token here -->
 
 
                 <label for="customerName">Customer Name:</label>
                 <input type="text" id="customerName" name="customerName" required>
-                
+
                 <label for="phoneNumber">Phone Number:</label>
                 <input type="tel" id="phoneNumber" name="phoneNumber" required>
-                
+
                 <label for="customerAddress">Address:</label>
                 <textarea id="customerAddress" name="customerAddress" rows="4" required></textarea>
-                
+
                 <label for="lastTransaction">Last Transaction:</label>
                 <input type="datetime-local" id="lastTransaction" name="lastTransaction" required>
-                
+
                 <label for="passportPhoto">Passport Photo:</label>
                 <input type="file" id="passportPhoto" name="passportPhoto">
-                
+
+                <div class="submit">
+                    <button type="submit">Add Customer</button>
+                </div>
             </div>
+        </form>
 
-            <div class="submit">
-                <button type="submit">Add Customer</button>
-            </div>
-=======
-    <form action="{% url 'add_customerView' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %} <!-- Include the CSRF token here -->
-        {{ form.errors }}
-
-        <!-- Update the input names to match the fields in CustomerForm -->
-        <label for="customerName">Customer Name:</label>
-        <input type="text" id="id_name" name="name" required>
-
-        <label for="phoneNumber">Phone Number:</label>
-        <input type="tel" id="id_phone_number" name="phone_number" required>
-
-        <label for="customerAddress">Address:</label>
-        <textarea id="id_address" name="address" rows="4" required></textarea>
-
-        <label for="lastTransaction">Last Transaction:</label>
-        <input type="datetime-local" id="id_last_transaction" name="last_transaction" required>
-
-        <label for="passportPhoto">Passport Photo:</label>
-        <input type="file" id="id_passport_photo" name="passport_photo">
->>>>>>> 1378ec4da8607415c72d295800324ff562a8f780
-
-            </form>
-            
     </div>
 
 </body>

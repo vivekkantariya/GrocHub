@@ -7,22 +7,20 @@
     <title>Product's List</title>
     <style>
         * {
-            margin: 0px;
-            padding: 0px;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-
 
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #344e41;
-            /* background-color: #737373; */
         }
 
         header {
             background-color: #02261a;
-            /* background-color: #6a7885; */
             color: white;
             text-align: center;
             padding: 1rem;
@@ -31,43 +29,33 @@
 
         .container {
             margin: 25px;
+            padding: 20px;
         }
 
-        h2 {
+        h1 {
             font-size: 32px;
             color: white;
             font-family: 'Raleway', sans-serif;
         }
 
-
-
         table {
-            width: 95%;
+            width: 100%;
             background: white;
             border-collapse: collapse;
             margin-top: 20px;
             border-radius: 8px;
             overflow: hidden;
             margin-bottom: 30px;
-            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
         }
 
         thead {
             background-color: #f2f2f2;
         }
 
-        th {
-            font-size: 20px;
-        }
-
-        td {
-            font-size: 20px;
-        }
-
         th,
         td {
             border: 1px solid #ddd;
-            padding: 10px;
+            padding: 15px;
             text-align: left;
         }
 
@@ -79,47 +67,54 @@
             background-color: #58815741;
         }
 
-
-        /* add product btn */
         button {
             background-color: #588157;
-            background-color: #97bb97;
             width: 150px;
             color: black;
             font-size: 16px;
-            padding: 9px 15px;
+            padding: 12px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             margin-left: 10px;
             transition: all 0.3s ease-in-out;
-
         }
 
         button:hover {
             background-color: #77bd8d;
-            background-color: #608d6f;
+        }
 
+        .remove-button {
+            background-color: #bd5151;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .remove-button:hover {
+            background-color: #a34a4a;
         }
     </style>
 </head>
 
 <body>
-
     <header>
-        <h1>Product's List
+        <h1>Product List
             <a href="addproduct.html"><button id="addProductButton">Add Product</button></a>
         </h1>
     </header>
 
     <div class="container">
-
         <table>
             <thead>
                 <tr>
                     <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Price</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -128,12 +123,23 @@
                     <td>{{ product.id }}</td>
                     <td>{{ product.name }}</td>
                     <td>{{ product.price }}</td>
+                    <td>
+                        <!-- Remove button for each product -->
+                        <button class="remove-button" onclick="removeProduct('{{ product.id }}')">Remove</button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-
     </div>
+
+    <script>
+        // JavaScript function to handle product removal
+        function removeProduct(productId) {
+            // You can add your logic here to handle the removal, for example, making an API call.
+            console.log("Remove product with ID:", productId);
+        }
+    </script>
 </body>
 
 </html>

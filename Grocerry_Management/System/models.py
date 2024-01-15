@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 
 class Product(models.Model):
     class Meta:
@@ -14,6 +16,10 @@ class Transaction(models.Model):
     customer_name = models.CharField(max_length=255)
     product_purchased = models.CharField(max_length=255)
     quantity = models.IntegerField()
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.customer_name} - {self.product_purchased} - {self.timestamp}"
 
 class Customer(models.Model):
     class Meta:

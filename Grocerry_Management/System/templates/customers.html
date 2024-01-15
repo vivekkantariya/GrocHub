@@ -122,6 +122,7 @@
                     <th>Address</th>
                     <th>Last Transaction</th>
                     <th>Passport Photo</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -132,12 +133,23 @@
                     <td>{{ customer.address }}</td>
                     <td>{{ customer.last_transaction }}</td>
                     <td><img src="{{ customer.passport_photo.url }}" alt="Passport Photo" width="50" height="50"></td>
+                    <td>
+                        <!-- Remove button for each product -->
+                        <button class="remove-button" onclick="removeProduct('{{ product.id }}')">Remove</button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 
+    <script>
+        // JavaScript function to handle product removal
+        function removeProduct(productId) {
+            // You can add your logic here to handle the removal, for example, making an API call.
+            console.log("Remove product with ID:", productId);
+        }
+    </script>
 </body>
 
 </html>
