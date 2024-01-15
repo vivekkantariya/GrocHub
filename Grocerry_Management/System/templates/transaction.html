@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Today's Transactions</title>
 
-    <!-- Add your CSS styles or external stylesheets if needed -->
     <style>
         /* Add your styles here */
     </style>
@@ -64,7 +63,6 @@
                     <th>Product Purchased</th>
                     <th>Quantity</th>
                     <th>Time</th>
-                    <!-- Add more transaction details as needed -->
                 </tr>
             </thead>
             <tbody id="todaysTransactionTableBody">
@@ -74,7 +72,6 @@
                     <td>{{ transaction.product_purchased }}</td>
                     <td>{{ transaction.quantity }}</td>
                     <td>{{ transaction.timestamp }}</td>
-                    <!-- Add more transaction details as needed -->
                 </tr>
                 {% endfor %}
             </tbody>
