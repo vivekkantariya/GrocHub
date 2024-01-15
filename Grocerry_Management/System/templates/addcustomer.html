@@ -9,6 +9,7 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #344e41;
+            margin: 0;
         }
 
         .container {
@@ -20,33 +21,22 @@
 
         form {
             display: flex;
-            align-items: center;
             flex-wrap: wrap;
         }
 
-        .input {
-            display: block;
-            width: 55%;
-        }
-
-        .submit {
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-left: 50px;
+        .pair {
+            width: 50%;
         }
 
         h2 {
-            /* text-align: center; */
             font-size: 32px;
             color: white;
             font-family: 'Raleway', sans-serif;
             background: #608d6f;
             padding: 10px 16px;
             border-radius: 10px;
+            margin: 0;
         }
-
 
         label {
             display: block;
@@ -56,7 +46,8 @@
         }
 
         input,
-        textarea {
+        textarea,
+        select {
             width: 90%;
             padding: 6px 15px;
             margin-bottom: 20px;
@@ -87,25 +78,63 @@
             transition: all 0.3s ease-in-out;
         }
 
-
         button:hover {
             background-color: #608d6f;
+        }
 
+        .btn {
+            width: 100%;
+        }
+
+        @media screen and (max-width: 750px) {
+            .pair {
+                width: 100%;
+            }
+
+            .container {
+                margin: 15px;
+            }
+
+            input,
+            textarea,
+            select {
+                width: 100%;
+            }
+        }
+
+        @media screen and (max-width: 450px) {
+            h2 {
+                font-size: 26px;
+            }
+
+            .container {
+                margin: 5px;
+                padding: 14px;
+            }
+
+            input,
+            textarea,
+            select {
+                width: 100%;
+                padding: 5px 10px;
+                font-size: 14px;
+            }
+
+            button {
+                width: 150px;
+                height: 35px;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 
 <body>
-
     <div class="container">
-
         <h2>Add Customer</h2>
-
         <form action="{% url 'add_customerView' %}" method="post" enctype="multipart/form-data">
-            <div class="input">
-                {% csrf_token %} <!-- Include the CSRF token here -->
-
-
+            {% csrf_token %} <!-- Include the CSRF token here -->
+            <div class="pair">
                 <label for="customerName">Customer Name:</label>
                 <input type="text" id="customerName" name="customerName" required>
 
@@ -120,15 +149,13 @@
 
                 <label for="passportPhoto">Passport Photo:</label>
                 <input type="file" id="passportPhoto" name="passportPhoto">
+            </div>
 
-                <div class="submit">
-                    <button type="submit">Add Customer</button>
-                </div>
+            <div class="submit">
+                <button type="submit">Add Customer</button>
             </div>
         </form>
-
     </div>
-
 </body>
 
 </html>

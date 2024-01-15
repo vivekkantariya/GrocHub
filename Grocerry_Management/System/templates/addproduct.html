@@ -37,13 +37,12 @@
             width: 300px;
             flex-wrap: wrap;
         }
-        .submit img{
-            width: 220px;
-            height: 220px;
+
+        .pair {
+            width: 50%;
         }
 
         h2 {
-            /* text-align: center; */
             font-size: 32px;
             color: white;
             font-family: 'Raleway', sans-serif;
@@ -51,7 +50,6 @@
             padding: 10px 16px;
             border-radius: 10px;
         }
-
 
         label {
             display: block;
@@ -72,7 +70,6 @@
             font-size: 20px;
         }
 
-
         button {
             margin-top: 10px;
             width: 200px;
@@ -91,37 +88,29 @@
 
         button:hover {
             background-color: #608d6f;
-
         }
 
+        .btn {
+            width: 100%;
+        }
 
         @media screen and (max-width: 750px) {
-            .input {
-                width: 70%;
-            }
-
-            .submit {
-                margin-left: 0px;
+            .pair {
+                width: 100%;
             }
 
             .container {
                 margin: 15px;
             }
 
-
             input,
             textarea {
                 width: 100%;
             }
-
         }
 
         @media screen and (max-width: 450px) {
-            .input {
-                width: 100%;
-            }
-
-            h2{
+            h2 {
                 font-size: 26px;
             }
 
@@ -129,6 +118,7 @@
                 margin: 5px;
                 padding: 14px;
             }
+
             input,
             textarea {
                 width: 100%;
@@ -137,11 +127,10 @@
             }
 
             button {
-            width: 150px;
-            height: 35px;
-            font-size: 16px;
+                width: 150px;
+                height: 35px;
+                font-size: 16px;
             }
-
         }
     </style>
 </head>
@@ -152,23 +141,19 @@
 
         <h2>Add Product</h2>
 
-        <form action="addproduct.html" method="post">
+        <form action="{% url 'add_productView' %}" method="post">
 
-            <div class="input">
+            <div class="pair">
+                <label for="name">Product Name:</label>
+                <input type="text" id="name" name="name" required>
 
-                <label for="productName">Product Name:</label>
-                <input type="text" id="productName" name="productName" required>
-
-                <label for="productPrice">Price:</label>
-                <input type="number" id="productPrice" name="productPrice" step="0.01" required>
-
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="price" step="0.01" required>
             </div>
 
-            <div class="submit">
-                <img src="https://i.ibb.co/jv3wy7G/sslogo.jpg" alt="">
+            <div class="btn">
                 <button type="submit">Add Product</button>
             </div>
-
         </form>
 
     </div>

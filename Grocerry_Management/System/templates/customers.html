@@ -82,25 +82,28 @@
 
         /* add product btn */
         button {
-            background-color: #588157;
+
+            width: 200px;
+            height: 45px;
             background-color: #97bb97;
-            width: 150px;
             color: black;
-            font-size: 16px;
+            font-size: 20px;
+            font-weight: bold;
             padding: 9px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin-left: 10px;
             transition: all 0.3s ease-in-out;
 
         }
 
         button:hover {
-            background-color: #77bd8d;
             background-color: #608d6f;
 
         }
+
+
+        
     </style>
 </head>
 
@@ -127,17 +130,17 @@
             </thead>
             <tbody>
                 {% for customer in customer %}
-                <tr>
-                    <td>{{ customer.name }}</td>
-                    <td>{{ customer.phone_number }}</td>
-                    <td>{{ customer.address }}</td>
-                    <td>{{ customer.last_transaction }}</td>
-                    <td><img src="{{ customer.passport_photo.url }}" alt="Passport Photo" width="50" height="50"></td>
-                    <td>
-                        <!-- Remove button for each product -->
-                        <button class="remove-button" onclick="removeProduct('{{ product.id }}')">Remove</button>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>{{ customer.name }}</td>
+                        <td>{{ customer.phone_number }}</td>
+                        <td>{{ customer.address }}</td>
+                        <td>{{ customer.last_transaction }}</td>
+                        <td><img src="{{ customer.passport_photo.url }}" alt="Passport Photo" width="50" height="50"></td>
+                        <td>
+                            <!-- Remove button for each product -->
+                            <button class="remove-button" onclick="removeCustomer('{{ customer.id }}')">Remove</button>
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
