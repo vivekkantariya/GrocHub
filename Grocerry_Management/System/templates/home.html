@@ -9,12 +9,7 @@
 
     <!-- text -->
     <link href="https://fonts.googleapis.com/css?family=Days One" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Michroma" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Rajdhani" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Audiowide" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Michroma" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Jost" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Poiret One" rel="stylesheet" type="text/css">
 
 
 
@@ -54,26 +49,248 @@
             }
         }
 
+
+
+
         nav {
+            background-color: #9eb19b;
+            color: rgb(0, 0, 0);
+            padding: 0px;
             display: flex;
-            justify-content: center;
-            background-color: #ddd;
-            padding: 0.5rem;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            z-index: 500;
+            width: 100%;
+            height: 65px;
         }
 
         nav a {
-            margin: 8px 18px;
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-            font-size: 22px;
             font-family: 'Jost', sans-serif;
         }
 
-        nav a:hover {
-            transform: scale(1.09);
+        /* logo in the nav bar */
+        .logo-container img {
+            width: 55%;
+            height: auto;
+            max-width: 450px;
+            display: block;
+            margin: 0 auto;
         }
 
+        /* Optional: Adjust the margin-left for larger screens if needed */
+        @media (min-width: 768px) {
+            .logo-container img {
+                margin-left: 20px;
+            }
+        }
+
+
+        .logo-container span {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .menu-container {
+            display: flex;
+            transition: 0.5s;
+        }
+
+        .menu-container a {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            padding: 0 15px;
+            font-weight: lighter;
+            font-size: 22px;
+        }
+
+        .menu-container a:hover {
+            color: #02261a;
+            text-decoration: none;
+            /* padding: 0 15px; */
+            font-weight: bolder;
+        }
+
+
+        /* Hamburger menu styles */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+
+        .bar {
+            height: 3px;
+            width: 25px;
+            background-color: rgb(0, 0, 0);
+            margin: 5px 0;
+        }
+
+        /* Styles for the cross icon when the menu is open */
+        .hamburger-menu.change .bar1 {
+            transform: rotate(-45deg) translate(-5px, 6px);
+            width: 40px;
+            transition: 0.5s;
+        }
+
+        .hamburger-menu.change .bar2 {
+            transform: rotate(45deg) translate(-3px, -6px);
+            width: 40px;
+            transition: 0.5s;
+        }
+
+        .hamburger-menu.change .bar3 {
+            margin-right: 9px;
+            opacity: 0;
+        }
+
+
+        /* dropdown */
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            padding: 0 15px;
+            font-weight: lighter;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 15px;
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            font-weight: lighter;
+            font-size: 20px;
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+
+        .product-directory {
+            display: none;
+            /* Initially hide the product directory */
+            background-color: #ffffff;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .product-directory a {
+            display: block;
+            padding: 15px;
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+
+
+        /* Media query for responsiveness */
+        @media only screen and (max-width: 768px) {
+            .menu-container {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 95%;
+                left: 0;
+                width: 100%;
+                background-color: #ffffff;
+                background-color: #bacfb7f5;
+                text-align: center;
+                overflow: scroll;
+                margin-top: 0px;
+                height: 1000%;
+                z-index: 1;
+                transition: height 0.3s ease-in-out;
+                margin-right: 20px;
+                align-items: center;
+            }
+
+            .menu-container a {
+                padding: 15px 0;
+                width: 100%;
+                display: block;
+            }
+
+            .hamburger-menu {
+                display: flex;
+                margin-right: 20px;
+            }
+
+            nav span {
+                color: white;
+                font-size: 150%;
+            }
+
+            .menu-container.show-menu a {
+                opacity: 1;
+            }
+
+            /* showing products */
+
+
+            .product-directory {
+                display: block;
+                background-color: transparent;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                border: none;
+            }
+
+            .product-directory a {
+                display: block;
+                padding: 15px;
+                color: rgb(0, 0, 0);
+                text-decoration: none;
+                font-size: 15px;
+                text-align: start;
+                padding-left: 10%;
+            }
+
+            /* adding right arrow in a tag at the start of content */
+            .product-directory a::after {
+                content: "\f054";
+                font-family: "Font Awesome 5 Free";
+                font-weight: 100;
+                padding-left: 10px;
+                align-self: center;
+
+                /* centering from its parent in vertically */
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+            }
+
+        }
 
         section {
             padding: 2rem;
@@ -145,6 +362,7 @@
         /* home style */
 
         #home .hcontainer {
+            margin-top: 40px;
             width: 100%;
             height: max-content;
             background-color: black;
@@ -181,12 +399,20 @@
                 margin: 20px;
                 font-size: 35px;
             }
+
+            section {
+                padding: 1rem;
+            }
         }
 
         @media screen and (max-width: 450px) {
             #home .hcontainer .text h2 {
                 margin: 20px;
                 font-size: 30px;
+            }
+
+            section {
+                padding: 0.5rem;
             }
         }
 
@@ -245,26 +471,83 @@
             }
         }
     </style>
+
+    <script>
+        const menuToggle = document.querySelector(".menu-toggle");
+        const navUl = document.querySelector("ul");
+        // navbar script
+        document.addEventListener('DOMContentLoaded', function () {
+            const hamburgerMenu = document.querySelector(".hamburger-menu");
+            const menuContainer = document.querySelector(".menu-container");
+
+            hamburgerMenu.addEventListener("click", () => {
+                menuContainer.style.transition = "all 0.5s ease-in-out";
+                menuContainer.style.display = (menuContainer.style.display === "none" || menuContainer.style.display === "") ? "flex" : "none";
+                hamburgerMenu.classList.toggle("change");
+            });
+
+        });
+
+
+    </script>
+
+<!-- Text Animation -->
+    <script>
+        var i = 0;
+        var txt = 'Welcome to our Grocery Management System!';
+        var speed = 50;
+
+        function typeWriter() {
+            if (i < txt.length) {
+                document.getElementById("demo").innerHTML += txt.charAt(i);
+                i++;
+                setTimeout(typeWriter, speed);
+            }
+        }
+
+        // Call typeWriter when the webpage loads
+        window.onload = function () {
+            typeWriter();
+        };
+    </script>
+
 </head>
 
 {% load crispy_forms_tags %}
 
 <body>
-    <header>
-        <h1>Grocery Management System</h1>
-    </header>
-
     <nav>
-        <a href="#" onclick="showHome()">Home</a>
-        <a href="#" onclick="showManageProduct()">Manage Products</a>
-        <a href="#" onclick="showCustomerPage()">Manage Customer</a>
+        <div class="logo-container">
+            <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png"
+                alt="logo">
+        </div>
+        <div class="menu-container">
+
+
+            <a href="#" onclick="showHome()">Home</a>
+            <a href="#" onclick="showManageProduct()">Manage Products</a>
+            <a href="#" onclick="showCustomerPage()">Manage Customer</a>
+
+            <a href="#export" onclick="scrollToSection('export')">Export</a>
+            <a href="Gallery.html">Gallery</a>
+
+
+        </div>
+        <div class="hamburger-menu" onclick="toggleMenu()">
+            <div class="bar bar1"></div>
+            <div class="bar bar2"></div>
+            <div class="bar bar3"></div>
+        </div>
     </nav>
+
+
 
     <section id="home">
         <!-- Add more content as needed -->
         <div class="hcontainer">
             <div class="text">
-                <h2>Welcome to our Grocery Management System!</h2>
+                <!-- <h2 id="demo">Welcome to our Grocery Management System!</h2> -->
+                <h2 id="demo"></h2>
 
             </div>
             <div class="btn">
@@ -278,6 +561,7 @@
             </div>
         </div>
     </section>
+
 
 
 
