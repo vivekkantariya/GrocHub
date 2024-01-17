@@ -9,9 +9,11 @@ from .models import Product, Transaction
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import timedelta
-
-
-
+from django.db.models import Sum
+from django.db.models import F, ExpressionWrapper, DecimalField
+from django.db.models.functions import TruncMonth
+from django.db.models import Count
+import json
 
 # Create your views here.
 def homeView(request, undefined_path=None):
@@ -153,3 +155,29 @@ def send_email_with_attachment(to_email, subject, message):
         error_message = str(e)
         print(f"Error sending email: {error_message}")
         return JsonResponse({'success': False, 'error': error_message})
+    
+
+def get_monthly_income(request):
+    monthly_income_data = Transaction.objects.annotate(
+        month=TruncMonth('timestamp')
+    ).values('month').annotate(
+        total_income=ExpressionWrapper(
+            Sum(F('quantity') * F('product_purchased')),
+            output_field=DecimalField(),
+        )
+    ).order_by('month')
+
+    labels = [item['month'].strftime('%B %Y') for item in monthly_income_data]
+    data = [item['total_income'] for item in monthly_income_data]
+
+    return JsonResponse({'labels': labels, 'data': data})
+
+def get_real_time_customers(request):
+    # Get real-time customer data for the last 24 hours
+    start_time = timezone.now() - timedelta(days=1)
+    real_time_customer_data = Transaction.objects.filter(timestamp__gte=start_time).values('timestamp').annotate(customer_count=Count('id')).order_by('timestamp')
+    
+    labels = [item['timestamp'].strftime('%H:%M') for item in real_time_customer_data]
+    data = [item['customer_count'] for item in real_time_customer_data]
+
+    return JsonResponse({'labels': labels, 'data': data})
