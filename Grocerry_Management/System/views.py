@@ -9,11 +9,15 @@ from .models import Product, Transaction
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import timedelta
-
-
-
+from django.db.models import Sum
+from django.db.models import F, ExpressionWrapper, DecimalField
+from django.db.models.functions import TruncMonth
+from django.db.models import Count
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
+
+
 def homeView(request, undefined_path=None):
     return render(request, "home.html")
 
@@ -45,7 +49,7 @@ def add_customerView(request):
         form = CustomerForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('customerslist')
+            return redirect('customer_list')
         else:
             return render(request, 'addcustomer.html', {'form': form})
     else:
@@ -58,7 +62,7 @@ def add_productView(request):
         form = ProductForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('productlist')  # Redirect to the correct URL
+            return redirect('product_list')  # Redirect to the correct URL
         else:
             return render(request, 'addproduct.html', {'form': form})
     else:
@@ -72,6 +76,7 @@ def transactionView(request):
     transactions = Transaction.objects.filter(timestamp__gte=start_time)
 
     return render(request, 'transaction.html', {'transactions': transactions})
+
 
 def AnalysisView(request):
     return render(request, 'analysis.html')
@@ -145,7 +150,8 @@ def generate_bill(request):
 
 def send_email_with_attachment(to_email, subject, message):
     try:
-        email = EmailMessage(subject, message, 'grochub1@yahoo.com', [to_email])
+        email = EmailMessage(
+            subject, message, 'grochub1@yahoo.com', [to_email])
         email.send(fail_silently=False)
         print("Email sent successfully")
         return JsonResponse({'success': True, 'message': 'Email sent successfully'})
@@ -153,3 +159,49 @@ def send_email_with_attachment(to_email, subject, message):
         error_message = str(e)
         print(f"Error sending email: {error_message}")
         return JsonResponse({'success': False, 'error': error_message})
+
+
+def get_monthly_income(request):
+    monthly_income_data = Transaction.objects.annotate(
+        month=TruncMonth('timestamp')
+    ).values('month').annotate(
+        total_income=ExpressionWrapper(
+            Sum(F('quantity') * F('product_purchased')),
+            output_field=DecimalField(),
+        )
+    ).order_by('month')
+
+    labels = [item['month'].strftime('%B %Y') for item in monthly_income_data]
+    data = [item['total_income'] for item in monthly_income_data]
+
+    return JsonResponse({'labels': labels, 'data': data})
+
+
+def get_real_time_customers(request):
+    # Get real-time customer data for the last 24 hours
+    start_time = timezone.now() - timedelta(days=1)
+    real_time_customer_data = Transaction.objects.filter(timestamp__gte=start_time).values(
+        'timestamp').annotate(customer_count=Count('id')).order_by('timestamp')
+
+    labels = [item['timestamp'].strftime('%H:%M')
+              for item in real_time_customer_data]
+    data = [item['customer_count'] for item in real_time_customer_data]
+
+    return JsonResponse({'labels': labels, 'data': data})
+
+
+def remove_product(request, product_id):
+    # Get the product instance
+    product = get_object_or_404(Product, id=product_id)
+
+    # Delete the product from the database
+    product.delete()
+
+    # Return a JSON response indicating success
+    return JsonResponse({'success': True, 'message': 'Product removed successfully'})
+
+
+def remove_customer(request, phone_number):
+    customer = get_object_or_404(Customer, phone_number=phone_number)
+    customer.delete()
+    return JsonResponse({'status': 'success'})

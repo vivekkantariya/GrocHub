@@ -389,12 +389,10 @@
         <div class="menu-container">
 
 
-            <a href="home.html" onclick="showHome()">Home</a>
-            <a href="#" onclick="showManageProduct()">Manage Products</a>
-            <a href="#" onclick="showCustomerPage()">Manage Customer</a>
-
+            <a href="{% url 'home' %}" onclick="showHome()">Home</a>
+            <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
+            <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
             <a href="#export" onclick="scrollToSection('export')">Export</a>
-            <a href="Gallery.html">Gallery</a>
 
 
         </div>
@@ -429,16 +427,16 @@
             </thead>
             <tbody>
                 {% for customer in customer %}
-                <tr>
-                    <td>{{ customer.name }}</td>
-                    <td>{{ customer.phone_number }}</td>
-                    <td>{{ customer.address }}</td>
-                    <td>{{ customer.last_transaction }}</td>
-                    <td><img src="{{ customer.passport_photo.url }}" alt="Passport Photo" width="50" height="50"></td>
-                    <td>
-                        <!-- Remove button for each product -->
-                        <button class="remove-button" onclick="removeCustomer('{{ customer.id }}')">Remove</button>
-                    </td>
+                <tr id="customer-row-{{ customer.phone_number }}"></tr>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.phone_number }}</td>
+                <td>{{ customer.address }}</td>
+                <td>{{ customer.last_transaction }}</td>
+                <td><img src="{{ customer.passport_photo.url }}" alt="Passport Photo" width="50" height="50"></td>
+                <td>
+                    <button class="remove-button"
+                        onclick="removeCustomer('{{ customer.phone_number }}')">Remove</button>
+                </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -446,12 +444,42 @@
     </div>
 
     <script>
-        // JavaScript function to handle product removal
-        function removeProduct(productId) {
-            // You can add your logic here to handle the removal, for example, making an API call.
-            console.log("Remove product with ID:", productId);
+        // JavaScript function to handle customer removal
+        function removeCustomer(phoneNumber) {
+            // Send an asynchronous request to remove the customer
+            fetch(`/remove_customer/${phoneNumber}/`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log(`Customer with Number ${phoneNumber} removed successfully`);
+                        // Find and remove the customer row from the DOM
+                        const customerRows = document.querySelectorAll('tbody tr');
+                        customerRows.forEach(row => {
+                            const phoneCell = row.querySelector('td:nth-child(2)'); // Assuming phone number is in the second column
+                            if (phoneCell && phoneCell.textContent.trim() === phoneNumber) {
+                                row.remove();
+                            }
+                        });
+                    } else {
+                        console.error(`Failed to remove customer with Number ${phoneNumber}`);
+                    }
+                })
+                .catch(error => {
+                    console.error(`Error removing customer: ${error}`);
+                });
         }
-    </script>
+
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+            return cookieValue ? cookieValue.pop() : '';
+        }    </script>
+
 </body>
 
 </html>

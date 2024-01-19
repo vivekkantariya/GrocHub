@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -385,26 +387,6 @@
 
         }
     </style>
-
-    <script>
-        const menuToggle = document.querySelector(".menu-toggle");
-        const navUl = document.querySelector("ul");
-        // navbar script
-        document.addEventListener('DOMContentLoaded', function () {
-            const hamburgerMenu = document.querySelector(".hamburger-menu");
-            const menuContainer = document.querySelector(".menu-container");
-
-            hamburgerMenu.addEventListener("click", () => {
-                menuContainer.style.transition = "all 0.5s ease-in-out";
-                menuContainer.style.display = (menuContainer.style.display === "none" || menuContainer.style.display === "") ? "flex" : "none";
-                hamburgerMenu.classList.toggle("change");
-            });
-
-        });
-
-    </script>
-
-
 </head>
 
 <body>
@@ -419,12 +401,10 @@
         <div class="menu-container">
 
 
-            <a href="home.html" onclick="showHome()">Home</a>
-            <a href="#" onclick="showManageProduct()">Manage Products</a>
-            <a href="#" onclick="showCustomerPage()">Manage Customer</a>
-
+            <a href="{% url 'home' %}" onclick="showHome()">Home</a>
+            <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
+            <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
             <a href="#export" onclick="scrollToSection('export')">Export</a>
-            <a href="Gallery.html">Gallery</a>
 
 
         </div>
@@ -439,33 +419,58 @@
     <div class="container">
         <h2>Add Customer</h2>
         <form action="{% url 'add_customerView' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
             <div class="pair">
                 <label for="customerName">Customer Name:</label>
-                <input type="text" id="customerName" name="customerName" required>
+                <input type="text" id="customerName" name="name" required>
 
                 <label for="phoneNumber">Phone Number:</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber" required>
+                <input type="tel" id="phoneNumber" name="phone_number" required>
             </div>
 
             <div class="pair">
-
                 <label for="lastTransaction">Last Transaction:</label>
-                <input type="datetime-local" id="lastTransaction" name="lastTransaction" required>
+                <input type="datetime-local" id="lastTransaction" name="last_transaction" required>
 
                 <label for="passportPhoto">Passport Photo:</label>
-                <input type="file" id="passportPhoto" name="passportPhoto">
+                <input type="file" id="passportPhoto" name="passport_photo">
             </div>
 
             <div class="pair">
-
                 <label for="customerAddress">Address:</label>
-                <textarea id="customerAddress" name="customerAddress" rows="4" required></textarea>
+                <textarea id="customerAddress" name="address" rows="4" required></textarea>
             </div>
+
             <div class="btn">
                 <button type="submit">Add Customer</button>
             </div>
-    </div>
-    </form>
+        </form>
+
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>Error(s):</strong>
+            {{ form.errors }}
+        </div>
+        {% endif %}
+
+        <script>
+            const menuToggle = document.querySelector(".menu-toggle");
+            const navUl = document.querySelector("ul");
+            // navbar script
+            document.addEventListener('DOMContentLoaded', function () {
+                const hamburgerMenu = document.querySelector(".hamburger-menu");
+                const menuContainer = document.querySelector(".menu-container");
+
+                hamburgerMenu.addEventListener("click", () => {
+                    menuContainer.style.transition = "all 0.5s ease-in-out";
+                    menuContainer.style.display = (menuContainer.style.display === "none" || menuContainer.style.display === "") ? "flex" : "none";
+                    hamburgerMenu.classList.toggle("change");
+                });
+
+            });
+
+        </script>
 
 </body>
 
