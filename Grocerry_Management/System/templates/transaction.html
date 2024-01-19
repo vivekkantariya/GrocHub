@@ -348,12 +348,10 @@
         <div class="menu-container">
 
 
-            <a href="home.html" onclick="showHome()">Home</a>
-            <a href="#" onclick="showManageProduct()">Manage Products</a>
-            <a href="#" onclick="showCustomerPage()">Manage Customer</a>
-
+            <a href="{% url 'home' %}" onclick="showHome()">Home</a>
+            <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
+            <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
             <a href="#export" onclick="scrollToSection('export')">Export</a>
-            <a href="Gallery.html">Gallery</a>
 
 
         </div>

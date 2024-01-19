@@ -3,7 +3,7 @@ from .views import (
     homeView, product_list, customer_list, loginView,
     addproductView, addcustomerView, add_customerView, add_productView,
     transactionView, AnalysisView, bill_view, get_product_suggestions, generate_bill,
-    get_monthly_income, get_real_time_customers
+    get_monthly_income, get_real_time_customers, remove_product , remove_customer
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -11,8 +11,12 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', homeView, name='home'),
     path('loginpage/', loginView, name='loginpage'),
-    path('products.html/', product_list, name='productlist'),
-    path('customers.html/', customer_list, name='customerslist'),
+    path('products.html/', product_list, name='product_list'),
+    path('remove_product/<int:product_id>/', remove_product, name='remove_product'),
+    path('remove_customer/<str:phone_number>/', remove_customer, name='remove_customer'),
+
+
+    path('customers.html/', customer_list, name='customer_list'),
     path('addproduct.html/', addproductView, name='addproduct'),
     path('addcustomer.html/', addcustomerView, name='addcustomer'),
 
@@ -25,11 +29,14 @@ urlpatterns = [
     path('generate_bill/', generate_bill, name='generate_bill'),
 
     path('get_monthly_income/', get_monthly_income, name='get_monthly_income'),
-    path('get_real_time_customers/', get_real_time_customers, name='get_real_time_customers'),
+    path('get_real_time_customers/', get_real_time_customers,
+         name='get_real_time_customers'),
 
-    path('get_product_suggestions/', get_product_suggestions, name='get_product_suggestions'),
+    path('get_product_suggestions/', get_product_suggestions,
+         name='get_product_suggestions'),
     path('<path:undefined_path>/', homeView, name='undefined_path'),
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
