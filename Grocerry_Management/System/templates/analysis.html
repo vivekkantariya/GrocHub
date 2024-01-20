@@ -1,143 +1,40 @@
-{% load static %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+    }
 
-<!DOCTYPE html>
-<html lang="en">
+    .content-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f7f7f7;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-<head>
-    <!-- Add necessary meta tags and include Chart.js -->
-    <!-- ... -->
+    img.chart-image {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 20px 0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
 
-    <title>Shop Analysis</title>
+    @media (max-width: 600px) {
+    .content-container {
+        max-width: 100%;
+        padding: 10px;
+    }
+}
 
-    <!-- Include Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</style>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #344e41;
-        }
-
-        #container {
-            margin: 25px;
-            background-color: #7eaf964c;
-            padding: 20px;
-            border-radius: 20px;
-        }
-
-        h1 {
-            font-size: 32px;
-            color: white;
-            font-family: 'Raleway', sans-serif;
-            background: #608d6f;
-            padding: 10px 16px;
-            border-radius: 10px;
-        }
-
-        canvas {
-            max-width: 80%;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-
-<body>
-    <div id="container">
-        <h1>Shop Analysis</h1>
-
-        <!-- Monthly Income Chart -->
-        <canvas id="monthlyIncomeChart"></canvas>
-
-        <!-- Real-time Customer Chart -->
-        <h1>Real-time Customer Visits (Last 24 hours)</h1>
-        <canvas id="realTimeCustomerChart"></canvas>
+{% block content %}
+    <div class="content-container">
+        {% if chart %}
+            <img src="data:image/png;base64, {{ chart|safe }}" class="chart-image">
+        {% endif %}
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="{% static 'js/analysis.js' %}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            $.ajax({
-                url: '{% url "get_monthly_income" %}',
-                method: 'GET',
-                success: function (monthlyIncomeData) {
-                    createMonthlyIncomeChart(monthlyIncomeData);
-                }
-            });
-
-            $.ajax({
-                url: '{% url "get_real_time_customers" %}',
-                method: 'GET',
-                success: function (realTimeCustomerData) {
-                    createRealTimeCustomerChart(realTimeCustomerData);
-                }
-            });
-
-            // Function to create Monthly Income Chart
-            function createMonthlyIncomeChart(monthlyIncomeData) {
-                var ctx = document.getElementById('monthlyIncomeChart').getContext('2d');
-                var monthlyIncomeChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: monthlyIncomeData.labels,
-                        datasets: [{
-                            label: 'Monthly Income',
-                            data: monthlyIncomeData.data,
-                            backgroundColor: '#608d6f',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Function to create Real-time Customer Chart
-            function createRealTimeCustomerChart(realTimeCustomerData) {
-                var ctx = document.getElementById('realTimeCustomerChart').getContext('2d');
-                var realTimeCustomerChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: realTimeCustomerData.labels,
-                        datasets: [{
-                            label: 'Customer Visits',
-                            data: realTimeCustomerData.data,
-                            borderColor: '#608d6f',
-                            borderWidth: 1,
-                            fill: false
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-
-                // Assuming you have real-time updates for customer visits, update the chart accordingly
-                setInterval(function () {
-                    $.ajax({
-                        url: '/get_real_time_customers/',
-                        method: 'GET',
-                        success: function (updatedRealTimeCustomerData) {
-                            // Update the chart data
-                            realTimeCustomerChart.data.labels = updatedRealTimeCustomerData.labels;
-                            realTimeCustomerChart.data.datasets[0].data = updatedRealTimeCustomerData.data;
-                            realTimeCustomerChart.update(); // Update the chart
-                        }
-                    });
-                }, 60000); // Update every minute (adjust as needed)
-            }
-        });
-
-    </script>
-</body>
-
-</html>
+{% endblock content %}

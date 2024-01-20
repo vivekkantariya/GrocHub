@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product, Customer, Bill
+from .models import Product, Customer, Bill, Transaction
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -7,9 +7,9 @@ class ProductForm(forms.ModelForm):
         fields = ['name', 'price']
         
 class TransactionForm(forms.ModelForm):
-    customer_name = forms.CharField(label='Customer Name', max_length=255)
-    product_purchased = forms.CharField(label='Product Purchased', max_length=255)
-    quantity = forms.IntegerField(label='Quantity')
+    class Meta:
+        model = Transaction
+        fields = ['customer_name', 'product_purchased', 'quantity']
 
 class CustomerForm(forms.ModelForm):
     class Meta:
@@ -18,5 +18,18 @@ class CustomerForm(forms.ModelForm):
 
 class BillForm(forms.ModelForm):
     class Meta:
-        model = Bill  # Specify your Bill model here
-        fields = ['customer_name', 'customer_email']
+        model = Bill
+        fields = ['customer_name', 'customer_email', 'address', 'phone_number']
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data['phone_number']
+
+        # Convert phone_number to string if it's an integer
+        if isinstance(phone_number, int):
+            phone_number = str(phone_number)
+
+        # Validate phone number
+        if not phone_number.isdigit():
+            raise forms.ValidationError('Phone number must contain only digits.')
+
+        return phone_number

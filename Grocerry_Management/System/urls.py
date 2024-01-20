@@ -1,9 +1,9 @@
 from django.urls import path
 from .views import (
-    homeView, product_list, customer_list, loginView,
+    homeView, product_list, customer_list, loginView, 
     addproductView, addcustomerView, add_customerView, add_productView,
     transactionView, AnalysisView, bill_view, get_product_suggestions, generate_bill,
-    get_monthly_income, get_real_time_customers, remove_product , remove_customer
+    get_monthly_income, get_real_time_customers, remove_product , remove_customer, get_daily_customer_buying
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -29,8 +29,8 @@ urlpatterns = [
     path('generate_bill/', generate_bill, name='generate_bill'),
 
     path('get_monthly_income/', get_monthly_income, name='get_monthly_income'),
-    path('get_real_time_customers/', get_real_time_customers,
-         name='get_real_time_customers'),
+    path('get_real_time_customers/', get_real_time_customers,name='get_real_time_customers'),
+    path('get_daily_customer_buying/', get_daily_customer_buying, name='get_daily_customer_buying'),
 
     path('get_product_suggestions/', get_product_suggestions,
          name='get_product_suggestions'),
