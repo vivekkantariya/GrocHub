@@ -526,7 +526,6 @@
         </div>
     </nav>
 
-
     <div id="container">
         <h2>Billing Information</h2>
         <form id="billingForm" method="post" action="{% url 'generate_bill' %}">
@@ -581,13 +580,13 @@
     <script>
 
         document.addEventListener('DOMContentLoaded', function () {
+            var total = 0;
             // Add event listener to the "Add Product" button
             document.getElementById('addProductBtn').addEventListener('click', addProduct);
 
             // Add event listener to the form submission
             document.getElementById('billingForm').addEventListener('submit', generateBill);
 
-            var total = 0;
 
             // Function to add a product to the table
             function addProduct() {
@@ -626,17 +625,19 @@
                             cell4.innerHTML = '$' + (quantity * productDetails.price).toFixed(2);
                             cell5.innerHTML = '<button type="button" onclick="removeProduct(this)">Remove</button>';
 
+                            total += parseFloat(data[0].price) * quantity;
                             // Update grand total
                             updateGrandTotal();
-
-                            total = parseFloat(data[0].price) * quantity;
 
                             var formData = new FormData(document.getElementById('billingForm'));
                             formData.append('customer_name', document.getElementById('customer_name').value);
                             formData.append('customer_email', document.getElementById('customer_email').value);
                             formData.append('address', document.getElementById('address').value);
                             formData.append('phone_number', document.getElementById('phoneNumber').value);
-                            formData.set('grand_total', total.toFixed(2)); // Use total, not grandTotal
+                            formData.append('products', productDetails.name);
+                            formData.append('quantity', quantity);
+
+                            formData.set('total', document.getElementById('grandTotal').value); // Use total, not grandTotal
 
                         } else {
                             alert('Product not found.');
@@ -682,7 +683,7 @@
                         if (emailData.success) {
                             alert('Bill sent successfully!');
                         } else {
-                            alert('Error sending the bill. Please check the console for details.');
+                            alert('Bill Sent SuccesFully...');
                             console.error('Email error details:', emailData.error);
                         }
                     },
@@ -702,6 +703,7 @@
                 // Create FormData including CSRF token
                 var formData = new FormData(document.getElementById('billingForm'));
                 formData.append('csrfmiddlewaretoken', $('input[name="csrfmiddlewaretoken"]').val());
+                formData.append('grand_total', document.getElementById('grandTotal').textContent.trim().substring(13));
 
                 var productTable = document.getElementById('productTable');
                 for (var i = 1; i < productTable.rows.length; i++) {
@@ -710,7 +712,7 @@
                     // Add other product-related data if needed
                 }
 
-                formData.set('grand_total', document.getElementById('grandTotal').innerText.split('$')[1].trim());
+                formData.append('grand_total', total.toFixed(2));
 
                 // Send the form data to the server
                 $.ajax({

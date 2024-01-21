@@ -6,7 +6,7 @@ from .models import Product, Customer
 from django.core.mail import send_mail, EmailMessage
 from django.shortcuts import render
 from .forms import BillForm
-from .models import Product, Transaction
+from .models import Product, Transaction, Bill
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import timedelta
@@ -20,6 +20,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
 from django.core.mail import send_mail
+from decimal import Decimal  # Add this import statement
+from django.db import transaction
+
 
 def homeView(request, undefined_path=None):
     return render(request, "home.html")
@@ -82,12 +85,11 @@ def transactionView(request):
 
 
 def AnalysisView(request):
-    qs = Transaction.objects.all()
+    qs = Bill.objects.all()
     x = [item.timestamp for item in qs]
-    y = [item.amount for item in qs]
+    y = [item.total for item in qs]
     chart = get_plot(x, y)
-    return render(request, 'analysis.html', {"chart": chart})  
-
+    return render(request, 'analysis.html', {"chart": chart})
 
 
 def bill_view(request):
@@ -106,19 +108,17 @@ def get_product_suggestions(request):
 
     return JsonResponse(suggestions, safe=False)
 
+
 @csrf_exempt
+@transaction.atomic
 def generate_bill(request):
     if request.method == 'POST':
         form = BillForm(request.POST)
         if form.is_valid():
-            with transaction.atomic():
-                # Process the form data and save it to the database
-                bill = form.save()
-
             # Get list of selected products
             products = request.POST.getlist('products')
-            # Get list of corresponding quantities
             quantities = request.POST.getlist('quantity')
+            grand_total = request.POST.get('grand_total', '0.00')
 
             # Validate product names and retrieve product details
             valid_products = []
@@ -127,32 +127,58 @@ def generate_bill(request):
                 product = Product.objects.filter(
                     name__iexact=product_name).first()
                 if product:
-                    valid_products.append({'name': product.name, 'quantity': int(
-                        quantity), 'price': float(product.price)})
+                    valid_products.append({
+                        'name': product.name,
+                        'quantity': int(quantity),
+                        'price': float(product.price)
+                    })
                     total_price += float(product.price) * int(quantity)
                 else:
                     return JsonResponse({'success': False, 'errors': [f'"{product_name}" is not a valid value.']})
 
-            # Additional logic for storing the transaction can be added here
+            try:
+                with transaction.atomic():
+                    # Process the form data and save it to the database
+                    bill = form.save(commit=False)
+                    bill.total = Decimal(grand_total)
+                    bill.save()
+
+                    # Create new_transaction after bill is saved
+                    new_transaction = Transaction.objects.create(
+                        customer_name=bill.customer_name,
+                        product_purchased=product.name,
+                        amount=bill.total,
+                        quantity=1
+                    )
+
+            except Exception as e:
+                return JsonResponse({'success': False, 'errors': [f'Error processing the transaction: {str(e)}']})
 
             try:
-                # Send email with the bill details
-                email_subject = 'Your Bill Details'
-                email_message = f'Thank you for your purchase!\n\n'
-                email_message += f'Customer Name: {bill.customer_name}\n'
-                email_message += f'Customer Email: {bill.customer_email}\n'
-                email_message += f'Address: {bill.address}\n'
-                email_message += f'Phone Number: {bill.phone_number}\n'
-                email_message += '\nProducts Purchased:\n'
-                for product in valid_products:
-                    email_message += f'{product["name"]} - Quantity: {product["quantity"]} - Price: ${product["price"]}\n'
-                email_message += f'\nGrand Total: ${total_price}\n'
-                email_message += f'Timestamp: {bill.timestamp}\n'
+                with transaction.atomic():
+                    # Send email with the bill details
+                    email_subject = 'Your Bill Details'
+                    email_message = f'Thank you for your purchase!\n\n'
+                    email_message += f'Customer Name: {bill.customer_name}\n'
+                    email_message += f'Customer Email: {bill.customer_email}\n'
+                    email_message += f'Address: {bill.address}\n'
+                    email_message += f'Phone Number: {bill.phone_number}\n'
+                    email_message += '\nProducts Purchased:\n'
+                    for product in valid_products:
+                        email_message += f'{product["name"]} - Quantity: {product["quantity"]} - Price: ${product["price"]}\n'
+                    email_message += f'\nGrand Total: ${total_price}\n'
+                    email_message += f'Timestamp: {bill.timestamp}\n'
 
-                send_email(bill.customer_email, email_subject, email_message)
+                    send_email(bill.customer_email,
+                               email_subject, email_message)
 
-                # Return a JSON response with success and customer email
-                return JsonResponse({'success': True, 'customer_email': bill.customer_email, 'bill_content': email_message})
+                    # Return a JSON response with success and customer email
+                    return JsonResponse({
+                        'success': True,
+                        'customer_email': bill.customer_email,
+                        'bill_content': email_message,
+                        'grand_total': float(bill.total)
+                    })
 
             except Exception as e:
                 # Handle email sending error
@@ -163,11 +189,13 @@ def generate_bill(request):
             return JsonResponse({'success': False, 'errors': form.errors})
     else:
         # Handle non-POST requests
-        return JsonResponse({'success': False, 'errors': 'Invalid request method'})
+        return render(request, 'home.html')
 
 
 def send_email(to_email, subject, message):
-    send_mail(subject, message, 'grochub1@yahoo.com', [to_email], fail_silently=False)
+    send_mail(subject, message, 'grochub1@yahoo.com',
+              [to_email], fail_silently=False)
+
 
 def send_email_with_attachment(to_email, subject, message):
     try:
@@ -181,12 +209,14 @@ def send_email_with_attachment(to_email, subject, message):
         print(f"Error sending email: {error_message}")
         return JsonResponse({'success': False, 'error': error_message})
 
+
 def get_monthly_income(request):
     monthly_income_data = Transaction.objects.annotate(
         month=TruncMonth('timestamp')
     ).values('month').annotate(
         total_income=ExpressionWrapper(
-            Sum(F('quantity') * F('product_purchased'), output_field=DecimalField()),
+            Sum(F('quantity') * F('product_purchased'),
+                output_field=DecimalField()),
             output_field=DecimalField(),
         )
     ).order_by('month')
@@ -226,6 +256,7 @@ def remove_customer(request, phone_number):
     customer.delete()
     return JsonResponse({'status': 'success'})
 
+
 def get_daily_customer_buying(request):
     # Get real-time customer data for the last 24 hours
     start_time = timezone.now() - timedelta(days=1)
@@ -236,7 +267,8 @@ def get_daily_customer_buying(request):
     ).values('hour').annotate(
         customer_count=Count('id')
     ).order_by('hour')
-    labels = [item['hour'].strftime('%H:%M') for item in daily_customer_buying_data]
+    labels = [item['hour'].strftime('%H:%M')
+              for item in daily_customer_buying_data]
     data = [item['customer_count'] for item in daily_customer_buying_data]
 
     # Provide a default value if data is empty
