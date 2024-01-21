@@ -529,7 +529,7 @@
 
     <div id="container">
         <h2>Billing Information</h2>
-        <form id="billingForm">
+        <form id="billingForm" method="post" action="{% url 'generate_bill' %}">
             {% csrf_token %}
             <div class="billinfo">
                 <div class="pair">
@@ -540,7 +540,7 @@
                 </div>
                 <div class="pair">
                     <label for="phoneNumber">Phone Number:</label>
-                    <input type="tel" id="phoneNumber" name="phoneNumber" required>
+                    <input type="tel" id="phoneNumber" name="phone_number" required>
                     <label for="address">Address:</label>
                     <textarea id="address" name="address" rows="4" required></textarea>
                 </div>
@@ -587,6 +587,8 @@
             // Add event listener to the form submission
             document.getElementById('billingForm').addEventListener('submit', generateBill);
 
+            var total = 0;
+
             // Function to add a product to the table
             function addProduct() {
                 var productName = document.getElementById('products').value;
@@ -627,9 +629,14 @@
                             // Update grand total
                             updateGrandTotal();
 
+                            total = parseFloat(data[0].price) * quantity;
+
                             var formData = new FormData(document.getElementById('billingForm'));
-                            formData.append('products', productName);
-                            formData.append('quantity', quantity);
+                            formData.append('customer_name', document.getElementById('customer_name').value);
+                            formData.append('customer_email', document.getElementById('customer_email').value);
+                            formData.append('address', document.getElementById('address').value);
+                            formData.append('phone_number', document.getElementById('phoneNumber').value);
+                            formData.set('grand_total', total.toFixed(2)); // Use total, not grandTotal
 
                         } else {
                             alert('Product not found.');
@@ -656,48 +663,6 @@
                 }
 
                 document.getElementById('grandTotal').innerHTML = 'Grand Total: $' + total.toFixed(2);
-            }
-
-            // Function to handle form submission
-            // Function to handle form submission
-            function generateBill(event) {
-                event.preventDefault();
-
-                // Create FormData including CSRF token
-                var formData = new FormData(document.getElementById('billingForm'));
-                formData.append('csrfmiddlewaretoken', $('input[name="csrfmiddlewaretoken"]').val());
-
-                var productTable = document.getElementById('productTable');
-                for (var i = 1; i < productTable.rows.length; i++) {
-                    formData.append('products', productTable.rows[i].cells[0].innerHTML.trim());
-                    formData.append('quantity', productTable.rows[i].cells[1].innerHTML.trim());
-                    // Add other product-related data if needed
-                }
-
-                // Send the form data to the server
-                $.ajax({
-                    url: '/generate_bill/',
-                    type: 'POST',
-                    headers: { 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val() },
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        if (data.success) {
-                            sendBillByEmail(data.customer_email, data.bill_content);
-                        } else {
-                            alert('Bill Sent Successfully!');
-                            console.error('Error details:', data.error);
-                        }
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        alert('Error generating the bill. Please check the console for details.');
-                        console.error('XHR:', xhr);
-                        console.error('Status:', textStatus);
-                        console.error('Error thrown:', errorThrown);
-                        console.log("FormData:", formData);
-                    }
-                });
             }
 
             function sendBillByEmail(customerEmail, billContent) {
@@ -727,6 +692,48 @@
                         console.error('XHR:', xhr);
                         console.error('Status:', textStatus);
                         console.error('Error thrown:', errorThrown);
+                    }
+                });
+            }
+
+            function generateBill(event) {
+                event.preventDefault();
+
+                // Create FormData including CSRF token
+                var formData = new FormData(document.getElementById('billingForm'));
+                formData.append('csrfmiddlewaretoken', $('input[name="csrfmiddlewaretoken"]').val());
+
+                var productTable = document.getElementById('productTable');
+                for (var i = 1; i < productTable.rows.length; i++) {
+                    formData.append('products', productTable.rows[i].cells[0].innerHTML.trim());
+                    formData.append('quantity', productTable.rows[i].cells[1].innerHTML.trim());
+                    // Add other product-related data if needed
+                }
+
+                formData.set('grand_total', document.getElementById('grandTotal').innerText.split('$')[1].trim());
+
+                // Send the form data to the server
+                $.ajax({
+                    url: '/generate_bill/',
+                    type: 'POST',
+                    headers: { 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val() },
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        if (data.success) {
+                            sendBillByEmail(data.customer_email, data.bill_content);
+                        } else {
+                            alert('Error generating or sending the bill. Please check the console for details.');
+                            console.error('Error details:', data.errors);
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        alert('Error generating the bill. Please check the console for details.');
+                        console.error('XHR:', xhr);
+                        console.error('Status:', textStatus);
+                        console.error('Error thrown:', errorThrown);
+                        console.log("FormData:", formData);
                     }
                 });
             }
