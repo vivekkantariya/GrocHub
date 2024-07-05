@@ -1,7 +1,7 @@
 from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect
 from .forms import CustomerForm, ProductForm, BillForm
-from .utils import get_graph, get_plot
+from .utils import get_plot
 from .models import Product, Customer
 from django.core.mail import send_mail, EmailMessage
 from django.shortcuts import render
@@ -20,7 +20,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
 from django.core.mail import send_mail
-from decimal import Decimal  # Add this import statement
+from decimal import Decimal 
 from django.db import transaction
 
 
@@ -77,7 +77,6 @@ def add_productView(request):
 
 
 def transactionView(request):
-    # Get transactions from the last 24 hours
     start_time = timezone.now() - timedelta(days=1)
     transactions = Transaction.objects.filter(timestamp__gte=start_time)
 
@@ -99,10 +98,8 @@ def bill_view(request):
 def get_product_suggestions(request):
     search_term = request.GET.get('search', '')
 
-    # Fetch product suggestions from the database
     products = Product.objects.filter(name__icontains=search_term)[:5]
 
-    # Return a JSON response with product details (including price)
     suggestions = [{'name': product.name, 'price': float(
         product.price)} for product in products]
 
@@ -115,12 +112,10 @@ def generate_bill(request):
     if request.method == 'POST':
         form = BillForm(request.POST)
         if form.is_valid():
-            # Get list of selected products
             products = request.POST.getlist('products')
             quantities = request.POST.getlist('quantity')
             grand_total = request.POST.get('grand_total', '0.00')
 
-            # Validate product names and retrieve product details
             valid_products = []
             total_price = 0
             for product_name, quantity in zip(products, quantities):
@@ -138,12 +133,10 @@ def generate_bill(request):
 
             try:
                 with transaction.atomic():
-                    # Process the form data and save it to the database
                     bill = form.save(commit=False)
                     bill.total = Decimal(grand_total)
                     bill.save()
 
-                    # Create new_transaction after bill is saved
                     new_transaction = Transaction.objects.create(
                         customer_name=bill.customer_name,
                         product_purchased=product.name,
@@ -172,7 +165,6 @@ def generate_bill(request):
                     send_email(bill.customer_email,
                                email_subject, email_message)
 
-                    # Return a JSON response with success and customer email
                     return JsonResponse({
                         'success': True,
                         'customer_email': bill.customer_email,
@@ -181,14 +173,11 @@ def generate_bill(request):
                     })
 
             except Exception as e:
-                # Handle email sending error
                 return JsonResponse({'success': False, 'errors': [f'Error sending email: {str(e)}']})
 
         else:
-            # Handle form validation errors
             return JsonResponse({'success': False, 'errors': form.errors})
     else:
-        # Handle non-POST requests
         return render(request, 'home.html')
 
 
@@ -228,7 +217,6 @@ def get_monthly_income(request):
 
 
 def get_real_time_customers(request):
-    # Get real-time customer data for the last 24 hours
     start_time = timezone.now() - timedelta(days=1)
     real_time_customer_data = Transaction.objects.filter(timestamp__gte=start_time).values(
         'timestamp').annotate(customer_count=Count('id')).order_by('timestamp')
@@ -241,13 +229,10 @@ def get_real_time_customers(request):
 
 
 def remove_product(request, product_id):
-    # Get the product instance
     product = get_object_or_404(Product, id=product_id)
 
-    # Delete the product from the database
     product.delete()
 
-    # Return a JSON response indicating success
     return JsonResponse({'success': True, 'message': 'Product removed successfully'})
 
 
@@ -258,7 +243,6 @@ def remove_customer(request, phone_number):
 
 
 def get_daily_customer_buying(request):
-    # Get real-time customer data for the last 24 hours
     start_time = timezone.now() - timedelta(days=1)
     daily_customer_buying_data = Transaction.objects.filter(
         timestamp__gte=start_time
@@ -271,7 +255,6 @@ def get_daily_customer_buying(request):
               for item in daily_customer_buying_data]
     data = [item['customer_count'] for item in daily_customer_buying_data]
 
-    # Provide a default value if data is empty
     if not labels:
         labels = ['No Data']
         data = [0]
