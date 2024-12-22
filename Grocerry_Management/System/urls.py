@@ -7,13 +7,14 @@ from .views import (
 )
 from django.conf import settings
 from django.conf.urls.static import static
+from . import views
 
 urlpatterns = [
     path('', homeView, name='home'),
     path('loginpage/', loginView, name='loginpage'),
     path('products.html', product_list, name='product_list'), 
     path('remove_product/<int:product_id>/', remove_product, name='remove_product'),
-    path('remove_customer/<str:phone_number>/', remove_customer, name='remove_customer'),
+    path('remove_customer/<str:email>/', views.remove_customer, name='remove_customer'),
     path('customers.html', customer_list, name='customer_list'),  
     path('addproduct.html', addproductView, name='addproduct'),  
     path('addcustomer.html', addcustomerView, name='addcustomer'),  
@@ -22,12 +23,14 @@ urlpatterns = [
     path('transaction.html', transactionView, name='transactions'),  
     path('analysis.html', AnalysisView, name='analysis'),  
     path('billing.html', bill_view, name='billing'),  
-    path('generate_bill/', generate_bill, name='generate_bill'),
+    path('generate_bill/', views.generate_bill, name='generate_bill'),
     path('get_monthly_income/', get_monthly_income, name='get_monthly_income'),
     path('get_real_time_customers/', get_real_time_customers, name='get_real_time_customers'),
     path('get_daily_customer_buying/', get_daily_customer_buying, name='get_daily_customer_buying'),
     path('get_product_suggestions/', get_product_suggestions, name='get_product_suggestions'),
     path('<path:undefined_path>/', homeView, name='undefined_path'),
+    path('remove_customer/<str:phone_number>/', views.remove_customer, name='remove_customer'),
+    path('send_bill_email/', views.send_bill_email, name='send_bill_email'),
 ]
 
 if settings.DEBUG:

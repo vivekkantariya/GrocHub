@@ -1,8 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from django.db.models import Sum
-from django.db.models.functions import TruncMonth, TruncDay
-from datetime import date
 
 
 class Product(models.Model):
@@ -14,42 +11,44 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Transaction(models.Model):
-    customer_name = models.CharField(max_length=255)
-    product_purchased = models.CharField(max_length=255)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.IntegerField()
-    timestamp = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return f"{self.customer_name} - {self.product_purchased} - {self.timestamp}"
-
-
+    
 class Customer(models.Model):
+    cust_id = models.AutoField(primary_key=True)
+    cust_name = models.CharField(max_length=255)
+    cust_email = models.EmailField(unique=True)
+    phone_no = models.CharField(max_length=15, null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
+    DOB = models.DateField(null=True, blank=True)
+    passport_photo = models.ImageField(upload_to='passport_photos/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # auto_now_add for current timestamp behavior
+
     class Meta:
         db_table = 'customer'
 
-    name = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=10)
-    address = models.TextField()
-    last_transaction = models.DateTimeField()
-    passport_photo = models.ImageField(
-        upload_to='passport_photos/', null=True, blank=True)
-    timestamp = models.DateTimeField(default=timezone.now)
-
     def __str__(self):
-        return self.name
-
+        return self.cust_name
 
 class Bill(models.Model):
-    customer_name = models.CharField(max_length=255)
-    customer_email = models.EmailField()
-    address = models.CharField(max_length=200)
-    phone_number = models.CharField(max_length=10)
+    class Meta:
+        db_table = 'system_bill'
+
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)  # Foreign key reference to Customer
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"{self.customer_name}'s Bill - {self.timestamp}"
+        return f"Bill ID: {self.id} - {self.customer.cust_name}"  # Change 'name' to 'cust_name'
+
+
+class Transaction(models.Model):
+    class Meta:
+        db_table = 'system_transaction'
+
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE)  # Foreign key reference to Bill
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)  # Foreign key reference to Product
+    quantity = models.IntegerField()
+    amount = models.DecimalField(max_digits=10, decimal_places=2)  # Matches DB schema
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Transaction ID: {self.id} - {self.product.name} x {self.quantity}"

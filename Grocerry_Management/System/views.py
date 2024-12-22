@@ -1,54 +1,49 @@
-from django.core.mail import EmailMessage
-from django.shortcuts import render, redirect
-from .forms import CustomerForm, ProductForm, BillForm
-from .utils import get_plot
-from .models import Product, Customer
 from django.core.mail import send_mail, EmailMessage
-from django.shortcuts import render
-from .forms import BillForm
-from .models import Product, Transaction, Bill
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import CustomerForm, ProductForm, BillForm
+from .models import Product, Customer, Transaction, Bill
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import timedelta
-from django.db.models import Sum
-from django.db.models.functions import TruncHour
-from django.db.models import F, ExpressionWrapper, DecimalField
-from django.db.models.functions import TruncMonth
-from django.db.models import Count
-from django.shortcuts import get_object_or_404
+from django.db import transaction
+from decimal import Decimal
+from django.db.models import Count, F, Sum, ExpressionWrapper
+from django.db.models.functions import TruncHour, TruncMonth
+from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.db import transaction
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
+import json
+from .models import Product, Customer, Bill, Transaction
+import logging
+from django.http import JsonResponse  # To return JSON responses
+from django.views.decorators.csrf import csrf_exempt  # To exempt the view from CSRF if needed
+from .models import Customer  # Import your Customer model
+from django.template.loader import render_to_string
 from django.core.mail import send_mail
-from decimal import Decimal 
-from django.db import transaction
 
 
-def homeView(request, undefined_path=None):
+def homeView(request):
     return render(request, "home.html")
-
 
 def loginView(request):
     return render(request, "loginpage.html")
 
-
 def product_list(request):
     products = Product.objects.all()
+    print(products)  # Debug statement
     return render(request, 'products.html', {'product': products})
-
 
 def customer_list(request):
     customers = Customer.objects.all()
     return render(request, 'customers.html', {'customer': customers})
 
-
 def addproductView(request):
     return render(request, 'addproduct.html')
 
-
 def addcustomerView(request):
     return render(request, 'addcustomer.html')
-
 
 def add_customerView(request):
     if request.method == 'POST':
@@ -62,26 +57,22 @@ def add_customerView(request):
         form = CustomerForm()
         return render(request, 'addcustomer.html', {'form': form})
 
-
 def add_productView(request):
     if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('product_list')  # Redirect to the correct URL
+            return redirect('product_list')
         else:
             return render(request, 'addproduct.html', {'form': form})
     else:
         form = ProductForm()
         return render(request, 'addproduct.html', {'form': form})
 
-
 def transactionView(request):
     start_time = timezone.now() - timedelta(days=1)
     transactions = Transaction.objects.filter(timestamp__gte=start_time)
-
     return render(request, 'transaction.html', {'transactions': transactions})
-
 
 def AnalysisView(request):
     qs = Bill.objects.all()
@@ -90,124 +81,117 @@ def AnalysisView(request):
     chart = get_plot(x, y)
     return render(request, 'analysis.html', {"chart": chart})
 
-
 def bill_view(request):
     return render(request, 'billing.html')
 
-
 def get_product_suggestions(request):
     search_term = request.GET.get('search', '')
-
     products = Product.objects.filter(name__icontains=search_term)[:5]
-
-    suggestions = [{'name': product.name, 'price': float(
-        product.price)} for product in products]
-
+    suggestions = [{'name': product.name, 'price': float(product.price)} for product in products]
     return JsonResponse(suggestions, safe=False)
 
-
+logger = logging.getLogger(__name__)
 @csrf_exempt
-@transaction.atomic
+@require_POST
 def generate_bill(request):
     if request.method == 'POST':
-        form = BillForm(request.POST)
-        if form.is_valid():
-            products = request.POST.getlist('products')
-            quantities = request.POST.getlist('quantity')
-            grand_total = request.POST.get('grand_total', '0.00')
+        try:
+            # Parse customer details
+            customer_name = request.POST.get('customer_name')
+            customer_email = request.POST.get('customer_email')
+            phone_no = request.POST.get('phone_no')
+            address = request.POST.get('address')
 
-            valid_products = []
-            total_price = 0
-            for product_name, quantity in zip(products, quantities):
-                product = Product.objects.filter(
-                    name__iexact=product_name).first()
-                if product:
-                    valid_products.append({
-                        'name': product.name,
-                        'quantity': int(quantity),
-                        'price': float(product.price)
-                    })
-                    total_price += float(product.price) * int(quantity)
-                else:
-                    return JsonResponse({'success': False, 'errors': [f'"{product_name}" is not a valid value.']})
-
+            # Parse products list
             try:
-                with transaction.atomic():
-                    bill = form.save(commit=False)
-                    bill.total = Decimal(grand_total)
-                    bill.save()
+                products_data = json.loads(request.POST.get('products', '[]'))
+            except json.JSONDecodeError:
+                return JsonResponse({'success': False, 'error': 'Invalid JSON format for products.'}, status=400)
 
-                    new_transaction = Transaction.objects.create(
-                        customer_name=bill.customer_name,
-                        product_purchased=product.name,
-                        amount=bill.total,
-                        quantity=1
-                    )
+            if not products_data:
+                return JsonResponse({'success': False, 'error': 'No products provided.'}, status=400)
 
-            except Exception as e:
-                return JsonResponse({'success': False, 'errors': [f'Error processing the transaction: {str(e)}']})
-
+            # Parse grand total
+            grand_total_str = request.POST.get('grand_total', '0.0')
             try:
-                with transaction.atomic():
-                    # Send email with the bill details
-                    email_subject = 'Your Bill Details'
-                    email_message = f'Thank you for your purchase!\n\n'
-                    email_message += f'Customer Name: {bill.customer_name}\n'
-                    email_message += f'Customer Email: {bill.customer_email}\n'
-                    email_message += f'Address: {bill.address}\n'
-                    email_message += f'Phone Number: {bill.phone_number}\n'
-                    email_message += '\nProducts Purchased:\n'
-                    for product in valid_products:
-                        email_message += f'{product["name"]} - Quantity: {product["quantity"]} - Price: ${product["price"]}\n'
-                    email_message += f'\nGrand Total: ${total_price}\n'
-                    email_message += f'Timestamp: {bill.timestamp}\n'
+                grand_total = float(grand_total_str.replace('$', '').strip())
+            except ValueError:
+                return JsonResponse({'success': False, 'error': 'Invalid grand total format.'}, status=400)
 
-                    send_email(bill.customer_email,
-                               email_subject, email_message)
+            # Check if customer exists in the database
+            try:
+                customer = Customer.objects.get(cust_email=customer_email)
+            except Customer.DoesNotExist:
+                # Create a temporary customer record
+                customer = Customer.objects.create(
+                    cust_name=customer_name,
+                    cust_email=customer_email,
+                    phone_no=phone_no,
+                    address=address
+                )
 
-                    return JsonResponse({
-                        'success': True,
-                        'customer_email': bill.customer_email,
-                        'bill_content': email_message,
-                        'grand_total': float(bill.total)
-                    })
+            # Create a bill
+            bill = Bill.objects.create(
+                customer=customer,
+                total=grand_total
+            )
 
-            except Exception as e:
-                return JsonResponse({'success': False, 'errors': [f'Error sending email: {str(e)}']})
+            # Save each product as a transaction
+            for product in products_data:
+                try:
+                    product_instance = Product.objects.get(name=product['name'])
+                except Product.DoesNotExist:
+                    return JsonResponse({'success': False, 'error': f'Product "{product["name"]}" not found.'}, status=400)
 
-        else:
-            return JsonResponse({'success': False, 'errors': form.errors})
+                # Create a transaction record
+                Transaction.objects.create(
+                    bill=bill,
+                    product=product_instance,
+                    quantity=product['quantity'],
+                    amount=product['subtotal']
+                )
+
+            # Prepare and send the email
+            send_bill_email(bill)  # Pass the bill object directly
+
+            return JsonResponse({
+                'success': True,
+                'customer_email': customer_email,
+                'bill_content': f'Bill #{bill.id} - Total: ${grand_total:.2f}'
+            })
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
     else:
-        return render(request, 'home.html')
+        return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=405)
 
+def send_bill_email(bill):
+    customer = bill.customer
+    transactions = bill.transaction_set.all()
+    bill_details = {
+        'bill': bill,
+        'customer': customer,
+        'transactions': transactions,
+    }
+
+    email_subject = f"Your Bill Details - Bill #{bill.id}"
+    email_body = render_to_string('emaildesign.html', bill_details)
+    
+    send_mail(
+        subject=email_subject,
+        message='',
+        from_email='grochubbusiness@example.com',
+        recipient_list=[customer.cust_email],
+        html_message=email_body,
+    )
 
 def send_email(to_email, subject, message):
-    send_mail(subject, message, 'grochub1@yahoo.com',
-              [to_email], fail_silently=False)
-
-
-def send_email_with_attachment(to_email, subject, message):
-    try:
-        email = EmailMessage(
-            subject, message, 'grochub1@yahoo.com', [to_email])
-        email.send(fail_silently=False)
-        print("Email sent successfully")
-        return JsonResponse({'success': True, 'message': 'Email sent successfully'})
-    except Exception as e:
-        error_message = str(e)
-        print(f"Error sending email: {error_message}")
-        return JsonResponse({'success': False, 'error': error_message})
-
+    send_mail(subject, message, 'grochub1@yahoo.com', [to_email], fail_silently=False)
 
 def get_monthly_income(request):
     monthly_income_data = Transaction.objects.annotate(
         month=TruncMonth('timestamp')
     ).values('month').annotate(
-        total_income=ExpressionWrapper(
-            Sum(F('quantity') * F('product_purchased'),
-                output_field=DecimalField()),
-            output_field=DecimalField(),
-        )
+        total_income=Sum(F('quantity') * F('product__price'))
     ).order_by('month')
 
     labels = [item['month'].strftime('%B %Y') for item in monthly_income_data]
@@ -215,31 +199,31 @@ def get_monthly_income(request):
 
     return JsonResponse({'labels': labels, 'data': data})
 
-
 def get_real_time_customers(request):
     start_time = timezone.now() - timedelta(days=1)
     real_time_customer_data = Transaction.objects.filter(timestamp__gte=start_time).values(
         'timestamp').annotate(customer_count=Count('id')).order_by('timestamp')
 
-    labels = [item['timestamp'].strftime('%H:%M')
-              for item in real_time_customer_data]
+    labels = [item['timestamp'].strftime('%H:%M') for item in real_time_customer_data]
     data = [item['customer_count'] for item in real_time_customer_data]
 
     return JsonResponse({'labels': labels, 'data': data})
 
-
+@csrf_exempt
 def remove_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-
     product.delete()
-
     return JsonResponse({'success': True, 'message': 'Product removed successfully'})
 
-
-def remove_customer(request, phone_number):
-    customer = get_object_or_404(Customer, phone_number=phone_number)
+def remove_customer(request, email):
+    # Get the customer object
+    customer = get_object_or_404(Customer, cust_email=email)
+    
+    # Delete the customer
     customer.delete()
-    return JsonResponse({'status': 'success'})
+
+    # Redirect to the customer list or any other page after deletion
+    return redirect('customers_list')  # Replace 'customers_list' with your actual redirect target
 
 
 def get_daily_customer_buying(request):
@@ -251,8 +235,8 @@ def get_daily_customer_buying(request):
     ).values('hour').annotate(
         customer_count=Count('id')
     ).order_by('hour')
-    labels = [item['hour'].strftime('%H:%M')
-              for item in daily_customer_buying_data]
+
+    labels = [item['hour'].strftime('%H:%M') for item in daily_customer_buying_data]
     data = [item['customer_count'] for item in daily_customer_buying_data]
 
     if not labels:
@@ -260,3 +244,4 @@ def get_daily_customer_buying(request):
         data = [0]
 
     return JsonResponse({'labels': labels, 'data': data})
+

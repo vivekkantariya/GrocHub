@@ -17,6 +17,98 @@
             padding: 0px;
         }
 
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Semi-transparent background */
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* Ensure popup appears above other content */
+        }
+
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        /* Style for form elements inside popup */
+        .popup-content form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .popup-content input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .popup-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .popup-actions button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .popup-actions button:first-child {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .popup-actions button:last-child {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .search-bar-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px auto;
+        }
+
+        .search-bar-container input {
+            width: 50%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #588157;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .search-bar-container button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #97bb97;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-bar-container button:hover {
+            background-color: #608d6f;
+        }
 
         body {
             font-family: Arial, sans-serif;
@@ -34,7 +126,7 @@
             font-size: 25px;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-evenly;
+            justify-content: space-between;
             margin-top: 85px;
         }
 
@@ -370,23 +462,99 @@
             }
         }
 
-        /* add product btn */
+        /* General Button Styles */
         button {
-            width: 200px;
-            height: 45px;
-            background-color: #97bb97;
-            color: black;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 9px 15px;
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            background-color: #4CAF50;
+            /* Primary color */
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
+        /* Hover Effect */
         button:hover {
-            background-color: #608d6f;
+            background-color: #45a049;
+            /* Slightly darker shade */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Active State */
+        button:active {
+            background-color: #388e3c;
+            /* Darker shade */
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Disabled State */
+        button:disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Add Button */
+        #addProductButton {
+            background-color: #2E7D32;
+            /* Blue color for Add button */
+            color: #ffffff;
+        }
+
+        #addProductButton:hover {
+            background-color: #1B5E20;
+            /* Darker blue */
+        }
+
+        /* Remove Button */
+        button.remove-button {
+            background-color: #C62828;
+            /* Red for Remove button */
+            color: #ffffff;
+        }
+
+        button.remove-button:hover {
+            background-color: #B71C1C;
+            /* Darker red */
+        }
+
+        /* Edit Button */
+        button.Edit-button {
+            background-color: #4CAF50;
+            /* Amber for Edit button */
+            color: #000;
+        }
+
+        button.Edit-button:hover {
+            background-color: #388E3C;
+            /* Darker amber */
+        }
+
+        /* Rounded Buttons (Optional) */
+        button.rounded {
+            border-radius: 50px;
+        }
+
+        /* Full-width Buttons */
+        button.full-width {
+            width: 100%;
+            display: block;
+            text-align: center;
+        }
+
+        /* Buttons within links (Optional, adjust based on your usage) */
+        a button {
+            text-decoration: none;
+            font-size: inherit;
+            font-weight: inherit;
         }
     </style>
     <script>
@@ -415,15 +583,10 @@
                 alt="Purohit Trading">
         </div>
         <div class="menu-container">
-
-
             <a href="{% url 'home' %}" onclick="showHome()">Home</a>
             <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
             <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
             <a href="#export" onclick="scrollToSection('export')">Export</a>
-
-
-
         </div>
         <div class="hamburger-menu" onclick="toggleMenu()">
             <div class="bar bar1"></div>
@@ -432,14 +595,17 @@
         </div>
     </nav>
 
-
-
     <header>
         <h1>Product List</h1>
         <div class="headerbtn">
             <a href="addproduct.html"><button id="addProductButton">Add Product</button></a>
         </div>
     </header>
+
+    <div class="search-bar-container">
+        <input type="text" id="searchInput" placeholder="Search Products by ID or Name..." onkeyup="filterTable()">
+        <button onclick="clearSearch()">Clear</button>
+    </div>
 
     <section class="container">
         <table>
@@ -458,30 +624,56 @@
                     <td>{{ product.name }}</td>
                     <td>{{ product.price }}</td>
                     <td>
+                        <button class="edit-button"
+                            onclick="openEditPopup('{{ product.id }}', '{{ product.name }}', '{{ product.price }}')">Edit</button>
                         <button class="remove-button" onclick="removeProduct('{{ product.id }}')">Remove</button>
                     </td>
                 </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No products available.</td>
+                </tr>
                 {% endfor %}
             </tbody>
+
         </table>
     </section>
+
+    <!-- Edit Popup -->
+    <div id="editPopup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <h2>Edit Product</h2>
+            <form id="editProductForm">
+                <label for="editProductId">Product ID:</label>
+                <input type="text" id="editProductId" name="productId" readonly>
+
+                <label for="editProductName">Product Name:</label>
+                <input type="text" id="editProductName" name="productName">
+
+                <label for="editProductPrice">Price:</label>
+                <input type="number" id="editProductPrice" name="productPrice">
+
+                <div class="popup-actions">
+                    <button type="button" onclick="saveProductChanges()">Save</button>
+                    <button type="button" onclick="closeEditPopup()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
         // Function to handle product removal
         function removeProduct(productId) {
-            // Make an API call to remove the product
             fetch(`/remove_product/${productId}/`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token for Django
+                    'X-CSRFToken': getCookie('csrftoken'),
                 },
             })
                 .then(response => {
                     if (response.ok) {
                         console.log(`Product with ID ${productId} removed successfully`);
-                        // Optionally, you can update the UI to reflect the removal
-                        // For example, you can remove the product from the DOM
                         const productRow = document.getElementById(`product-row-${productId}`);
                         if (productRow) {
                             productRow.remove();
@@ -495,13 +687,81 @@
                 });
         }
 
+        // Function to open the edit popup
+        function openEditPopup(productId, productName, productPrice) {
+            const popup = document.getElementById('editPopup');
+            document.getElementById('editProductId').value = productId;
+            document.getElementById('editProductName').value = productName;
+            document.getElementById('editProductPrice').value = productPrice;
+            popup.style.display = 'flex';  // Changed from 'block' to 'flex'
+        }
+
+        // Function to close the edit popup
+        function closeEditPopup() {
+            document.getElementById('editPopup').style.display = 'none';
+        }
+
+        // Function to save changes made in the edit popup
+        function saveProductChanges() {
+            const productId = document.getElementById('editProductId').value;
+            const productName = document.getElementById('editProductName').value;
+            const productPrice = document.getElementById('editProductPrice').value;
+
+            fetch(`/edit_product/${productId}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({
+                    name: productName,
+                    price: productPrice
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log(`Product with ID ${productId} updated successfully`);
+                        document.querySelector(`#product-row-${productId} td:nth-child(2)`).innerText = productName;
+                        document.querySelector(`#product-row-${productId} td:nth-child(3)`).innerText = productPrice;
+                        closeEditPopup();
+                    } else {
+                        console.error(`Failed to update product with ID ${productId}`);
+                    }
+                })
+                .catch(error => {
+                    console.error(`Error updating product: ${error}`);
+                });
+        }
+
         // Function to get CSRF token from cookies
         function getCookie(name) {
-            const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+            const cookieValue = document.cookie.match('(^|;)​\s*' + name + '\s*=\s*([^;]+)');
             return cookieValue ? cookieValue.pop() : '';
         }
-    </script>
 
+        // Function to filter table based on search input
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const tableRows = document.querySelectorAll('tbody tr');
+
+            tableRows.forEach(row => {
+                const productId = row.cells[0].innerText.toLowerCase();
+                const productName = row.cells[1].innerText.toLowerCase();
+
+                if (productId.includes(searchInput) || productName.includes(searchInput)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Function to clear search input and reset table
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            filterTable();
+        }
+    </script>
 </body>
 
 </html>

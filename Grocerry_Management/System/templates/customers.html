@@ -16,6 +16,162 @@
             padding: 0px;
         }
 
+        /* Container for the popup overlay */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Semi-transparent dark background */
+            display: none;
+            /* Initially hidden */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* Ensure the popup appears above other content */
+            animation: fadeIn 0.3s ease;
+            /* Fade-in animation */
+        }
+
+        /* Popup content box */
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: scaleUp 0.3s ease;
+            /* Scale-up effect */
+        }
+
+        /* Popup form styles */
+        .popup-content form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .popup-content input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .popup-content input:focus {
+            border-color: #4CAF50;
+            /* Highlight border on focus */
+            outline: none;
+            /* Remove default outline */
+        }
+
+        /* Actions at the bottom of the popup */
+        .popup-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        /* Button styles */
+        .popup-actions button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .popup-actions button:first-child {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .popup-actions button:first-child:hover {
+            background-color: #45a049;
+            /* Slightly darker on hover */
+        }
+
+        .popup-actions button:last-child {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .popup-actions button:last-child:hover {
+            background-color: #e53935;
+            /* Slightly darker on hover */
+        }
+
+        /* Close button to dismiss popup (optional) */
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Animations for fade-in and scale-up effects */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleUp {
+            0% {
+                transform: scale(0.95);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+
+        .search-bar-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px auto;
+        }
+
+        .search-bar-container input {
+            width: 50%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #588157;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .search-bar-container button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #003423;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-bar-container button:hover {
+            background-color: #608d6f;
+        }
+
 
         body {
             font-family: Arial, sans-serif;
@@ -33,7 +189,7 @@
             font-size: 25px;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-evenly;
+            justify-content: space-between;
             margin-top: 85px;
         }
 
@@ -75,6 +231,10 @@
             .logo-container img {
                 margin-left: 20px;
             }
+        }
+
+        .container {
+            overflow-x: auto;
         }
 
 
@@ -334,26 +494,99 @@
             background-color: #58815741;
         }
 
-
-        /* add product btn */
+        /* General Button Styles */
         button {
-
-            width: 200px;
-            height: 45px;
-            background-color: #97bb97;
-            color: black;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 9px 15px;
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            background-color: #4CAF50;
+            /* Primary color */
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease-in-out;
-
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
+        /* Hover Effect */
         button:hover {
-            background-color: #608d6f;
+            background-color: #45a049;
+            /* Slightly darker shade */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Active State */
+        button:active {
+            background-color: #388e3c;
+            /* Darker shade */
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Disabled State */
+        button:disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Add Button */
+        #addCustomerButton {
+            background-color: #2E7D32;
+            /* Blue color for Add button */
+            color: #ffffff;
+        }
+
+        #addCustomerButton:hover {
+            background-color: #1B5E20;
+            /* Darker blue */
+        }
+
+        /* Remove Button */
+        button.remove-button {
+            background-color: #C62828;
+            /* Red for Remove button */
+            color: #ffffff;
+        }
+
+        button.remove-button:hover {
+            background-color: #B71C1C;
+            /* Darker red */
+        }
+
+        /* Edit Button */
+        button.Edit-button {
+            background-color: #4CAF50;
+            /* Amber for Edit button */
+            color: #000;
+        }
+
+        button.Edit-button:hover {
+            background-color: #388E3C;
+            /* Darker amber */
+        }
+
+        /* Rounded Buttons (Optional) */
+        button.rounded {
+            border-radius: 50px;
+        }
+
+        /* Full-width Buttons */
+        button.full-width {
+            width: 100%;
+            display: block;
+            text-align: center;
+        }
+
+        /* Buttons within links (Optional, adjust based on your usage) */
+        a button {
+            text-decoration: none;
+            font-size: inherit;
+            font-weight: inherit;
         }
     </style>
 
@@ -384,17 +617,12 @@
         <div class="logo-container">
             <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png"
                 alt="Purohit Trading">
-            <!-- <span>PUROHIT TRADING</span> -->
         </div>
         <div class="menu-container">
-
-
             <a href="{% url 'home' %}" onclick="showHome()">Home</a>
             <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
             <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
             <a href="#export" onclick="scrollToSection('export')">Export</a>
-
-
         </div>
         <div class="hamburger-menu" onclick="toggleMenu()">
             <div class="bar bar1"></div>
@@ -403,7 +631,6 @@
         </div>
     </nav>
 
-
     <header>
         <h1>Customer List</h1>
         <div class="headerbtn">
@@ -411,43 +638,190 @@
         </div>
     </header>
 
+    <div class="search-bar-container">
+        <input type="text" id="searchInput" placeholder="Search Customer by ID or Name..." onkeyup="filterTable()">
+        <button onclick="clearSearch()">Clear</button>
+    </div>
 
     <div class="container">
-
         <table>
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Name</th>
                     <th>Phone Number</th>
+                    <th>Email</th>
                     <th>Address</th>
-                    <th>Last Transaction</th>
+                    <th>D.O.B.</th>
                     <th>Passport Photo</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for customer in customer %}
-                <tr id="customer-row-{{ customer.phone_number }}"></tr>
-                <td>{{ customer.name }}</td>
-                <td>{{ customer.phone_number }}</td>
-                <td>{{ customer.address }}</td>
-                <td>{{ customer.last_transaction }}</td>
-                <td><img src="{{ customer.passport_photo.url }}" alt="Passport Photo" width="50" height="50"></td>
-                <td>
-                    <button class="remove-button"
-                        onclick="removeCustomer('{{ customer.phone_number }}')">Remove</button>
-                </td>
+                <tr id="customer-row-{{ customer.cust_email }}">
+                    <td>{{ customer.cust_id }}</td>
+                    <td>{{ customer.cust_name }}</td>
+                    <td>{{ customer.phone_no }}</td>
+                    <td>{{ customer.cust_email }}</td>
+                    <td>{{ customer.address }}</td>
+                    <td>{{ customer.DOB }}</td>
+                    <td><img src="{{ customer.passport_photo.url }}" alt="Passport Photo" width="50" height="50"></td>
+                    <td>
+                        <button class="Edit-button" onclick="EditCustomer('{{ customer.phone_number }}')">Edit</button>
+                        <button class="remove-button"
+                            onclick="removeCustomer('{{ customer.cust_email}}')">Remove</button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 
+    <div class="popup" id="editPopup">
+        <div class="popup-content">
+            <h2>Edit Customer Details</h2>
+            <form id="editCustomerForm">
+                <input type="text" id="customerId" placeholder="Customer ID" readonly>
+                <input type="text" id="customerName" placeholder="Customer Name">
+                <input type="text" id="customerPhone" placeholder="Phone Number">
+                <input type="text" id="customerEmail" placeholder="Email">
+                <input type="text" id="customerAddress" placeholder="Address">
+                <input type="date" id="customerDOB" placeholder="D.O.B.">
+                <input type="file" id="customerPassportPhoto" placeholder="Upload Passport Photo">
+
+                <div class="popup-actions">
+                    <button type="button" onclick="saveCustomer()">Save</button>
+                    <button type="button" onclick="closePopup()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // JavaScript function to handle customer removal
-        function removeCustomer(phoneNumber) {
-            // Send an asynchronous request to remove the customer
-            fetch(`/remove_customer/${phoneNumber}/`, {
+        // JavaScript function to open the popup and fill the form with customer data
+        function EditCustomer(phoneNumber) {
+            // Find customer data based on phone number
+            const row = document.querySelector(`#customer-row-${phoneNumber}`);
+            const customerId = row.querySelector('td:nth-child(1)').innerText;
+            const customerName = row.querySelector('td:nth-child(2)').innerText;
+            const customerPhone = row.querySelector('td:nth-child(3)').innerText;
+            const customerEmail = row.querySelector('td:nth-child(4)').innerText;
+            const customerAddress = row.querySelector('td:nth-child(5)').innerText;
+            const customerDOB = row.querySelector('td:nth-child(6)').innerText;
+            const customerPassportPhoto = row.querySelector('td:nth-child(7) img').src;
+
+            // Set values in the popup form
+            document.getElementById('customerId').value = customerId;
+            document.getElementById('customerName').value = customerName;
+            document.getElementById('customerPhone').value = customerPhone;
+            document.getElementById('customerEmail').value = customerEmail;
+            document.getElementById('customerAddress').value = customerAddress;
+            document.getElementById('customerDOB').value = customerDOB;
+            // You can add functionality for previewing the passport photo if needed
+
+            // Show the popup
+            document.getElementById('editPopup').style.display = 'flex';
+        }
+
+        // Function to close the popup
+        function closePopup() {
+            document.getElementById('editPopup').style.display = 'none';
+        }
+
+        // Function to save customer data (you can modify it to send updated data to the server)
+        function saveCustomer() {
+            const customerId = document.getElementById('customerId').value;
+            const customerName = document.getElementById('customerName').value;
+            const customerPhone = document.getElementById('customerPhone').value;
+            const customerEmail = document.getElementById('customerEmail').value;
+            const customerAddress = document.getElementById('customerAddress').value;
+            const customerDOB = document.getElementById('customerDOB').value;
+            const customerPassportPhoto = document.getElementById('customerPassportPhoto').files[0];
+
+            // Here you would send the updated data to the server via an AJAX request
+            console.log('Saving updated customer details', customerId, customerName, customerPhone, customerEmail, customerAddress, customerDOB, customerPassportPhoto);
+
+            // After saving, close the popup
+            closePopup();
+        }
+
+
+        // Function to handle customer update
+        document.getElementById('editCustomerForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const updatedName = document.getElementById('customerName').value;
+            const updatedEmail = document.getElementById('customerEmail').value;
+            const updatedPhone = document.getElementById('customerPhone').value;
+            const updatedAddress = document.getElementById('customerAddress').value;
+            const updatedDOB = document.getElementById('customerDOB').value;
+
+            // Send an asynchronous request to update the customer
+            fetch(`/update_customer/${updatedPhone}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({
+                    name: updatedName,
+                    email: updatedEmail,
+                    address: updatedAddress,
+                    dob: updatedDOB,
+                }),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log(`Customer with Phone Number ${updatedPhone} updated successfully`);
+                        // Close the modal
+                        closeModal();
+                        // Optionally, update the customer row in the table
+                    } else {
+                        console.error('Failed to update customer');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating customer:', error);
+                });
+        });
+
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+            return cookieValue ? cookieValue.pop() : '';
+        }
+
+        // Function to toggle the menu on mobile
+        function toggleMenu() {
+            const menuContainer = document.querySelector(".menu-container");
+            menuContainer.style.display = menuContainer.style.display === "flex" ? "none" : "flex";
+        }
+
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const tableRows = document.querySelectorAll('tbody tr');
+
+            tableRows.forEach(row => {
+                const customerId = row.cells[0].innerText.toLowerCase();
+                const customerName = row.cells[1].innerText.toLowerCase();
+
+                if (productId.includes(searchInput) || productName.includes(searchInput)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Function to clear search input and reset table
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            filterTable();
+        }
+
+        function removeCustomer(cust_email) {
+            fetch(`/remove_customer/${cust_email}/`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -456,29 +830,21 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        console.log(`Customer with Number ${phoneNumber} removed successfully`);
-                        // Find and remove the customer row from the DOM
-                        const customerRows = document.querySelectorAll('tbody tr');
-                        customerRows.forEach(row => {
-                            const phoneCell = row.querySelector('td:nth-child(2)'); // Assuming phone number is in the second column
-                            if (phoneCell && phoneCell.textContent.trim() === phoneNumber) {
-                                row.remove();
-                            }
-                        });
+                        console.log(`Customer with Email ${cust_email} removed successfully`);
+                        const customerRow = document.getElementById(`customer-row-${cust_email}`);
+                        if (customerRow) {
+                            customerRow.remove();
+                        }
                     } else {
-                        console.error(`Failed to remove customer with Number ${phoneNumber}`);
+                        console.error(`Failed to remove Custoemr with Email ${cust_email}`);
                     }
                 })
                 .catch(error => {
-                    console.error(`Error removing customer: ${error}`);
+                    console.error(`Error removing Customer: ${error}`);
                 });
         }
 
-        // Function to get CSRF token from cookies
-        function getCookie(name) {
-            const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-            return cookieValue ? cookieValue.pop() : '';
-        }    </script>
+    </script>
 
 </body>
 

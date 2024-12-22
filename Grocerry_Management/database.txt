@@ -1,0 +1,47 @@
+-- Customer Table
+CREATE TABLE `customer` (
+  `cust_id` int NOT NULL AUTO_INCREMENT,
+  `cust_name` varchar(255) NOT NULL,
+  `cust_email` varchar(255) NOT NULL,
+  `phone_no` varchar(15) DEFAULT NULL,
+  `address` text,
+  `DOB` date DEFAULT NULL,
+  `passport_photo` blob,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`cust_id`),
+  UNIQUE KEY `cust_email` (`cust_email`)
+);
+
+-- Product Table
+CREATE TABLE `product` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- System Bill Table
+CREATE TABLE `system_bill` (
+  `bill_id` bigint NOT NULL AUTO_INCREMENT,
+  `customer_id` int NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `timestamp` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  PRIMARY KEY (`bill_id`),
+  KEY `cust_id` (`customer_id`),
+  CONSTRAINT `system_bill_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`cust_id`)
+) ;
+
+-- System Transaction Table
+CREATE TABLE `system_transaction` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `bill_id` bigint NOT NULL,
+  `product_id` bigint NOT NULL,
+  `quantity` int NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `timestamp` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  PRIMARY KEY (`id`),
+  KEY `bill_id` (`bill_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `system_transaction_ibfk_1` FOREIGN KEY (`bill_id`) REFERENCES `system_bill` (`bill_id`),
+  CONSTRAINT `system_transaction_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+) ;

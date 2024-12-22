@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Bill Details</title>
+</head>
+<body>
+    <h2>Your Bill Details</h2>
+    <p><strong>Bill #{{ bill.id }}</strong></p>
+    <p><strong>Date:</strong> {{ bill.timestamp|date:"M d, Y H:i:s" }}</p>
+    
+    <h3>Customer Details:</h3>
+    <p><strong>Name:</strong> {{ customer.cust_name }}</p>
+    <p><strong>Email:</strong> {{ customer.cust_email }}</p>
+    
+    <h3>Purchased Items:</h3>
+    <table border="1" style="border-collapse: collapse; width: 100%;">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price (per unit)</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.product.name }}</td>
+                <td>{{ transaction.quantity }}</td>
+                <td>${{ transaction.product.price }}</td>
+                <td>${{ transaction.amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h3>Total Amount: ${{ bill.total }}</h3>
+</body>
+</html>

@@ -19,12 +19,19 @@
             background-color: #344e41;
         }
 
+        input::placeholder {
+            color: #00000058;
+            /* Change to your desired color */
+        }
+
         .container {
             margin: 25px;
             background-color: #7eaf964c;
             padding: 20px;
             border-radius: 20px;
             margin-top: 80px;
+            display: flex;
+            flex-direction: column;
         }
 
 
@@ -337,6 +344,10 @@
         }
 
         .btn {
+            display: flex;
+            justify-content: flex-end;
+            /* margin-top: 10px; */
+            align-self: flex-end;
             width: 100%;
         }
 
@@ -395,17 +406,14 @@
     <nav>
         <div class="logo-container">
             <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png"
-                alt="Purohit Trading">
-            <!-- <span>PUROHIT TRADING</span> -->
+                alt="Company Name">
         </div>
         <div class="menu-container">
-
 
             <a href="{% url 'home' %}" onclick="showHome()">Home</a>
             <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
             <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
-            <a href="#export" onclick="scrollToSection('export')">Export</a>
-
+            <a href="#export" onclick="scrollToSection('export')">Export</a> <!-- NEW to do  -->
 
         </div>
         <div class="hamburger-menu" onclick="toggleMenu()">
@@ -423,23 +431,28 @@
 
             <div class="pair">
                 <label for="customerName">Customer Name:</label>
-                <input type="text" id="customerName" name="name" required>
+                <input type="text" id="customerName" name="cust_name" required>
+                
+                <label for="emailaddress">Email:</label> <!-- NEW -->
+                <input type="text" id="emailaddress" name="cust_email">
 
                 <label for="phoneNumber">Phone Number:</label>
-                <input type="tel" id="phoneNumber" name="phone_number" required>
+                <input type="tel" id="phoneNumber" name="phone_no" required>
+
             </div>
 
             <div class="pair">
-                <label for="lastTransaction">Last Transaction:</label>
-                <input type="datetime-local" id="lastTransaction" name="last_transaction" required>
+                <label for="lastTransaction">DOB:</label>
+                <input type="datetime" id="lastTransaction" placeholder="yyyy-mm-dd" name="DOB" required>
 
                 <label for="passportPhoto">Passport Photo:</label>
                 <input type="file" id="passportPhoto" name="passport_photo">
+
+                <label for="customerAddress">Address:</label>
+                <textarea id="customerAddress" name="address" rows="3" required></textarea>
             </div>
 
             <div class="pair">
-                <label for="customerAddress">Address:</label>
-                <textarea id="customerAddress" name="address" rows="4" required></textarea>
             </div>
 
             <div class="btn">
