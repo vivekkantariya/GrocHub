@@ -362,8 +362,6 @@
         </div>
     </nav>
 
-
-
     <div id="container">
         <h1>Today's Transactions</h1>
         <table>
@@ -380,7 +378,7 @@
                 {% for transaction in transactions %}
                 <tr>
                     <td>{{ transaction.customer_name }}</td>
-                    <td>{{ transaction.product_purchased }}</td>
+                    <td>{{ transaction.product_name }}</td>
                     <td>{{ transaction.amount }}</td>
                     <td>{{ transaction.quantity }}</td>
                     <td>{{ transaction.timestamp }}</td>

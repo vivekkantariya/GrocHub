@@ -1,28 +1,18 @@
 from django.core.mail import send_mail, EmailMessage
 from django.shortcuts import render, redirect, get_object_or_404
+from System.utils import get_plot
 from .forms import CustomerForm, ProductForm, BillForm
 from .models import Product, Customer, Transaction, Bill
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import timedelta
-from django.db import transaction
-from decimal import Decimal
 from django.db.models import Count, F, Sum, ExpressionWrapper
 from django.db.models.functions import TruncHour, TruncMonth
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.shortcuts import get_object_or_404
 import json
-from .models import Product, Customer, Bill, Transaction
 import logging
-from django.http import JsonResponse  # To return JSON responses
-from django.views.decorators.csrf import csrf_exempt  # To exempt the view from CSRF if needed
-from .models import Customer  # Import your Customer model
 from django.template.loader import render_to_string
-from django.core.mail import send_mail
-
 
 def homeView(request):
     return render(request, "home.html")
@@ -68,11 +58,34 @@ def add_productView(request):
     else:
         form = ProductForm()
         return render(request, 'addproduct.html', {'form': form})
-
 def transactionView(request):
+    # Get the start time for the last 24 hours
     start_time = timezone.now() - timedelta(days=1)
+
+    # Retrieve all transactions in the last 24 hours
     transactions = Transaction.objects.filter(timestamp__gte=start_time)
-    return render(request, 'transaction.html', {'transactions': transactions})
+
+    # Prepare the data to include transactions with missing customer details
+    transaction_data = []
+    for transaction in transactions:
+        bill = transaction.bill
+        if bill.customer:  # If linked to a customer in the database
+            customer_name = bill.customer.cust_name
+            customer_email = bill.customer.cust_email
+        else:  # Handle cases where customer is missing
+            customer_name = "Guest Customer"
+            customer_email = "Unknown"
+        
+        transaction_data.append({
+            'customer_name': customer_name,
+            'product_name': transaction.product.name,
+            'amount': transaction.amount,
+            'quantity': transaction.quantity,
+            'timestamp': transaction.timestamp,
+        })
+
+    # Render the template with transaction data
+    return render(request, 'transaction.html', {'transactions': transaction_data})
 
 def AnalysisView(request):
     qs = Bill.objects.all()
@@ -183,9 +196,6 @@ def send_bill_email(bill):
         recipient_list=[customer.cust_email],
         html_message=email_body,
     )
-
-def send_email(to_email, subject, message):
-    send_mail(subject, message, 'grochub1@yahoo.com', [to_email], fail_silently=False)
 
 def get_monthly_income(request):
     monthly_income_data = Transaction.objects.annotate(

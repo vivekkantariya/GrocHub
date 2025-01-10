@@ -806,7 +806,7 @@
                 const customerId = row.cells[0].innerText.toLowerCase();
                 const customerName = row.cells[1].innerText.toLowerCase();
 
-                if (productId.includes(searchInput) || productName.includes(searchInput)) {
+                if (customerId.includes(searchInput) || customerName.includes(searchInput)) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
