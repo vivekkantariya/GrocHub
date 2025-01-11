@@ -22,7 +22,7 @@ class TransactionForm(forms.ModelForm):
 class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
-        fields = ['cust_name', 'cust_email', 'phone_no', 'address', 'DOB', 'passport_photo']
+        fields = ['cust_name', 'cust_email', 'phone_no', 'address', 'dob', 'passport_photo']  # Include passport_photo
 
     def clean_phone_no(self):
         phone_no = self.cleaned_data['phone_no']
@@ -36,6 +36,11 @@ class CustomerForm(forms.ModelForm):
             raise forms.ValidationError('Email is already registered.')
         return cust_email
 
+    def clean_passport_photo(self):
+        passport_photo = self.cleaned_data.get('passport_photo')
+        if passport_photo and not passport_photo.name.lower().endswith(('jpg', 'jpeg', 'png')):
+            raise forms.ValidationError('File must be a JPG, JPEG, or PNG image.')
+        return passport_photo
 
 
 class BillForm(forms.ModelForm):

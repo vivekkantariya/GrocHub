@@ -522,6 +522,7 @@
 
     <div id="container">
         <h2>Billing Information</h2>
+        <!-- billing.html -->
         <form id="billingForm" method="post" action="{% url 'generate_bill' %}">
             {% csrf_token %}
             <div class="billinfo">
@@ -568,159 +569,179 @@
             <label id="grandTotal">Grand Total: $0.00</label>
             <button type="submit">Generate Bill</button>
         </form>
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var total = 0;  // Initialize the total variable
-        document.getElementById('addProductBtn').addEventListener('click', addProduct);
-        document.getElementById('billingForm').addEventListener('submit', generateBill);
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var total = 0;  // Initialize the total variable
+            document.getElementById('addProductBtn').addEventListener('click', addProduct);
+            document.getElementById('billingForm').addEventListener('submit', generateBill);
 
-        // Event delegation for removing products
-        $('#productTable tbody').on('click', 'button', function() {
-            removeProduct(this);
+            // Event delegation for removing products
+            $('#productTable tbody').on('click', 'button', function () {
+                removeProduct(this);
+            });
+
+            function addProduct() {
+                var productName = document.getElementById('products').value;
+                var quantity = document.getElementById('quantity').value;
+
+                if (productName.trim() === '' || quantity <= 0) {
+                    alert('Please enter valid product details.');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/get_product_suggestions/',
+                    data: { search: productName },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.length > 0) {
+                            var productDetails = data[0];
+                            var tableBody = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+                            var newRow = tableBody.insertRow(tableBody.rows.length);
+
+                            var cell1 = newRow.insertCell(0);
+                            var cell2 = newRow.insertCell(1);
+                            var cell3 = newRow.insertCell(2);
+                            var cell4 = newRow.insertCell(3);
+                            var cell5 = newRow.insertCell(4);
+
+                            cell1.innerHTML = productDetails.name;
+                            cell2.innerHTML = quantity;
+                            cell3.innerHTML = '$' + productDetails.price.toFixed(2);
+                            cell4.innerHTML = '$' + (quantity * productDetails.price).toFixed(2);
+                            cell5.innerHTML = '<button type="button">Remove</button>';
+
+                            total += parseFloat(productDetails.price) * quantity;  // Update total when adding product
+                            updateGrandTotal();
+                        } else {
+                            alert('Product not found.');
+                        }
+                    }
+                });
+            }
+
+            function removeProduct(button) {
+                var row = button.closest('tr');
+                var priceCell = row.cells[3];  // Total cost cell
+                var price = parseFloat(priceCell.innerHTML.replace('$', ''));
+
+                total -= price;  // Subtract the removed product's price from the total
+                row.remove();  // Remove the row from the table
+                updateGrandTotal();
+            }
+
+            // Update the grand total by recalculating all product subtotals in the table
+            function updateGrandTotal() {
+                total = 0;
+                var table = document.getElementById('productTable');
+                for (var i = 1; i < table.rows.length; i++) {
+                    total += parseFloat(table.rows[i].cells[3].innerHTML.replace('$', ''));
+                }
+
+                document.getElementById('grandTotal').innerHTML = 'Grand Total: $' + total.toFixed(2);
+            }
+
+            function generateBill(event) {
+                event.preventDefault();
+                var productTable = document.getElementById('productTable');
+                var products = [];
+
+                for (var i = 1; i < productTable.rows.length; i++) {
+                    var row = productTable.rows[i];
+                    var product = {
+                        name: row.cells[0].innerHTML.trim(),
+                        quantity: parseInt(row.cells[1].innerHTML.trim()),
+                        price: parseFloat(row.cells[2].innerHTML.replace('$', '').trim()),
+                        subtotal: parseFloat(row.cells[3].innerHTML.replace('$', '').trim())
+                    };
+                    products.push(product);
+                }
+
+                if (products.length === 0) {
+                    alert('Please add at least one product to generate the bill.');
+                    return;
+                }
+
+                var formData = new FormData(document.getElementById('billingForm'));
+                formData.append('products', JSON.stringify(products));
+                formData.append('grand_total', total);
+
+                $.ajax({
+                    url: '/generate_bill/',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+                    },
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        if (data.success) {
+                            alert(data.message); // Display the server's success message
+
+                            // Trigger email sending
+                            sendBillByEmail(data.customer_email, data.bill_content);
+                        } else {
+                            alert("Error: " + data.error);
+                        }
+                    },
+                    error: function (xhr) {
+                        alert("An error occurred: " + xhr.responseText);
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                $('#customer_email').on('blur', function () {
+                    var email = $(this).val();
+                    $.ajax({
+                        url: '/get_customer_details/',
+                        data: { email: email },
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success) {
+                                $('#customer_name').val(response.customer_name);
+                                $('#phoneNumber').val(response.phone_no);
+                                $('#address').val(response.address);
+                            }
+                        }
+                    });
+                });
+            }); 
+
+
+            function sendBillByEmail(customerEmail, billContent) {
+                console.log("Sending email with the following data:");
+                console.log({ customer_email: customerEmail, bill_content: billContent });
+
+                $.ajax({
+                    url: '/send_bill_email/',
+                    type: 'POST',
+                    data: {
+                        customer_email: customerEmail,
+                        bill_content: billContent,
+                        csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+                    },
+                    success: function (response) {
+                        console.log("Server Response:", response);
+                        if (response.success) {
+                            alert('Bill sent successfully!');
+                        } else {
+                            alert('Error sending the bill: ' + response.error);
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('AJAX Error:', xhr.responseText);
+                        alert('An error occurred: ' + xhr.responseText);
+                    }
+                });
+            }
         });
-
-        function addProduct() {
-            var productName = document.getElementById('products').value;
-            var quantity = document.getElementById('quantity').value;
-
-            if (productName.trim() === '' || quantity <= 0) {
-                alert('Please enter valid product details.');
-                return;
-            }
-
-            $.ajax({
-                url: '/get_product_suggestions/',
-                data: { search: productName },
-                dataType: 'json',
-                success: function (data) {
-                    if (data.length > 0) {
-                        var productDetails = data[0];
-                        var tableBody = document.getElementById('productTable').getElementsByTagName('tbody')[0];
-                        var newRow = tableBody.insertRow(tableBody.rows.length);
-
-                        var cell1 = newRow.insertCell(0);
-                        var cell2 = newRow.insertCell(1);
-                        var cell3 = newRow.insertCell(2);
-                        var cell4 = newRow.insertCell(3);
-                        var cell5 = newRow.insertCell(4);
-
-                        cell1.innerHTML = productDetails.name;
-                        cell2.innerHTML = quantity;
-                        cell3.innerHTML = '$' + productDetails.price.toFixed(2);
-                        cell4.innerHTML = '$' + (quantity * productDetails.price).toFixed(2);
-                        cell5.innerHTML = '<button type="button">Remove</button>';
-
-                        total += parseFloat(productDetails.price) * quantity;  // Update total when adding product
-                        updateGrandTotal();
-                    } else {
-                        alert('Product not found.');
-                    }
-                }
-            });
-        }
-
-        function removeProduct(button) {
-            var row = button.closest('tr');
-            var priceCell = row.cells[3];  // Total cost cell
-            var price = parseFloat(priceCell.innerHTML.replace('$', ''));
-
-            total -= price;  // Subtract the removed product's price from the total
-            row.remove();  // Remove the row from the table
-            updateGrandTotal();
-        }
-
-        // Update the grand total by recalculating all product subtotals in the table
-        function updateGrandTotal() {
-            total = 0;
-            var table = document.getElementById('productTable');
-            for (var i = 1; i < table.rows.length; i++) {
-                total += parseFloat(table.rows[i].cells[3].innerHTML.replace('$', ''));
-            }
-
-            document.getElementById('grandTotal').innerHTML = 'Grand Total: $' + total.toFixed(2);
-        }
-
-        function generateBill(event) {
-            event.preventDefault();
-            var productTable = document.getElementById('productTable');
-            var products = [];
-
-            for (var i = 1; i < productTable.rows.length; i++) {
-                var row = productTable.rows[i];
-                var product = {
-                    name: row.cells[0].innerHTML.trim(),
-                    quantity: parseInt(row.cells[1].innerHTML.trim()),
-                    price: parseFloat(row.cells[2].innerHTML.replace('$', '').trim()),
-                    subtotal: parseFloat(row.cells[3].innerHTML.replace('$', '').trim())
-                };
-                products.push(product);
-            }
-
-            if (products.length === 0) {
-                alert('Please add at least one product to generate the bill.');
-                return;
-            }
-
-            var formData = new FormData(document.getElementById('billingForm'));
-            formData.append('products', JSON.stringify(products));
-            formData.append('grand_total', total);
-
-            $.ajax({
-                url: '/generate_bill/',
-                type: 'POST',
-                headers: {
-                    'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
-                },
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    if (data.success) {
-                        alert(data.message); // Display the server's success message
-
-                        // Trigger email sending
-                        sendBillByEmail(data.customer_email, data.bill_content);
-                    } else {
-                        alert("Error: " + data.error);
-                    }
-                },
-                error: function (xhr) {
-                    alert("An error occurred: " + xhr.responseText);
-                }
-            });
-        }
-
-        function sendBillByEmail(customerEmail, billContent) {
-            console.log("Sending email with the following data:");
-            console.log({ customer_email: customerEmail, bill_content: billContent });
-
-            $.ajax({
-                url: '/send_bill_email/',
-                type: 'POST',
-                data: {
-                    customer_email: customerEmail,
-                    bill_content: billContent,
-                    csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
-                },
-                success: function (response) {
-                    console.log("Server Response:", response);
-                    if (response.success) {
-                        alert('Bill sent successfully!');
-                    } else {
-                        alert('Error sending the bill: ' + response.error);
-                    }
-                },
-                error: function (xhr) {
-                    console.error('AJAX Error:', xhr.responseText);
-                    alert('An error occurred: ' + xhr.responseText);
-                }
-            });
-        }
-    });
-</script>
+    </script>
 
 </body>
 

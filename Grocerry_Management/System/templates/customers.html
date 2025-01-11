@@ -660,14 +660,20 @@
             <tbody>
                 {% for customer in customer %}
                 <tr id="customer-row-{{ customer.cust_email }}">
-                    <td>{{ customer.cust_id }}</td>
+                    <td>{{ customer.id }}</td>
                     <td>{{ customer.cust_name }}</td>
                     <td>{{ customer.phone_no }}</td>
                     <td>{{ customer.cust_email }}</td>
                     <td>{{ customer.address }}</td>
-                    <td>{{ customer.DOB }}</td>
-                    <td><img src="{{ customer.passport_photo.url }}" alt="Passport Photo" width="50" height="50"></td>
+                    <td>{{ customer.dob }}</td>
                     <td>
+                        {% if customer.passport_photo %}
+                            <img src="{{ customer.passport_photo.url }}" alt="Passport Photo" width="50" height="50">
+                        {% else %}
+                            <img src="C:\Users\Vivek\Pictures\hacktober.jpg" alt="No Passport Photo" width="50" height="50">
+                        {% endif %}
+                    </td>
+                                        <td>
                         <button class="Edit-button" onclick="EditCustomer('{{ customer.phone_number }}')">Edit</button>
                         <button class="remove-button"
                             onclick="removeCustomer('{{ customer.cust_email}}')">Remove</button>
@@ -697,6 +703,7 @@
             </form>
         </div>
     </div>
+
 
     <script>
         // JavaScript function to open the popup and fill the form with customer data
@@ -825,9 +832,10 @@
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken'),
+                    'X-CSRFToken': getCookie('csrftoken'),  // Add CSRF token
                 },
             })
+
                 .then(response => {
                     if (response.ok) {
                         console.log(`Customer with Email ${cust_email} removed successfully`);

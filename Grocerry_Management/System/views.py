@@ -12,6 +12,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 import json
 import logging
+from django.http import HttpResponse, Http404
+from django.shortcuts import render
+from .models import Customer
 from django.template.loader import render_to_string
 
 def homeView(request):
@@ -58,6 +61,7 @@ def add_productView(request):
     else:
         form = ProductForm()
         return render(request, 'addproduct.html', {'form': form})
+    
 def transactionView(request):
     # Get the start time for the last 24 hours
     start_time = timezone.now() - timedelta(days=1)
@@ -131,21 +135,20 @@ def generate_bill(request):
             except ValueError:
                 return JsonResponse({'success': False, 'error': 'Invalid grand total format.'}, status=400)
 
-            # Check if customer exists in the database
+            # Check if customer exists in the database (Regular customer)
             try:
                 customer = Customer.objects.get(cust_email=customer_email)
             except Customer.DoesNotExist:
-                # Create a temporary customer record
-                customer = Customer.objects.create(
-                    cust_name=customer_name,
-                    cust_email=customer_email,
-                    phone_no=phone_no,
-                    address=address
-                )
+                # Non-regular customer case, don't save them to the database
+                if not customer_name or not customer_email:
+                    return JsonResponse({'success': False, 'error': 'Non-regular customer must provide valid details.'}, status=400)
+                
+                # For non-regular customers, customer = None, but we still need to pass the email
+                customer = None  # No customer in the database
 
-            # Create a bill
+            # Create a bill (can be associated with or without a customer)
             bill = Bill.objects.create(
-                customer=customer,
+                customer=customer,  # Can be None for non-regular customers
                 total=grand_total
             )
 
@@ -165,7 +168,11 @@ def generate_bill(request):
                 )
 
             # Prepare and send the email
-            send_bill_email(bill)  # Pass the bill object directly
+            if customer:
+                send_bill_email(bill)  # Regular customer with email
+            else:
+                # Handle non-regular customer email sending without a customer object
+                send_non_regular_customer_email(bill, customer_name, customer_email)
 
             return JsonResponse({
                 'success': True,
@@ -176,10 +183,10 @@ def generate_bill(request):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     else:
         return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=405)
-
+    
 def send_bill_email(bill):
     customer = bill.customer
-    transactions = bill.transaction_set.all()
+    transactions = bill.transactions.all()  # Updated to use 'transactions' as related_name
     bill_details = {
         'bill': bill,
         'customer': customer,
@@ -194,6 +201,26 @@ def send_bill_email(bill):
         message='',
         from_email='grochubbusiness@example.com',
         recipient_list=[customer.cust_email],
+        html_message=email_body,
+    )
+    
+def send_non_regular_customer_email(bill, customer_name, customer_email):
+    transactions = bill.transactions.all()  # Updated to use 'transactions' as related_name
+    bill_details = {
+        'bill': bill,
+        'customer_name': customer_name,
+        'customer_email': customer_email,
+        'transactions': transactions,
+    }
+
+    email_subject = f"Your Bill Details - Bill #{bill.id}"
+    email_body = render_to_string('emaildesign.html', bill_details)
+    
+    send_mail(
+        subject=email_subject,
+        message='',
+        from_email='grochubbusiness@example.com',
+        recipient_list=[customer_email],
         html_message=email_body,
     )
 
@@ -226,15 +253,12 @@ def remove_product(request, product_id):
     return JsonResponse({'success': True, 'message': 'Product removed successfully'})
 
 def remove_customer(request, email):
-    # Get the customer object
-    customer = get_object_or_404(Customer, cust_email=email)
-    
-    # Delete the customer
-    customer.delete()
-
-    # Redirect to the customer list or any other page after deletion
-    return redirect('customers_list')  # Replace 'customers_list' with your actual redirect target
-
+    try:
+        customer = Customer.objects.get(cust_email=email)
+        customer.delete()
+        return HttpResponse(f'Customer with email {email} removed successfully.')
+    except Customer.DoesNotExist:
+        raise Http404("Customer not found.")
 
 def get_daily_customer_buying(request):
     start_time = timezone.now() - timedelta(days=1)
@@ -254,4 +278,19 @@ def get_daily_customer_buying(request):
         data = [0]
 
     return JsonResponse({'labels': labels, 'data': data})
+
+# views.py
+
+def get_customer_details(request):
+    email = request.GET.get('email')
+    try:
+        customer = Customer.objects.get(cust_email=email, customer_type=Customer.REGULAR)
+        return JsonResponse({
+            'success': True,
+            'customer_name': customer.cust_name,
+            'phone_no': customer.phone_no,
+            'address': customer.address
+        })
+    except Customer.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Customer not found.'}, status=404)
 

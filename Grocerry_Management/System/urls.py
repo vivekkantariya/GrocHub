@@ -29,7 +29,6 @@ urlpatterns = [
     path('get_daily_customer_buying/', get_daily_customer_buying, name='get_daily_customer_buying'),
     path('get_product_suggestions/', get_product_suggestions, name='get_product_suggestions'),
     path('<path:undefined_path>/', homeView, name='undefined_path'),
-    path('remove_customer/<str:phone_number>/', views.remove_customer, name='remove_customer'),
     path('send_bill_email/', views.send_bill_email, name='send_bill_email'),
 ]
 
