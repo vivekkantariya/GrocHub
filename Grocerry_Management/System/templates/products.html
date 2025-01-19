@@ -586,7 +586,7 @@
             <a href="{% url 'home' %}" onclick="showHome()">Home</a>
             <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
             <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
-            <a href="#export" onclick="scrollToSection('export')">Export</a>
+            <a href="{% url 'stock' %}" onclick="scrollToSection()">Stock</a>
         </div>
         <div class="hamburger-menu" onclick="toggleMenu()">
             <div class="bar bar1"></div>

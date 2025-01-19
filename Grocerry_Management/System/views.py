@@ -16,12 +16,14 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from .models import Customer
 from django.template.loader import render_to_string
+from django.conf import settings
 
-def homeView(request):
-    return render(request, "home.html")
+def homeView(request, undefined_path=None):
+    print(f"Unexpected request with undefined_path: {undefined_path}")
+    return render(request, 'home.html')
 
 def loginView(request):
-    return render(request, "loginpage.html")
+    return render(request, "login.html")
 
 def product_list(request):
     products = Product.objects.all()
@@ -37,6 +39,10 @@ def addproductView(request):
 
 def addcustomerView(request):
     return render(request, 'addcustomer.html')
+
+def stockView(request):
+    products = Product.objects.all()  # Retrieve all products from the database
+    return render(request, 'stock.html', {'product': products})
 
 def add_customerView(request):
     if request.method == 'POST':
@@ -63,13 +69,10 @@ def add_productView(request):
         return render(request, 'addproduct.html', {'form': form})
     
 def transactionView(request):
-    # Get the start time for the last 24 hours
     start_time = timezone.now() - timedelta(days=1)
 
-    # Retrieve all transactions in the last 24 hours
     transactions = Transaction.objects.filter(timestamp__gte=start_time)
 
-    # Prepare the data to include transactions with missing customer details
     transaction_data = []
     for transaction in transactions:
         bill = transaction.bill
@@ -88,7 +91,6 @@ def transactionView(request):
             'timestamp': transaction.timestamp,
         })
 
-    # Render the template with transaction data
     return render(request, 'transaction.html', {'transactions': transaction_data})
 
 def AnalysisView(request):
@@ -113,13 +115,11 @@ logger = logging.getLogger(__name__)
 def generate_bill(request):
     if request.method == 'POST':
         try:
-            # Parse customer details
             customer_name = request.POST.get('customer_name')
             customer_email = request.POST.get('customer_email')
             phone_no = request.POST.get('phone_no')
             address = request.POST.get('address')
 
-            # Parse products list
             try:
                 products_data = json.loads(request.POST.get('products', '[]'))
             except json.JSONDecodeError:
@@ -128,38 +128,33 @@ def generate_bill(request):
             if not products_data:
                 return JsonResponse({'success': False, 'error': 'No products provided.'}, status=400)
 
-            # Parse grand total
             grand_total_str = request.POST.get('grand_total', '0.0')
             try:
                 grand_total = float(grand_total_str.replace('$', '').strip())
             except ValueError:
                 return JsonResponse({'success': False, 'error': 'Invalid grand total format.'}, status=400)
 
-            # Check if customer exists in the database (Regular customer)
+            # Check if the customer is regular or non-regular
             try:
                 customer = Customer.objects.get(cust_email=customer_email)
             except Customer.DoesNotExist:
-                # Non-regular customer case, don't save them to the database
                 if not customer_name or not customer_email:
                     return JsonResponse({'success': False, 'error': 'Non-regular customer must provide valid details.'}, status=400)
                 
-                # For non-regular customers, customer = None, but we still need to pass the email
-                customer = None  # No customer in the database
+                customer = None  # No customer in the database for non-regular
 
-            # Create a bill (can be associated with or without a customer)
+            # Create the Bill
             bill = Bill.objects.create(
-                customer=customer,  # Can be None for non-regular customers
+                customer=customer,  # Pass customer object or None
                 total=grand_total
             )
 
-            # Save each product as a transaction
             for product in products_data:
                 try:
                     product_instance = Product.objects.get(name=product['name'])
                 except Product.DoesNotExist:
                     return JsonResponse({'success': False, 'error': f'Product "{product["name"]}" not found.'}, status=400)
 
-                # Create a transaction record
                 Transaction.objects.create(
                     bill=bill,
                     product=product_instance,
@@ -167,11 +162,10 @@ def generate_bill(request):
                     amount=product['subtotal']
                 )
 
-            # Prepare and send the email
+            # Send the bill email based on whether the customer is regular or not
             if customer:
-                send_bill_email(bill)  # Regular customer with email
+                send_bill_email(bill)  # Regular customer email
             else:
-                # Handle non-regular customer email sending without a customer object
                 send_non_regular_customer_email(bill, customer_name, customer_email)
 
             return JsonResponse({
@@ -183,14 +177,16 @@ def generate_bill(request):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     else:
         return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=405)
-    
+
 def send_bill_email(bill):
     customer = bill.customer
-    transactions = bill.transactions.all()  # Updated to use 'transactions' as related_name
+    transactions = bill.transactions.all()
+    download_url = f"{settings.SITE_URL}/download_bill/{bill.id}/"
     bill_details = {
         'bill': bill,
         'customer': customer,
         'transactions': transactions,
+        'download_url': download_url,
     }
 
     email_subject = f"Your Bill Details - Bill #{bill.id}"
@@ -201,15 +197,15 @@ def send_bill_email(bill):
         message='',
         from_email='grochubbusiness@example.com',
         recipient_list=[customer.cust_email],
+        
         html_message=email_body,
     )
-    
 def send_non_regular_customer_email(bill, customer_name, customer_email):
-    transactions = bill.transactions.all()  # Updated to use 'transactions' as related_name
+    transactions = bill.transactions.all()
     bill_details = {
         'bill': bill,
-        'customer_name': customer_name,
-        'customer_email': customer_email,
+        'customer_name': customer_name,  # Pass customer name explicitly
+        'customer_email': customer_email,  # Pass customer email explicitly
         'transactions': transactions,
     }
 
@@ -279,7 +275,23 @@ def get_daily_customer_buying(request):
 
     return JsonResponse({'labels': labels, 'data': data})
 
-# views.py
+def generate_pdf(bill, transactions):
+    html_string = render_to_string('bill_pdf_template.html', {'bill': bill, 'transactions': transactions})
+    pdf_file_path = os.path.join(settings.MEDIA_ROOT, f'bill_{bill.id}.pdf')
+    HTML(string=html_string).write_pdf(pdf_file_path)
+    return pdf_file_path
+
+def download_bill(request, bill_id):
+    try:
+        bill = Bill.objects.get(id=bill_id)
+        transactions = bill.transactions.all()
+        pdf_path = generate_pdf(bill, transactions)
+
+        response = FileResponse(open(pdf_path, 'rb'), content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="bill_{bill.id}.pdf"'
+        return response
+    except Bill.DoesNotExist:
+        return HttpResponse('Bill not found.', status=404)
 
 def get_customer_details(request):
     email = request.GET.get('email')
@@ -294,3 +306,5 @@ def get_customer_details(request):
     except Customer.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Customer not found.'}, status=404)
 
+def stockView(request):
+    return render(request, 'stock.html')

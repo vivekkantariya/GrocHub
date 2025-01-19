@@ -23,13 +23,16 @@ urlpatterns = [
     path('transaction.html', transactionView, name='transactions'),  
     path('analysis.html', AnalysisView, name='analysis'),  
     path('billing.html', bill_view, name='billing'),  
+    path('download_bill/<int:bill_id>/', views.download_bill, name='download_bill'),
     path('generate_bill/', views.generate_bill, name='generate_bill'),
     path('get_monthly_income/', get_monthly_income, name='get_monthly_income'),
     path('get_real_time_customers/', get_real_time_customers, name='get_real_time_customers'),
     path('get_daily_customer_buying/', get_daily_customer_buying, name='get_daily_customer_buying'),
     path('get_product_suggestions/', get_product_suggestions, name='get_product_suggestions'),
-    path('<path:undefined_path>/', homeView, name='undefined_path'),
     path('send_bill_email/', views.send_bill_email, name='send_bill_email'),
+    path('stock/', views.stockView, name='stock'),  # Stock page
+    path('<path:undefined_path>/', views.homeView, name='home'),
+
 ]
 
 if settings.DEBUG:
