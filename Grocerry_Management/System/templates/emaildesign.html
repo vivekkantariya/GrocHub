@@ -3,50 +3,170 @@
 
 <head>
     <title>Your Bill Details</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-color: #4caf50;
+            color: #fff;
+            text-align: center;
+            padding: 20px 10px;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+
+        .info p {
+            margin: 5px 0;
+        }
+
+        .table-container {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            text-align: left;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4caf50;
+            text-align: right;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px 10px;
+            background-color: #f2f2f2;
+            color: #777;
+            font-size: 14px;
+            border-top: 1px solid #ddd;
+        }
+
+        .download-button {
+            display: inline-block;
+            background-color: #4caf50;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 4px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .download-button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 
 <body>
-    <h2>Your Bill Details</h2>
-    <p><strong>Bill #{{ bill.id }}</strong></p>
-    <p><strong>Date:</strong> {{ bill.timestamp|date:"M d, Y H:i:s" }}</p>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h2>Your Bill Details</h2>
+        </div>
 
-    <h3>Customer Details:</h3>
-    
-    {% if customer %}
-        <p><strong>Name:</strong> {{ customer.cust_name }}</p>
-        <p><strong>Email:</strong> {{ customer.cust_email }}</p>
-    {% else %}
-        <p><strong>Name:</strong> {{ customer_name }}</p>
-        <p><strong>Email:</strong> {{ customer_email }}</p>
-    {% endif %}
+        <!-- Content -->
+        <div class="content">
+            <!-- Bill Details -->
+            <div class="info">
+                <p><strong>Bill #:</strong> {{ bill.id }}</p>
+                <p><strong>Date:</strong> {{ bill.date|date:"M d, Y H:i:s" }}</p>
+            </div>
 
-    <h3>Purchased Items:</h3>
-    <table border="1" style="border-collapse: collapse; width: 100%;">
-        <thead>
-            <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Price (per unit)</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for transaction in transactions %}
-            <tr>
-                <td>{{ transaction.product.name }}</td>
-                <td>{{ transaction.quantity }}</td>
-                <td>${{ transaction.product.price }}</td>
-                <td>${{ transaction.amount }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            <!-- Customer Details -->
+            <h3 class="section-title">Customer Details:</h3>
+            <div class="info">
+                {% if customer %}
+                    <p><strong>Name:</strong> {{ customer.cust_name }}</p>
+                    <p><strong>Email:</strong> {{ customer.cust_email }}</p>
+                {% else %}
+                    <p><strong>Name:</strong> {{ customer_name }}</p>
+                    <p><strong>Email:</strong> {{ customer_email }}</p>
+                {% endif %}
+            </div>
 
-    <h3>Total Amount: ${{ bill.total }}</h3>
+            <!-- Purchased Items -->
+            <h3 class="section-title">Purchased Items:</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Price (per unit)</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.product.name }}</td>
+                            <td>{{ transaction.quantity }}</td>
+                            <td>${{ transaction.product.price }}</td>
+                            <td>${{ transaction.amount }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
-    <p>You can download your bill using the link below:</p>
-    <a href="{{ download_url }}" target="_blank">Download Bill</a>
+            <!-- Total Amount -->
+            <p class="total">Total Amount: ${{ bill.total }}</p>
 
+            <!-- Download Link -->
+            <a href="{{ download_url }}" target="_blank" class="download-button">Download Bill</a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Thank you for your purchase! If you have any questions, contact us at support@example.com.</p>
+        </div>
+    </div>
 </body>
 
 </html>

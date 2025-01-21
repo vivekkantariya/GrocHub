@@ -281,17 +281,55 @@ def generate_pdf(bill, transactions):
     HTML(string=html_string).write_pdf(pdf_file_path)
     return pdf_file_path
 
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa  # Make sure this is installed
+from .models import Bill, Transaction
+
 def download_bill(request, bill_id):
     try:
+        # Fetch the bill
         bill = Bill.objects.get(id=bill_id)
-        transactions = bill.transactions.all()
-        pdf_path = generate_pdf(bill, transactions)
-
-        response = FileResponse(open(pdf_path, 'rb'), content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename="bill_{bill.id}.pdf"'
-        return response
     except Bill.DoesNotExist:
-        return HttpResponse('Bill not found.', status=404)
+        return HttpResponse('Bill not found', status=404)
+    
+    # Fetch transactions related to the bill
+    transactions = Transaction.objects.filter(bill=bill)
+
+    # Check if the bill has an associated customer
+    customer = bill.customer  # Will be `None` if no customer is linked
+
+    # Prepare customer details based on the type
+    if customer:
+        customer_name = customer.cust_name
+        customer_email = customer.cust_email
+    else:
+        customer_name = "Not Provided"
+        customer_email = "Not Provided"
+
+    # Prepare context for the template
+    context = {
+        'bill': bill,
+        'transactions': transactions,
+        'customer': customer,  # Regular customer object (if present)
+        'customer_name': customer_name,
+        'customer_email': customer_email,
+    }
+
+    # Load the template
+    template_path = 'bill_pdf_template.html'
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # Generate the PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="bill_{bill.id}.pdf"'
+
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('Error generating PDF', status=500)
+    
+    return response
 
 def get_customer_details(request):
     email = request.GET.get('email')
