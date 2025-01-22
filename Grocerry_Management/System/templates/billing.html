@@ -548,7 +548,7 @@
                     <div id="productSuggestions"></div>
                 </div>
                 <div class="pair">
-                    <label for="quantity">Quantity:</label>
+                    <label for="quantity">Quantity or Measurement Unit:</label>
                     <input type="number" id="quantity" name="quantity" required>
                 </div>
                 <div class="btn"></div>
@@ -558,8 +558,8 @@
                 <thead>
                     <tr>
                         <th>Product Name</th>
-                        <th>Quantity</th>
                         <th>Price</th>
+                        <th>Quantity or Measurement Unit</th>
                         <th>Subtotal</th>
                         <th>Action</th>
                     </tr>
@@ -610,8 +610,8 @@
                             var cell5 = newRow.insertCell(4);
 
                             cell1.innerHTML = productDetails.name;
-                            cell2.innerHTML = quantity;
-                            cell3.innerHTML = '$' + productDetails.price.toFixed(2);
+                            cell2.innerHTML = '$' + productDetails.price.toFixed(2);
+                            cell3.innerHTML = quantity;
                             cell4.innerHTML = '$' + (quantity * productDetails.price).toFixed(2);
                             cell5.innerHTML = '<button type="button">Remove</button>';
 

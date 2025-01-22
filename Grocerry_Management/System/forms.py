@@ -4,7 +4,7 @@ from .models import Product, Customer, Bill, Transaction
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'price', 'measurement_unit', 'custom_measurement']
+        fields = ['name', 'price','measurement_unit', 'custom_measurement']
 
     def clean(self):
         cleaned_data = super().clean()

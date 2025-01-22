@@ -614,6 +614,7 @@
                     <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Price</th>
+                    <th>Unit</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -623,6 +624,7 @@
                     <td>{{ product.id }}</td>
                     <td>{{ product.name }}</td>
                     <td>{{ product.price }}</td>
+                    <td>{{ product.measurement_unit }}</td>
                     <td>
                         <button class="edit-button"
                             onclick="openEditPopup('{{ product.id }}', '{{ product.name }}', '{{ product.price }}')">Edit</button>

@@ -55,25 +55,24 @@ def add_customerView(request):
     else:
         form = CustomerForm()
         return render(request, 'addcustomer.html', {'form': form})
-    
+
 def add_productView(request):
     if request.method == 'POST':
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            product = form.save(commit=False)
+        name = request.POST.get('name')
+        price = request.POST.get('price')
+        description = request.POST.get('description')  # Optional description
+        measurement_unit = request.POST.get('measurement_unit')
+        custom_measurement = request.POST.get('custom_measurement') if measurement_unit == 'custom' else None
 
-            # Handle the custom measurement case
-            if product.measurement_unit == 'custom':
-                product.custom_measurement = request.POST.get('custom_measurement', '')
-
-            product.save()
-            return redirect('product_list')
-        else:
-            print(form.errors)  # Debugging log
-            return render(request, 'addproduct.html', {'form': form})
-    else:
-        form = ProductForm()
-        return render(request, 'addproduct.html', {'form': form})
+        product = Product.objects.create(
+            name=name,
+            price=price,
+            description=description,
+            measurement_unit=measurement_unit,
+            custom_measurement=custom_measurement
+        )
+        return redirect('product_list')  # Redirect to the product list page
+    return render(request, 'addproduct.html')
 
 def transactionView(request):
     start_time = timezone.now() - timedelta(days=1)
