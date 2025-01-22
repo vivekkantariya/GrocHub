@@ -1,12 +1,20 @@
 from django import forms
 from .models import Product, Customer, Bill, Transaction
 
-
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'price']  # Correct fields from the Product model
+        fields = ['name', 'price', 'measurement_unit', 'custom_measurement']
 
+    def clean(self):
+        cleaned_data = super().clean()
+        measurement_unit = cleaned_data.get('measurement_unit')
+        custom_measurement = cleaned_data.get('custom_measurement')
+
+        if measurement_unit == 'custom' and not custom_measurement:
+            raise forms.ValidationError('Custom measurement must be provided if "Custom" is selected.')
+
+        return cleaned_data
 
 class TransactionForm(forms.ModelForm):
     class Meta:

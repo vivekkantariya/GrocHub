@@ -20,33 +20,46 @@ class Customer(models.Model):
     )
     dob = models.DateField(null=True, blank=True)  # Added Date of Birth field
     passport_photo = models.ImageField(upload_to='passport_photos/', null=True, blank=True)
-    dob = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.cust_name
-
+    
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)  # Optional field
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    MEASUREMENT_CHOICES = [
+        ('250g', '250 Gram'),
+        ('500g', '500 Gram'),
+        ('1kg', '1 KG'),
+        ('5kg', '5 KG'),
+        ('custom', 'Custom'),
+    ]
+    measurement_unit = models.CharField(
+        max_length=10,
+        choices=MEASUREMENT_CHOICES,
+        default='1kg'
+    )
+    custom_measurement = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.measurement_unit or self.custom_measurement}"
 
 class Bill(models.Model):
     customer = models.ForeignKey(Customer, related_name='bills', on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
+
     def __str__(self):
         return f"Bill #{self.id} for {self.customer}"
-    
+
+
 class Transaction(models.Model):
     bill = models.ForeignKey(Bill, on_delete=models.CASCADE, related_name='transactions')  # Added related_name here
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     timestamp = models.DateTimeField(auto_now_add=True) 
-    
+
     def __str__(self):
         return f"{self.product.name} - {self.quantity} x {self.amount}"
-

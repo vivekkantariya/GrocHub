@@ -410,22 +410,16 @@
 </head>
 
 <body>
-
-
     <nav>
         <div class="logo-container">
             <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png"
                 alt="Purohit Trading">
         </div>
         <div class="menu-container">
-
-
             <a href="{% url 'home' %}" onclick="showHome()">Home</a>
             <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
             <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
             <a href="#export" onclick="scrollToSection('export')">Export</a>
-
-
         </div>
         <div class="hamburger-menu" onclick="toggleMenu()">
             <div class="bar bar1"></div>
@@ -434,30 +428,59 @@
         </div>
     </nav>
 
-
     <div class="container">
-
         <h2>Add Product</h2>
-
         <form action="{% url 'add_productView' %}" method="post">
             {% csrf_token %}
             <div class="pair">
                 <label for="name">Product Name:</label>
                 <input type="text" id="name" name="name" required>
-        
+
                 <label for="price">Price:</label>
                 <input type="number" id="price" name="price" step="0.01" required>
             </div>
-        
+
+            <div class="pair">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" cols="50"></textarea>
+            </div>
+
+            <div class="pair">
+                <label for="measurement">Measurement:</label>
+                <select id="measurement" name="measurement_unit">
+                    <option value="250g">250 Gram</option>
+                    <option value="500g">500 Gram</option>
+                    <option value="1kg">1 KG</option>
+                    <option value="5kg">5 KG</option>
+                    <option value="custom">Custom</option>
+                </select>
+
+                <label for="custom_measurement" id="customMeasurementLabel" style="display: none;">Custom
+                    Measurement:</label>
+                <input type="text" id="custom_measurement" name="custom_measurement" style="display: none;">
+            </div>
+
             <div class="btn">
                 <button type="submit">Add Product</button>
             </div>
         </form>
-
     </div>
 
-    <script src="{% static 'path/to/your/js/file.js' %}"></script>
+    <script>
+        const measurementSelect = document.getElementById('measurement');
+        const customMeasurementInput = document.getElementById('custom_measurement');
+        const customMeasurementLabel = document.getElementById('customMeasurementLabel');
 
+        measurementSelect.addEventListener('change', function () {
+            if (this.value === 'custom') {
+                customMeasurementInput.style.display = 'block';
+                customMeasurementLabel.style.display = 'block';
+            } else {
+                customMeasurementInput.style.display = 'none';
+                customMeasurementLabel.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 
 </html>

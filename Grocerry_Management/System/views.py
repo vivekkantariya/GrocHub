@@ -55,19 +55,26 @@ def add_customerView(request):
     else:
         form = CustomerForm()
         return render(request, 'addcustomer.html', {'form': form})
-
+    
 def add_productView(request):
     if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
-            form.save()
+            product = form.save(commit=False)
+
+            # Handle the custom measurement case
+            if product.measurement_unit == 'custom':
+                product.custom_measurement = request.POST.get('custom_measurement', '')
+
+            product.save()
             return redirect('product_list')
         else:
+            print(form.errors)  # Debugging log
             return render(request, 'addproduct.html', {'form': form})
     else:
         form = ProductForm()
         return render(request, 'addproduct.html', {'form': form})
-    
+
 def transactionView(request):
     start_time = timezone.now() - timedelta(days=1)
 
@@ -244,9 +251,9 @@ def get_real_time_customers(request):
 
 @csrf_exempt
 def remove_product(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    product.delete()
-    return JsonResponse({'success': True, 'message': 'Product removed successfully'})
+        product = get_object_or_404(Product, id=product_id)
+        product.delete()
+        return JsonResponse({'status': 'success'}, status=200)
 
 def remove_customer(request, email):
     try:
@@ -346,3 +353,20 @@ def get_customer_details(request):
 
 def stockView(request):
     return render(request, 'stock.html')
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
+from .models import Product
+import json
+
+@csrf_exempt  # Disable CSRF validation for the API (optional, but requires you to handle CSRF tokens on the client-side)
+def edit_product(request, product_id):
+    if request.method == 'PUT':
+        product = get_object_or_404(Product, id=product_id)
+        data = json.loads(request.body)
+        product.name = data.get('name')
+        product.price = data.get('price')
+        product.save()
+        return JsonResponse({'status': 'success'}, status=200)
+    return JsonResponse({'status': 'failed'}, status=400)
