@@ -164,7 +164,7 @@ def generate_bill(request):
                 Transaction.objects.create(
                     bill=bill,
                     product=product_instance,
-                    quantity=product['quantity'],
+                    quantity = float(product['quantity']),
                     amount=product['subtotal']
                 )
 

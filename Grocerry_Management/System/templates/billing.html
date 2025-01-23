@@ -549,7 +549,7 @@
                 </div>
                 <div class="pair">
                     <label for="quantity">Quantity or Measurement Unit:</label>
-                    <input type="number" id="quantity" name="quantity" required>
+                    <input type="number" id="quantity" name="quantity" required step="0.01">
                 </div>
                 <div class="btn"></div>
                 <button type="button" id="addProductBtn">Add Product</button>
@@ -654,7 +654,7 @@
                     var row = productTable.rows[i];
                     var product = {
                         name: row.cells[0].innerHTML.trim(),
-                        quantity: parseInt(row.cells[1].innerHTML.trim()),
+                        quantity : parseFloat(row.cells[2].innerHTML.trim()),
                         price: parseFloat(row.cells[2].innerHTML.replace('$', '').trim()),
                         subtotal: parseFloat(row.cells[3].innerHTML.replace('$', '').trim())
                     };
