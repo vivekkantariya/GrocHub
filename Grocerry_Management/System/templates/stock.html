@@ -20,6 +20,26 @@
             padding: 0;
         }
 
+        .menu-container {
+            display: flex;
+            transition: 0.5s;
+        }
+
+        .menu-container a {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            padding: 0 15px;
+            font-weight: lighter;
+            font-size: 22px;
+        }
+
+        .menu-container a:hover {
+            color: #02261a;
+            /* padding: 0 15px; */
+            font-weight: bolder;
+
+        }
+        
         nav {
             background-color: #9eb19b;
             color: rgb(0, 0, 0);
@@ -32,24 +52,11 @@
             z-index: 500;
             width: 100%;
             height: 65px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        nav:hover {
-            background-color: #8fae8b;
         }
 
         nav a {
             margin: 8px 18px;
             font-family: 'Jost', sans-serif;
-            color: #333;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: #4CAF50;
         }
 
         .container {

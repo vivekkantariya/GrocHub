@@ -81,8 +81,11 @@
 
         .search-bar-container {
             display: flex;
-            justify-content: center;
+            justify-content: left;
             margin: 20px auto;
+            margin-left: 29px;
+            margin-top: 30px;
+            margin-bottom: 50px;
         }
 
         .search-bar-container input {
@@ -92,12 +95,14 @@
             border: 2px solid #588157;
             border-radius: 4px;
             outline: none;
+            border-radius: 10px;
+
         }
 
         .search-bar-container button {
             margin-left: 10px;
             padding: 10px 20px;
-            background-color: #97bb97;
+            background-color: #003423;
             color: white;
             font-size: 16px;
             border: none;
@@ -127,6 +132,9 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
+            margin-right: 5px;
+            margin-left: 5px;
+            border-radius: 10px;
             margin-top: 85px;
         }
 
@@ -628,8 +636,8 @@
                     <td>
                         <button class="edit-button"
                             onclick="openEditPopup('{{ product.id }}', '{{ product.name }}', '{{ product.price }}')">Edit</button>
-                            <button class="remove-button" onclick="removeProduct('{{ product.id }}')">Remove</button>
-                        </td>
+                        <button class="remove-button" onclick="removeProduct('{{ product.id }}')">Remove</button>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
