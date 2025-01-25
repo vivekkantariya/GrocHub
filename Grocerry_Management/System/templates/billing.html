@@ -175,6 +175,29 @@
             z-index: 1000;
         }
 
+        #productSuggestions {
+            position: absolute;
+            border: 1px solid #ddd;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: rgba(255, 255, 255, 0.941);
+            z-index: 1000;
+            width: 40vh;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .suggestion-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .suggestion-item:hover,
+        .suggestion-item.selected {
+            background-color: #97bb97;
+        }
+
+
         .product-directory a {
             display: block;
             padding: 15px;
@@ -571,104 +594,213 @@
         </form>
 
     </div>
-
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var total = 0;  // Initialize the total variable
-            document.getElementById('addProductBtn').addEventListener('click', addProduct);
-            document.getElementById('billingForm').addEventListener('submit', generateBill);
+            window.total = 0;
 
-            // Event delegation for removing products
-            $('#productTable tbody').on('click', 'button', function () {
-                removeProduct(this);
+            document.getElementById('addProductBtn').addEventListener('click', addProduct);
+
+            // NEW: Enhanced Product Suggestions Autocomplete
+            const productInput = document.getElementById('products');
+            const suggestionsContainer = document.getElementById('productSuggestions');
+            let suggestions = [];
+            let selectedIndex = -1;
+
+            productInput.addEventListener('input', function () {
+                const productNameInput = this.value;
+
+                if (productNameInput.trim() === '') {
+                    suggestionsContainer.innerHTML = '';
+                    return;
+                }
+
+                // Fetch suggestions from the server
+                $.ajax({
+                    url: '/get_product_suggestions/',
+                    data: { search: productNameInput },
+                    dataType: 'json',
+                    success: function (data) {
+                        suggestions = data;
+                        suggestionsContainer.innerHTML = ''; // Clear previous suggestions
+                        selectedIndex = -1;
+
+                        if (data.length > 0) {
+                            data.forEach((product, index) => {
+                                const suggestion = document.createElement('div');
+                                suggestion.className = 'suggestion-item';
+                                suggestion.textContent = product.name;
+                                suggestion.setAttribute('data-index', index);
+
+                                // On clicking a suggestion, autofill the product name
+                                suggestion.addEventListener('click', function () {
+                                    selectSuggestion(index);
+                                });
+
+                                suggestionsContainer.appendChild(suggestion);
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching product suggestions:', xhr.responseText);
+                    }
+                });
             });
 
-            function addProduct() {
-                var productName = document.getElementById('products').value;
-                var quantity = document.getElementById('quantity').value;
+            // Keyboard navigation for suggestions
+            productInput.addEventListener('keydown', function (e) {
+                if (suggestionsContainer.children.length === 0) return;
 
-                if (productName.trim() === '' || quantity <= 0) {
+                switch (e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        navigateSuggestions(1);
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        navigateSuggestions(-1);
+                        break;
+                    case 'Enter':
+                        if (selectedIndex !== -1) {
+                            e.preventDefault();
+                            selectSuggestion(selectedIndex);
+                        }
+                        break;
+                    case 'Escape':
+                        suggestionsContainer.innerHTML = '';
+                        selectedIndex = -1;
+                        break;
+                }
+            });
+
+            function navigateSuggestions(direction) {
+                const suggestionItems = suggestionsContainer.querySelectorAll('.suggestion-item');
+
+                // Remove previous selection
+                if (selectedIndex !== -1) {
+                    suggestionItems[selectedIndex].classList.remove('selected');
+                }
+
+                // Calculate new index
+                selectedIndex += direction;
+
+                // Wrap around handling
+                if (selectedIndex < 0) {
+                    selectedIndex = suggestionItems.length - 1;
+                } else if (selectedIndex >= suggestionItems.length) {
+                    selectedIndex = 0;
+                }
+
+                // Highlight new selection
+                const newSelectedItem = suggestionItems[selectedIndex];
+                newSelectedItem.classList.add('selected');
+
+                // Scroll to keep selected item in view
+                newSelectedItem.scrollIntoView({ block: 'nearest' });
+            }
+
+            function selectSuggestion(index) {
+                productInput.value = suggestions[index].name;
+                suggestionsContainer.innerHTML = '';
+                selectedIndex = -1;
+            }
+
+            // Close suggestions when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!productInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                    suggestionsContainer.innerHTML = '';
+                }
+            });
+
+            // Existing code for adding product remains the same
+            function addProduct() {
+                const productName = document.getElementById('products').value.trim();
+                const quantity = parseFloat(document.getElementById('quantity').value);
+
+                if (productName === '' || quantity <= 0) {
                     alert('Please enter valid product details.');
                     return;
                 }
 
+                // Fetch product details from the server with case-insensitive and trimmed search
                 $.ajax({
                     url: '/get_product_suggestions/',
                     data: { search: productName },
                     dataType: 'json',
                     success: function (data) {
-                        if (data.length > 0) {
-                            var productDetails = data[0];
-                            var tableBody = document.getElementById('productTable').getElementsByTagName('tbody')[0];
-                            var newRow = tableBody.insertRow(tableBody.rows.length);
+                        // Find a product that matches case-insensitively and trimmed
+                        const matchedProduct = data.find(product =>
+                            product.name.trim().toLowerCase() === productName.toLowerCase()
+                        );
 
-                            var cell1 = newRow.insertCell(0);
-                            var cell2 = newRow.insertCell(1);
-                            var cell3 = newRow.insertCell(2);
-                            var cell4 = newRow.insertCell(3);
-                            var cell5 = newRow.insertCell(4);
+                        if (matchedProduct) {
+                            const tableBody = document.getElementById('productTable').querySelector('tbody');
+                            const newRow = tableBody.insertRow();
 
-                            cell1.innerHTML = productDetails.name;
-                            cell2.innerHTML = '$' + productDetails.price.toFixed(2);
-                            cell3.innerHTML = quantity;
-                            cell4.innerHTML = '$' + (quantity * productDetails.price).toFixed(2);
-                            cell5.innerHTML = '<button type="button">Remove</button>';
+                            newRow.innerHTML = `
+                    <td>${matchedProduct.name}</td>
+                    <td>$${matchedProduct.price.toFixed(2)}</td>
+                    <td>${quantity}</td>
+                    <td>$${(quantity * matchedProduct.price).toFixed(2)}</td>
+                    <td><button type="button">Remove</button></td>
+                `;
 
-                            total += parseFloat(productDetails.price) * quantity;  // Update total when adding product
+                            window.total += quantity * matchedProduct.price;
                             updateGrandTotal();
+
+                            // Event listener for the remove button
+                            newRow.querySelector('button').addEventListener('click', function () {
+                                removeProduct(this);
+                            });
+
                         } else {
-                            alert('Product not found.');
+                            alert(`Product "${productName}" not found. Please check the spelling or select from suggestions.`);
                         }
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching product details:', xhr.responseText);
+                        alert('An error occurred while fetching product details.');
                     }
                 });
             }
-
             function removeProduct(button) {
-                var row = button.closest('tr');
-                var priceCell = row.cells[3];  // Total cost cell
-                var price = parseFloat(priceCell.innerHTML.replace('$', ''));
+                const row = button.closest('tr');
+                const price = parseFloat(row.cells[3].textContent.replace('$', ''));
 
-                total -= price;  // Subtract the removed product's price from the total
-                row.remove();  // Remove the row from the table
+                window.total -= price;
+                row.remove();
                 updateGrandTotal();
             }
 
-            // Update the grand total by recalculating all product subtotals in the table
             function updateGrandTotal() {
-                total = 0;
-                var table = document.getElementById('productTable');
-                for (var i = 1; i < table.rows.length; i++) {
-                    total += parseFloat(table.rows[i].cells[3].innerHTML.replace('$', ''));
-                }
-
-                document.getElementById('grandTotal').innerHTML = 'Grand Total: $' + total.toFixed(2);
+                document.getElementById('grandTotal').textContent = `Grand Total: $${window.total.toFixed(2)}`;
             }
 
-            function generateBill(event) {
+            window.generateBill = function (event) {
                 event.preventDefault();
-                var productTable = document.getElementById('productTable');
-                var products = [];
 
-                for (var i = 1; i < productTable.rows.length; i++) {
-                    var row = productTable.rows[i];
-                    var product = {
-                        name: row.cells[0].innerHTML.trim(),
-                        quantity : parseFloat(row.cells[2].innerHTML.trim()),
-                        price: parseFloat(row.cells[2].innerHTML.replace('$', '').trim()),
-                        subtotal: parseFloat(row.cells[3].innerHTML.replace('$', '').trim())
+                const productTable = document.getElementById('productTable');
+                const products = [];
+
+                const rows = productTable.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    const product = {
+                        name: row.cells[0].textContent.trim(),
+                        price: parseFloat(row.cells[1].textContent.replace('$', '').trim()),
+                        quantity: parseFloat(row.cells[2].textContent.trim()),
+                        subtotal: parseFloat(row.cells[3].textContent.replace('$', '').trim()),
                     };
                     products.push(product);
-                }
+                });
 
                 if (products.length === 0) {
                     alert('Please add at least one product to generate the bill.');
                     return;
                 }
 
-                var formData = new FormData(document.getElementById('billingForm'));
+                const formData = new FormData(document.getElementById('billingForm'));
                 formData.append('products', JSON.stringify(products));
-                formData.append('grand_total', total);
+                formData.append('grand_total', window.total);
 
                 $.ajax({
                     url: '/generate_bill/',
@@ -681,10 +813,7 @@
                     contentType: false,
                     success: function (data) {
                         if (data.success) {
-                            alert(data.message); // Display the server's success message
-
-                            // Trigger email sending
-                            sendBillByEmail(data.customer_email, data.bill_content);
+                            alert(data.message);
                         } else {
                             alert("Error: " + data.error);
                         }
@@ -693,56 +822,58 @@
                         alert("An error occurred: " + xhr.responseText);
                     }
                 });
-            }
+            };
 
-            $(document).ready(function () {
-                $('#customer_email').on('blur', function () {
-                    var email = $(this).val();
-                    $.ajax({
-                        url: '/get_customer_details/',
-                        data: { email: email },
-                        dataType: 'json',
-                        success: function (response) {
-                            if (response.success) {
-                                $('#customer_name').val(response.customer_name);
-                                $('#phoneNumber').val(response.phone_no);
-                                $('#address').val(response.address);
-                            }
-                        }
-                    });
-                });
-            }); 
+            document.getElementById('billingForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                generateBill(event);
+            });
 
-
-            function sendBillByEmail(customerEmail, billContent) {
-                console.log("Sending email with the following data:");
-                console.log({ customer_email: customerEmail, bill_content: billContent });
-
+            // Existing customer email autofill code remains the same
+            $('#customer_email').on('blur', function () {
+                var email = $(this).val();
                 $.ajax({
-                    url: '/send_bill_email/',
-                    type: 'POST',
-                    data: {
-                        customer_email: customerEmail,
-                        bill_content: billContent,
-                        csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
-                    },
+                    url: '/get_customer_details/',
+                    data: { email: email },
+                    dataType: 'json',
                     success: function (response) {
-                        console.log("Server Response:", response);
                         if (response.success) {
-                            alert('Bill sent successfully!');
-                        } else {
-                            alert('Error sending the bill: ' + response.error);
+                            $('#customer_name').val(response.customer_name);
+                            $('#phoneNumber').val(response.phone_no);
+                            $('#address').val(response.address);
                         }
-                    },
-                    error: function (xhr) {
-                        console.error('AJAX Error:', xhr.responseText);
-                        alert('An error occurred: ' + xhr.responseText);
                     }
                 });
-            }
+            });
         });
-    </script>
 
+        function sendBillByEmail(customerEmail, billContent) {
+            console.log("Sending email with the following data:");
+            console.log({ customer_email: customerEmail, bill_content: billContent });
+
+            $.ajax({
+                url: '/send_bill_email/',
+                type: 'POST',
+                data: {
+                    customer_email: customerEmail,
+                    bill_content: billContent,
+                    csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+                },
+                success: function (response) {
+                    console.log("Server Response:", response);
+                    if (response.success) {
+                        alert('Bill sent successfully!');
+                    } else {
+                        alert('Error sending the bill: ' + response.error);
+                    }
+                },
+                error: function (xhr) {
+                    console.error('AJAX Error:', xhr.responseText);
+                    alert('An error occurred: ' + xhr.responseText);
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

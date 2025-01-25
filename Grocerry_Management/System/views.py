@@ -121,16 +121,27 @@ logger = logging.getLogger(__name__)
 def generate_bill(request):
     if request.method == 'POST':
         try:
+            # Add detailed logging
+            logger.debug(f"Received POST data: {request.POST}")
+            
             customer_name = request.POST.get('customer_name')
             customer_email = request.POST.get('customer_email')
             phone_no = request.POST.get('phone_no')
             address = request.POST.get('address')
+            
+            products_str = request.POST.get('products', '[]')
+            logger.debug(f"Raw products string: {products_str}")
 
             try:
-                products_data = json.loads(request.POST.get('products', '[]'))
-            except json.JSONDecodeError:
-                return JsonResponse({'success': False, 'error': 'Invalid JSON format for products.'}, status=400)
-
+                products_data = json.loads(products_str)
+                logger.debug(f"Decoded products data: {products_data}")
+                
+                if not isinstance(products_data, list):
+                    raise ValueError("Products data must be a list.")
+            except (json.JSONDecodeError, ValueError) as e:
+                logger.error(f"Invalid products data: {e}")
+                return JsonResponse({'success': False, 'error': f'Invalid JSON format for products: {str(e)}'}, status=400)
+            
             if not products_data:
                 return JsonResponse({'success': False, 'error': 'No products provided.'}, status=400)
 
