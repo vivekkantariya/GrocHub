@@ -31,7 +31,7 @@ urlpatterns = [
     path('get_daily_customer_buying/', get_daily_customer_buying, name='get_daily_customer_buying'),
     path('get_product_suggestions/', get_product_suggestions, name='get_product_suggestions'),
     path('send_bill_email/', views.send_bill_email, name='send_bill_email'),
-    path('stock/', views.stockView, name='stock'),  # Stock page
+    # path('stock/', views.stock_view, name='stock'),  # Stock page
     path('<path:undefined_path>/', views.homeView, name='home'),
 
 ]

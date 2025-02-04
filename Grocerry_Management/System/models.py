@@ -41,10 +41,11 @@ class Product(models.Model):
         default='1kg'
     )
     custom_measurement = models.CharField(max_length=50, null=True, blank=True)
+    stock = models.PositiveIntegerField(default=0)  # Stock quantity
 
     def __str__(self):
-        return f"{self.name} - {self.measurement_unit or self.custom_measurement}"
-
+        return f"{self.name} - {self.measurement_unit or self.custom_measurement} ({self.stock} in stock)"
+    
 class Bill(models.Model):
     customer = models.ForeignKey(Customer, related_name='bills', on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True)

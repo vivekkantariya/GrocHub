@@ -365,7 +365,7 @@
         #home .hcontainer {
             margin-top: 80px;
             width: 100%;
-            height: max-content;
+            height: 600px;
             background-color: black;
             background: url("https://i.ibb.co/3TB8w4J/bg-home.jpg") no-repeat center;
             /* filter: brightness(30%); */
@@ -379,7 +379,7 @@
         #home .hcontainer .text {
             /* margin: 50px; */
             width: 550px;
-            height: 80%;
+            /* height: 80%; */
             /* background-color: black; */
             color: white;
             display: flex;
@@ -425,7 +425,7 @@
             color: white;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
         }
 
@@ -528,7 +528,6 @@
             <a href="#" onclick="showHome()">Home</a>
             <a href="#" onclick="showManageProduct()">Manage Products</a>
             <a href="#" onclick="showCustomerPage()">Manage Customer</a>
-            <a href="{% url 'stock' %}">Stock</a>
             
 
         </div>
@@ -551,7 +550,7 @@
             </div>
             <div class="btn">
                 <div class="button-container">
-                    <a href="analysis.html" class="button">Analysis</a>
+                    <!-- <a href="analysis.html" class="button">Analysis</a> -->
                     <a href="billing.html" class="button">BillForm</a>
                     <a href="addcustomer.html" class="button">Add Customer</a>
                     <a href="addproduct.html" class="button">Add Product</a>

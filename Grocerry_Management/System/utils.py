@@ -1,62 +1,48 @@
-import matplotlib.pyplot as plt 
-import base64
-from io import BytesIO
+from django.db.models.functions import TruncDay, TruncWeek, TruncMonth
+from django.db.models import Sum
+from .models import Transaction, Bill
 
-def get_graph():
-    buffer = BytesIO()
-    plt.savefig(buffer, format='png')
-    buffer.seek(0)
-    image_png = buffer.getvalue()
-    graph = base64.b64encode(image_png)
-    graph = graph.decode('utf-8')
-    buffer.close()
-    return graph
+def get_sales_trend(period='daily'):
+    # Choose appropriate truncation based on period
+    if period == 'daily':
+        trunc_func = TruncDay('timestamp')
+    elif period == 'weekly':
+        trunc_func = TruncWeek('timestamp')
+    else:  # monthly
+        trunc_func = TruncMonth('timestamp')
+    
+    # Aggregate sales data
+    sales_trend = Transaction.objects.annotate(
+        period=trunc_func
+    ).values('period').annotate(
+        total_sales=Sum('amount')
+    ).order_by('period')
+    
+    return sales_trend
 
-from matplotlib.dates import DateFormatter
+def get_top_products(top_n=5):
+    top_products = Transaction.objects.values(
+        'product__name'
+    ).annotate(
+        total_sales=Sum('amount'),
+        total_quantity=Sum('quantity')
+    ).order_by('-total_sales')[:top_n]
+    
+    return top_products
 
-def get_plot(x, y):
-    plt.switch_backend('TkAgg')
-    plt.figure(figsize=(10, 5))
-    plt.title("Professional Line Chart", fontsize=16)
-    plt.plot_date(x, y, '-o', color='b', label='Transaction Amount', linewidth=2, markersize=8)
-    plt.xticks(rotation=45, fontsize=10)
-    plt.grid(True, linestyle='--', alpha=0.7)
-    plt.xlabel("Timestamp", fontsize=12)
-    plt.ylabel("Total Amount", fontsize=12)
-    plt.gca().xaxis.set_major_formatter(DateFormatter('%Y-%m-%d %H:%M'))
-    plt.gca().spines['top'].set_color('black')
-    plt.gca().spines['right'].set_color('black')
-    plt.gca().spines['bottom'].set_color('black')
-    plt.gca().spines['left'].set_color('black')
-    plt.tick_params(axis='both', which='both', colors='black', labelsize=10)
-    plt.legend(fontsize=12)
-    plt.tight_layout()
-    graph = get_graph()
-    return graph
-
-
-def get_area_chart(x, y):
-    plt.switch_backend('TkAgg')
-    plt.figure(figsize=(10, 5))
-    plt.title("Monthly Income - Cumulative Area Chart", fontsize=16)
-    plt.fill_between(x, y, color='skyblue', alpha=0.4)
-    plt.xticks(rotation=45, fontsize=10)
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-    plt.xlabel("Month", fontsize=12)
-    plt.ylabel("Cumulative Income", fontsize=12)
-    plt.gca().spines['top'].set_color('black')
-    plt.gca().spines['right'].set_color('black')
-    plt.gca().spines['bottom'].set_color('black')
-    plt.gca().spines['left'].set_color('black')
-    plt.tick_params(axis='both', which='both', colors='black', labelsize=10)
-    plt.tight_layout()
-
-    buffer = BytesIO()
-    plt.savefig(buffer, format='png')
-    buffer.seek(0)
-    image_png = buffer.getvalue()
-    graph = base64.b64encode(image_png)
-    graph = graph.decode('utf-8')
-    buffer.close()
-
-    return graph
+def get_revenue_trend(period='daily'):
+    # Similar to sales trend, but using Bill model
+    if period == 'daily':
+        trunc_func = TruncDay('date')
+    elif period == 'weekly':
+        trunc_func = TruncWeek('date')
+    else:  # monthly
+        trunc_func = TruncMonth('date')
+    
+    revenue_trend = Bill.objects.annotate(
+        period=trunc_func
+    ).values('period').annotate(
+        total_revenue=Sum('total')
+    ).order_by('period')
+    
+    return revenue_trend

@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'System',
     'crispy_forms',
     'debug_toolbar',
-
+    'plotly',
 ]
 
 MIDDLEWARE = [

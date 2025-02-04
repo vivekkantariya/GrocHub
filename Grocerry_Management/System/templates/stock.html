@@ -39,7 +39,7 @@
             font-weight: bolder;
 
         }
-        
+
         nav {
             background-color: #9eb19b;
             color: rgb(0, 0, 0);
@@ -313,16 +313,16 @@
                 </tr>
             </thead>
             <tbody>
-                {% for product in product %}
-                <tr id="product-row-{{ product.id }}">
+                {% for product in products %}
+                <tr>
                     <td>{{ product.id }}</td>
                     <td>{{ product.name }}</td>
                     <td>${{ product.price }}</td>
-                    <td class="action-buttons">
-                        <button class="edit" onclick="editProduct({{ product.id }})"><i class="fas fa-edit"></i>
-                            Edit</button>
-                        <button class="delete" onclick="deleteProduct({{ product.id }})"><i class="fas fa-trash"></i>
-                            Delete</button>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="edit" onclick="editProduct({{ product.id }})">Edit</button>
+                            <button class="delete" onclick="deleteProduct({{ product.id }})">Delete</button>
+                        </div>
                     </td>
                 </tr>
                 {% empty %}
@@ -331,6 +331,9 @@
                 </tr>
                 {% endfor %}
             </tbody>
+            
+            
+
         </table>
     </div>
 
@@ -348,6 +351,24 @@
             </form>
         </div>
     </div>
+
+    <script>
+        const searchInput = document.getElementById('search');
+        searchInput.addEventListener('input', function () {
+            const filter = searchInput.value.toLowerCase();
+            const rows = document.querySelectorAll('table tbody tr');
+    
+            rows.forEach(row => {
+                const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                if (name.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    
 </body>
 
 

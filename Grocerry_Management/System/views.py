@@ -1,6 +1,5 @@
 from django.core.mail import send_mail, EmailMessage
 from django.shortcuts import render, redirect, get_object_or_404
-from System.utils import get_plot
 from .forms import CustomerForm, ProductForm, BillForm
 from .models import Product, Customer, Transaction, Bill
 from django.http import JsonResponse
@@ -13,10 +12,13 @@ from django.views.decorators.http import require_POST
 import json
 import logging
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
 from .models import Customer
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.shortcuts import render
+import plotly.graph_objs as go
+import plotly.offline as opy
+from .utils import get_sales_trend, get_top_products, get_revenue_trend
 
 def homeView(request, undefined_path=None):
     print(f"Unexpected request with undefined_path: {undefined_path}")
@@ -40,9 +42,9 @@ def addproductView(request):
 def addcustomerView(request):
     return render(request, 'addcustomer.html')
 
-def stockView(request):
-    products = Product.objects.all()  # Retrieve all products from the database
-    return render(request, 'stock.html', {'product': products})
+# def stock_view(request):
+#     products = Product.objects.all()  # Fetch all products
+#     return render(request, 'stock.html', {'products': products})
 
 def add_customerView(request):
     if request.method == 'POST':
@@ -100,11 +102,7 @@ def transactionView(request):
     return render(request, 'transaction.html', {'transactions': transaction_data})
 
 def AnalysisView(request):
-    qs = Bill.objects.all()
-    x = [item.timestamp for item in qs]
-    y = [item.total for item in qs]
-    chart = get_plot(x, y)
-    return render(request, 'analysis.html', {"chart": chart})
+    return render(request, 'analysis.html')
 
 def bill_view(request):
     return render(request, 'billing.html')
@@ -179,7 +177,6 @@ def generate_bill(request):
                     amount=product['subtotal']
                 )
 
-            # Send the bill email based on whether the customer is regular or not
             if customer:
                 send_bill_email(bill)  # Regular customer email
             else:
@@ -361,15 +358,6 @@ def get_customer_details(request):
     except Customer.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Customer not found.'}, status=404)
 
-def stockView(request):
-    return render(request, 'stock.html')
-
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import get_object_or_404
-from .models import Product
-import json
-
 @csrf_exempt  # Disable CSRF validation for the API (optional, but requires you to handle CSRF tokens on the client-side)
 def edit_product(request, product_id):
     if request.method == 'PUT':
@@ -380,3 +368,104 @@ def edit_product(request, product_id):
         product.save()
         return JsonResponse({'status': 'success'}, status=200)
     return JsonResponse({'status': 'failed'}, status=400)
+
+from django.shortcuts import render
+from django.http import HttpResponse
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+from .utils import get_sales_trend, get_top_products, get_revenue_trend
+from .models import Transaction, Bill
+from django.db.models import Sum
+
+def analysis_dashboard(request):
+    try:
+        # Get selected period from request parameters, default to daily
+        period = request.GET.get('period', 'daily')
+        
+        # Verify data exists
+        if not Transaction.objects.exists() or not Bill.objects.exists():
+            return HttpResponse("No transaction or bill data available")
+
+        # Get data using utility functions
+        sales_data = get_sales_trend(period)
+        top_products = get_top_products(top_n=10)
+        revenue_data = get_revenue_trend(period)
+
+        # Create figure for sales trend
+        sales_fig = go.Figure()
+        sales_fig.add_trace(
+            go.Scatter(
+                x=[str(item['period']) for item in sales_data],
+                y=[float(item['total_sales']) for item in sales_data],
+                mode='lines+markers',
+                name='Sales',
+                line=dict(color='#099f6d'),
+            )
+        )
+        sales_fig.update_layout(
+            title='Sales Trend',
+            plot_bgcolor='white',
+            paper_bgcolor='white',
+            height=400,
+            margin=dict(l=40, r=40, t=40, b=40)
+        )
+        
+        # Create figure for top products
+        products_fig = go.Figure()
+        products_fig.add_trace(
+            go.Bar(
+                x=[str(item['product__name']) for item in top_products],
+                y=[float(item['total_sales']) for item in top_products],
+                marker_color='#02261a'
+            )
+        )
+        products_fig.update_layout(
+            title='Top Products by Revenue',
+            plot_bgcolor='white',
+            paper_bgcolor='white',
+            height=400,
+            margin=dict(l=40, r=40, t=40, b=40)
+        )
+
+        # Create figure for revenue trend
+        revenue_fig = go.Figure()
+        revenue_fig.add_trace(
+            go.Bar(
+                x=[str(item['period']) for item in revenue_data],
+                y=[float(item['total_revenue']) for item in revenue_data],
+                marker_color='#7eaf96'
+            )
+        )
+        revenue_fig.update_layout(
+            title='Revenue Trend',
+            plot_bgcolor='white',
+            paper_bgcolor='white',
+            height=400,
+            margin=dict(l=40, r=40, t=40, b=40)
+        )
+
+        # Combine all figures into a single HTML div
+        plot_div = sales_fig.to_html(full_html=False, include_plotlyjs='cdn') + \
+                   products_fig.to_html(full_html=False, include_plotlyjs=False) + \
+                   revenue_fig.to_html(full_html=False, include_plotlyjs=False)
+
+        # Calculate summary statistics
+        total_revenue = Bill.objects.aggregate(total=Sum('total'))['total'] or 0
+        total_transactions = Transaction.objects.count()
+        avg_transaction = total_revenue / total_transactions if total_transactions > 0 else 0
+
+        context = {
+            'plot_div': plot_div,
+            'total_revenue': total_revenue,
+            'total_transactions': total_transactions,
+            'avg_transaction': avg_transaction,
+            'selected_period': period,
+        }
+
+        return render(request, 'analysis.html', context)
+
+    except Exception as e:
+        import traceback
+        error_trace = traceback.format_exc()
+        print(f"Full Error: {error_trace}")
+        return HttpResponse(f"Chart generation error: {str(e)}")

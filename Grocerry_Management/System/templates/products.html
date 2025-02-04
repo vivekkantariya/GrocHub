@@ -107,6 +107,7 @@
             font-size: 16px;
             border: none;
             border-radius: 4px;
+            margin-right: 20px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
@@ -456,10 +457,10 @@
             tr {
                 margin-bottom: 15px;
             }
-
+/* 
             td {
                 text-align: right;
-            }
+            } */
 
             td::before {
                 content: attr(data-label);
@@ -478,7 +479,7 @@
             font-weight: 600;
             color: #ffffff;
             background-color: #4CAF50;
-            /* Primary color */
+            margin-right: 85px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -527,6 +528,8 @@
             background-color: #C62828;
             /* Red for Remove button */
             color: #ffffff;
+            margin-left: 60px;
+            margin-top: 10px;
         }
 
         button.remove-button:hover {
@@ -594,7 +597,6 @@
             <a href="{% url 'home' %}" onclick="showHome()">Home</a>
             <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
             <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
-            <a href="{% url 'stock' %}" onclick="scrollToSection()">Stock</a>
         </div>
         <div class="hamburger-menu" onclick="toggleMenu()">
             <div class="bar bar1"></div>
