@@ -11,8 +11,6 @@
     <link href="https://fonts.googleapis.com/css?family=Days One" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Jost" rel="stylesheet" type="text/css">
 
-
-
     <style>
         * {
             margin: 0px;
@@ -37,6 +35,17 @@
             font-size: 25px;
         }
 
+        @media screen and (max-width: 1500px) {
+            #home .hcontainer .text {
+                margin-bottom: 200px;
+            }
+        }
+        @media screen and (max-width: 1050px) {
+            #home .hcontainer .text {
+                margin-bottom: 0px;
+            }
+        }
+
         @media screen and (max-width: 868px) {
             header {
                 font-size: 20px;
@@ -48,10 +57,7 @@
                 font-size: 15px;
             }
         }
-
-
-
-
+        
         nav {
             background-color: #9eb19b;
             color: rgb(0, 0, 0);
@@ -208,9 +214,6 @@
             font-size: 18px;
         }
 
-
-
-        /* Media query for responsiveness */
         @media only screen and (max-width: 768px) {
             .menu-container {
                 display: none;
@@ -249,10 +252,7 @@
 
             .menu-container.show-menu a {
                 opacity: 1;
-            }
-
-            /* showing products */
-
+            }   
 
             .product-directory {
                 display: block;
@@ -357,11 +357,6 @@
             font-weight: bold;
         }
 
-
-
-
-        /* home style */
-
         #home .hcontainer {
             margin-top: 80px;
             width: 100%;
@@ -378,7 +373,7 @@
 
         #home .hcontainer .text {
             /* margin: 50px; */
-            width: 550px;
+            width: 650px;
             /* height: 80%; */
             /* background-color: black; */
             color: white;
@@ -492,7 +487,7 @@
 
     </script>
 
-<!-- Text Animation -->
+    <!-- Text Animation -->
     <script>
         var i = 0;
         var txt = 'Welcome to our Grocery Management System!';
@@ -528,7 +523,7 @@
             <a href="#" onclick="showHome()">Home</a>
             <a href="#" onclick="showManageProduct()">Manage Products</a>
             <a href="#" onclick="showCustomerPage()">Manage Customer</a>
-            
+
 
         </div>
         <div class="hamburger-menu" onclick="toggleMenu()">
@@ -590,7 +585,7 @@
             </tbody>
         </table>
     </section>
-    
+
     <!-- manage Customer -->
     <section id="customerPage" style="display: none;">
         <h2>Customer Page
