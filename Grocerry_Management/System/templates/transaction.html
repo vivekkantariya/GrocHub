@@ -11,11 +11,12 @@
 
 
     <title>Today's Transactions</title>
-
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #02261a;
+            margin: 0;
+            padding: 0;
         }
 
         #container {
@@ -25,7 +26,6 @@
             border-radius: 20px;
             margin-top: 85px;
         }
-
 
         nav {
             background-color: #9eb19b;
@@ -47,7 +47,6 @@
             font-family: 'Jost', sans-serif;
         }
 
-        /* logo in the nav bar */
         .logo-container img {
             width: 55%;
             height: auto;
@@ -56,13 +55,11 @@
             margin: 0 auto;
         }
 
-        /* Optional: Adjust the margin-left for larger screens if needed */
         @media (min-width: 768px) {
             .logo-container img {
                 margin-left: 20px;
             }
         }
-
 
         .logo-container span {
             margin-left: 10px;
@@ -79,18 +76,14 @@
             text-decoration: none;
             padding: 0 15px;
             font-weight: lighter;
-            font-size: 22px;
+            font-size: 1.2rem; /* Adjusted for responsiveness */
         }
 
         .menu-container a:hover {
             color: #02261a;
-            text-decoration: none;
-            /* padding: 0 15px; */
             font-weight: bolder;
         }
 
-
-        /* Hamburger menu styles */
         .hamburger-menu {
             display: none;
             flex-direction: column;
@@ -105,7 +98,6 @@
             margin: 5px 0;
         }
 
-        /* Styles for the cross icon when the menu is open */
         .hamburger-menu.change .bar1 {
             transform: rotate(-45deg) translate(-5px, 6px);
             width: 40px;
@@ -123,9 +115,6 @@
             opacity: 0;
         }
 
-
-        /* dropdown */
-
         .dropdown {
             position: relative;
         }
@@ -135,7 +124,7 @@
             text-decoration: none;
             padding: 0 15px;
             font-weight: lighter;
-            font-size: 20px;
+            font-size: 1.2rem; /* Adjusted for responsiveness */
             cursor: pointer;
         }
 
@@ -155,18 +144,15 @@
             color: rgb(0, 0, 0);
             text-decoration: none;
             font-weight: lighter;
-            font-size: 20px;
+            font-size: 1.2rem; /* Adjusted for responsiveness */
         }
 
-        /* Show the dropdown menu on hover */
         .dropdown:hover .dropdown-menu {
             display: block;
         }
 
-
         .product-directory {
             display: none;
-            /* Initially hide the product directory */
             background-color: #ffffff;
             position: absolute;
             top: 100%;
@@ -181,12 +167,9 @@
             padding: 15px;
             color: rgb(0, 0, 0);
             text-decoration: none;
-            font-size: 18px;
+            font-size: 1.1rem; /* Adjusted for responsiveness */
         }
 
-
-
-        /* Media query for responsiveness */
         @media only screen and (max-width: 768px) {
             .menu-container {
                 display: none;
@@ -195,7 +178,6 @@
                 top: 95%;
                 left: 0;
                 width: 100%;
-                background-color: #ffffff;
                 background-color: #bacfb7f5;
                 text-align: center;
                 overflow: scroll;
@@ -227,9 +209,6 @@
                 opacity: 1;
             }
 
-            /* showing products */
-
-
             .product-directory {
                 display: block;
                 background-color: transparent;
@@ -248,30 +227,25 @@
                 padding: 15px;
                 color: rgb(0, 0, 0);
                 text-decoration: none;
-                font-size: 15px;
+                font-size: 1rem; /* Adjusted for responsiveness */
                 text-align: start;
                 padding-left: 10%;
             }
 
-            /* adding right arrow in a tag at the start of content */
             .product-directory a::after {
                 content: "\f054";
                 font-family: "Font Awesome 5 Free";
                 font-weight: 100;
                 padding-left: 10px;
                 align-self: center;
-
-                /* centering from its parent in vertically */
                 align-items: center;
                 justify-content: center;
                 font-size: 20px;
             }
-
         }
 
-
         h1 {
-            font-size: 32px;
+            font-size: 2rem; /* Adjusted for responsiveness */
             color: white;
             font-family: 'Raleway', sans-serif;
             background: #00271abe;
@@ -293,19 +267,11 @@
             background-color: #f2f2f2;
         }
 
-        th {
-            font-size: 20px;
-        }
-
-        td {
-            font-size: 20px;
-        }
-
-        th,
-        td {
+        th, td {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: left;
+            font-size: 1rem; /* Adjusted for responsiveness */
         }
 
         tbody tr:nth-child(even) {
@@ -315,12 +281,30 @@
         tbody tr:hover {
             background-color: #58815741;
         }
-    </style>
 
+        @media only screen and (max-width: 600px) {
+            #container {
+                margin: 10px;
+                padding: 10px;
+                margin-top: 70px;
+            }
+
+            h1 {
+                font-size: 1.5rem; /* Adjusted for responsiveness */
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            th, td {
+                font-size: 0.9rem; /* Adjusted for responsiveness */
+            }
+        }
+    </style>
     <script>
-        const menuToggle = document.querySelector(".menu-toggle");
-        const navUl = document.querySelector("ul");
-        // navbar script
         document.addEventListener('DOMContentLoaded', function () {
             const hamburgerMenu = document.querySelector(".hamburger-menu");
             const menuContainer = document.querySelector(".menu-container");
@@ -330,29 +314,18 @@
                 menuContainer.style.display = (menuContainer.style.display === "none" || menuContainer.style.display === "") ? "flex" : "none";
                 hamburgerMenu.classList.toggle("change");
             });
-
         });
-
     </script>
-
 </head>
-
 <body>
-
     <nav>
         <div class="logo-container">
-            <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png"
-                alt="Purohit Trading">
-            <!-- <span>PUROHIT TRADING</span> -->
+            <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png" alt="Purohit Trading">
         </div>
         <div class="menu-container">
-
-
             <a href="{% url 'home' %}" onclick="showHome()">Home</a>
             <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
             <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
-
-
         </div>
         <div class="hamburger-menu" onclick="toggleMenu()">
             <div class="bar bar1"></div>
@@ -386,7 +359,5 @@
             </tbody>
         </table>
     </div>
-
 </body>
-
 </html>

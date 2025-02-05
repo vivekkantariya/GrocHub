@@ -249,8 +249,38 @@
                 opacity: 1;
             }
 
-            /* showing products */
+            .table-container {
+                overflow-x: auto;
+                /* Enables horizontal scrolling */
+                -webkit-overflow-scrolling: touch;
+                /* Smooth scrolling for iOS */
+            }
 
+            .table {
+                min-width: 100%;
+                /* Ensures the table is full-width but can scroll if needed */
+            }
+
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            th,
+            td {
+                padding: 10px 15px;
+            }
+
+            /* Adjust table headers for smaller screens */
+            th {
+                font-size: 14px;
+            }
+
+            td {
+                font-size: 14px;
+            }
 
             .product-directory {
                 display: block;
@@ -479,9 +509,26 @@
                 font-size: 26px;
             }
 
+            th,
+            td {
+                padding: 8px 10px;
+                /* Reduce padding */
+                font-size: 12px;
+                /* Smaller font size */
+            }
+
+            table {
+                font-size: 12px;
+            }
+
             .container {
                 margin: 5px;
-                padding: 14px;
+                padding: 10px;
+            }
+
+            .pair {
+                width: 100%;
+                /* Ensure full width for each pair */
             }
 
             input,
@@ -501,6 +548,38 @@
                 width: 90%;
             }
 
+
+        }
+
+        @media screen and (max-width: 455px) {
+
+            /* Ensure the table fits within the container */
+            table {
+                width: 100%;
+                max-width: 100%;
+                background: white;
+                border-collapse: collapse;
+                margin-top: 20px;
+                border-radius: 8px;
+                overflow: hidden;
+                margin-bottom: 30px;
+                display: block;
+                overflow-x: auto;
+                /* Enable horizontal scrolling */
+            }
+
+            /* Adjust table headers and cells */
+            th,
+            td {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+            /* Ensure that the container doesn't cut off the table */
+            .container {
+                overflow-x: auto;
+                /* Allow horizontal scrolling if the table overflows */
+            }
         }
     </style>
 
@@ -534,7 +613,6 @@
             <a href="{% url 'home' %}" onclick="showHome()">Home</a>
             <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
             <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
-            <a href="#export" onclick="scrollToSection('export')">Export</a>
         </div>
         <div class="hamburger-menu" onclick="toggleMenu()">
             <div class="bar bar1"></div>
