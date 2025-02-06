@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'System',
     'crispy_forms',
-    'debug_toolbar',
     'plotly',
 ]
 
@@ -56,8 +55,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",  # Add this line
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
