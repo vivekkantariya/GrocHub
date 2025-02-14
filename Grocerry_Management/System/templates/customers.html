@@ -456,6 +456,7 @@
                 margin: 10px;
             }
         }
+
         @media only screen and (max-width: 450px) {
             button {
                 margin: 10px;
@@ -634,7 +635,6 @@
 
 
 </head>
-
 <body>
 
     <nav>
@@ -643,9 +643,9 @@
                 alt="Purohit Trading">
         </div>
         <div class="menu-container">
-            <a href="{% url 'home' %}" onclick="showHome()">Home</a>
-            <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
-            <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'product_list' %}">Manage Products</a>
+            <a href="{% url 'customer_list' %}">Manage Customer</a>
         </div>
         <div class="hamburger-menu" onclick="toggleMenu()">
             <div class="bar bar1"></div>
@@ -682,29 +682,57 @@
             </thead>
             <tbody>
                 {% for customer in customer %}
-                <tr id="customer-row-{{ customer.cust_email }}">
+                <tr class="clickable-row" 
+                    id="customer-row-{{ customer.cust_email }}"
+                    data-customer-id="{{ customer.id }}">
                     <td>{{ customer.id }}</td>
                     <td>{{ customer.cust_name }}</td>
                     <td>{{ customer.phone_no }}</td>
                     <td>{{ customer.cust_email }}</td>
                     <td>{{ customer.address }}</td>
-                    <td>{{ customer.dob }}</td>
+                    <td>{{ customer.dob|date:"Y-m-d" }}</td>
                     <td>
                         {% if customer.passport_photo %}
                             <img src="{{ customer.passport_photo.url }}" alt="Passport Photo" width="50" height="50">
                         {% else %}
-                            <img src="C:\Users\Vivek\Pictures\hacktober.jpg" alt="No Passport Photo" width="50" height="50">
+                            <img src="https://via.placeholder.com/50" alt="No Passport Photo" width="50" height="50">
                         {% endif %}
                     </td>
-                                        <td>
-                        <button class="Edit-button" onclick="EditCustomer('{{ customer.phone_number }}')">Edit</button>
+                    <td>
+                        <button class="Edit-button" 
+                                onclick="event.stopPropagation(); EditCustomer('{{ customer.id }}')">
+                            Edit
+                        </button>
                         <button class="remove-button"
-                            onclick="removeCustomer('{{ customer.cust_email}}')">Remove</button>
+                                onclick="event.stopPropagation(); removeCustomer('{{ customer.cust_email}}')">
+                            Remove
+                        </button>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+
+    <div class="popup" id="editPopup">
+        <div class="popup-content">
+            <h2>Edit Customer Details</h2>
+            <form id="editCustomerForm" method="post">
+                {% csrf_token %}
+                <input type="text" id="customerId" name="customer_id" readonly>
+                <input type="text" id="customerName" name="name" placeholder="Customer Name">
+                <input type="text" id="customerPhone" name="phone" placeholder="Phone Number">
+                <input type="email" id="customerEmail" name="email" placeholder="Email">
+                <input type="text" id="customerAddress" name="address" placeholder="Address">
+                <input type="date" id="customerDOB" name="dob" placeholder="D.O.B.">
+                <input type="file" id="customerPassportPhoto" name="photo" accept="image/*">
+
+                <div class="popup-actions">
+                    <button type="submit">Save</button>
+                    <button type="button" onclick="closePopup()">Cancel</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div class="popup" id="editPopup">
@@ -729,6 +757,19 @@
 
 
     <script>
+
+        // Initialize clickable rows
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.clickable-row').forEach(row => {
+                row.addEventListener('click', function(e) {
+                    // Ignore clicks on buttons and action cells
+                    if (!e.target.closest('button') && !e.target.closest('td:last-child')) {
+                        const customerId = this.dataset.customerId;
+                        window.location.href = `/customers/${customerId}/`;
+                    }
+                });
+            });
+        });
         // JavaScript function to open the popup and fill the form with customer data
         function EditCustomer(phoneNumber) {
             // Find customer data based on phone number
@@ -814,6 +855,16 @@
                 .catch(error => {
                     console.error('Error updating customer:', error);
                 });
+        });
+
+        rows.forEach(row => {
+            row.addEventListener('click', function (e) {
+                // Check if click was on action cell or buttons
+                if (!e.target.closest('.action-cell')) {
+                    const customerId = this.dataset.customerId;
+                    window.location.href = `/customer/${customerId}/`;
+                }
+            });
         });
 
         // Function to get CSRF token from cookies

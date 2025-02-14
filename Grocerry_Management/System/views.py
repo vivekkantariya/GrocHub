@@ -15,10 +15,15 @@ from django.http import HttpResponse, Http404
 from .models import Customer
 from django.template.loader import render_to_string
 from django.conf import settings
-from django.shortcuts import render
 import plotly.graph_objs as go
 import plotly.offline as opy
 from .utils import get_sales_trend, get_top_products, get_revenue_trend
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa  # Make sure this is installed
+from django.http import HttpResponse
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 def homeView(request, undefined_path=None):
     print(f"Unexpected request with undefined_path: {undefined_path}")
@@ -42,6 +47,15 @@ def addproductView(request):
 def addcustomerView(request):
     return render(request, 'addcustomer.html')
 
+def customer_detail(request, customer_id):
+    customer = get_object_or_404(Customer, id=customer_id)
+    bills = Bill.objects.filter(customer=customer).prefetch_related('transactions')
+    
+    return render(request, 'addon.html', {
+        'customer': customer,
+        'bills': bills
+    })
+    
 # def stock_view(request):
 #     products = Product.objects.all()  # Fetch all products
 #     return render(request, 'stock.html', {'products': products})
@@ -295,11 +309,6 @@ def generate_pdf(bill, transactions):
     HTML(string=html_string).write_pdf(pdf_file_path)
     return pdf_file_path
 
-from django.http import HttpResponse
-from django.template.loader import get_template
-from xhtml2pdf import pisa  # Make sure this is installed
-from .models import Bill, Transaction
-
 def download_bill(request, bill_id):
     try:
         # Fetch the bill
@@ -368,14 +377,6 @@ def edit_product(request, product_id):
         product.save()
         return JsonResponse({'status': 'success'}, status=200)
     return JsonResponse({'status': 'failed'}, status=400)
-
-from django.shortcuts import render
-from django.http import HttpResponse
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-from .utils import get_sales_trend, get_top_products, get_revenue_trend
-from .models import Transaction, Bill
-from django.db.models import Sum
 
 def analysis_dashboard(request):
     try:

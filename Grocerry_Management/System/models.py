@@ -53,6 +53,10 @@ class Bill(models.Model):
 
     def __str__(self):
         return f"Bill #{self.id} for {self.customer}"
+    
+    # models.py (add to Bill model)
+    def get_items(self):
+        return self.transactions.all()
 
 
 class Transaction(models.Model):
@@ -64,3 +68,8 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - {self.quantity} x {self.amount}"
+
+
+    # models.py (add to Transaction model)
+    def get_total(self):
+        return self.quantity * self.product.price
