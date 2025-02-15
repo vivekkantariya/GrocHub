@@ -4,478 +4,472 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Details</title>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+    <title>Customer Profile | Purohit Trading</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Enhanced Styles */
+        :root {
+            --primary: #2B59C3;
+            --secondary: #253C78;
+            --accent: #D36582;
+            --background: #f8f9fa;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
         nav {
-            background-color: #9eb19b;
-            padding: 0 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 0 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 70px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 65px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
         }
 
-        .logo-container img {
-            height: 50px;
-            width: auto;
-            transition: transform 0.3s ease;
+        .logo img {
+            height: 45px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .logo-container img:hover {
-            transform: scale(1.05);
+        .logo img:hover {
+            transform: rotate(-5deg);
         }
 
-        .menu-container {
+        .nav-links {
             display: flex;
             gap: 2rem;
             align-items: center;
         }
 
-        .menu-container a {
-            color: #000;
-            text-decoration: none;
-            font-size: 1.1rem;
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .menu-container a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #02261a;
-            transition: width 0.3s ease;
-        }
-
-        .menu-container a:hover::after {
-            width: 100%;
-        }
-
-        .hamburger-menu {
-            display: none;
-            cursor: pointer;
-            padding: 10px;
-        }
-
-        .bar {
-            width: 25px;
-            height: 3px;
-            background-color: #000;
-            margin: 4px 0;
-            transition: 0.4s;
-        }
-
-        body {
-            font-family: 'Raleway', sans-serif;
-            background-color: #02261a;
+        .nav-links a {
             color: white;
-            line-height: 1.6;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .container {
             max-width: 1200px;
-            margin: 85px auto 30px;
-            padding: 0 20px;
+            margin: 100px auto 3rem;
+            padding: 0 2rem;
         }
 
-        .customer-header {
+        .profile-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: linear-gradient(145deg, #00271a, #001711);
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .customer-details {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 25px;
-            margin-bottom: 40px;
-            padding: 25px;
-            background: rgba(126, 175, 150, 0.3);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .passport-photo {
-            text-align: center;
+        .profile-header h1 {
+            font-size: 2rem;
+            color: var(--secondary);
             display: flex;
-            flex-direction: column;
             align-items: center;
+            gap: 1rem;
         }
 
-        .photo-container {
+        .profile-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e429f;
+            transform: translateY(-1px);
+        }
+
+        .profile-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 3rem;
+        }
+
+        .profile-sidebar {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .avatar-container {
             position: relative;
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 4px solid #9eb19b;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            background: rgba(0, 39, 26, 0.6);
+            margin-bottom: 2rem;
         }
 
-        .customer-image {
+        .avatar {
             width: 100%;
-            height: 100%;
+            height: 300px;
+            border-radius: 1rem;
             object-fit: cover;
+            border: 3px solid var(--primary);
+            background: #e2e8f0;
+            padding: 0.5rem;
         }
 
-        .placeholder-photo {
-            width: 100%;
-            height: 100%;
+        .avatar-placeholder {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 39, 26, 0.4);
+            height: 100%;
+            background: #e2e8f0;
+            border-radius: 1rem;
         }
 
-        .placeholder-photo i {
-            font-size: 80px;
-            color: #9eb19b;
-            opacity: 0.8;
+        .avatar-placeholder i {
+            font-size: 5rem;
+            color: var(--text-light);
         }
 
-        .detail-item {
-            padding: 20px;
-            background: rgba(0, 39, 26, 0.4);
-            border-radius: 12px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
+        .profile-details {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .detail-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
         }
 
-        .detail-item label {
-            color: #9eb19b;
-            font-size: 0.95em;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .detail-card {
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: 0.75rem;
+            border-left: 4px solid var(--primary);
         }
 
-        .detail-item span {
-            font-size: 1.2em;
-            color: #fff;
-            font-weight: 500;
+        .detail-card label {
+            display: block;
+            color: var(--text-light);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
         }
 
-        .details-grid {
-            display: contents;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            width: 100%;
+        .detail-card span {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-dark);
         }
 
         .purchase-history {
-            padding: 25px;
-            background: rgba(126, 175, 150, 0.3);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
+            margin-top: 3rem;
         }
 
         .purchase-history h2 {
-            margin-bottom: 25px;
-            color: #9eb19b;
-            font-size: 1.5em;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--primary);
+            display: inline-block;
         }
 
-        .bill {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(0, 39, 26, 0.4);
-            border-radius: 12px;
-            transition: transform 0.3s ease;
+        .invoice-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
         }
 
-        .bill:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .bill-header {
+        .invoice-header {
+            background: #f8fafc;
+            padding: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #00271a;
-            border-radius: 8px;
-            color: #9eb19b;
+            border-bottom: 2px solid #e2e8f0;
         }
 
-        .bill-items {
+        .invoice-id {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .invoice-date {
+            color: var(--text-light);
+        }
+
+        .invoice-total {
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .invoice-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .bill-items th {
-            background-color: #00271a;
-            color: #9eb19b;
-            padding: 12px;
-            font-weight: 600;
-            border-radius: 7px;
+        .invoice-table th,
+        .invoice-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        .bill-items td {
-            padding: 12px;
-            border-bottom: 1px solid rgba(158, 177, 155, 0.2);
-            color: #fff;
+        .invoice-table th {
+            background: #f8fafc;
+            color: var(--text-light);
+            font-weight: 500;
         }
 
-        .bill-items tr:last-child td {
-            border-bottom: none;
-        }
-
-        .back-btn {
+        .status-indicator {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 12px 25px;
-            background: #80bc94;
-            color: #000;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
         }
 
-        .back-btn:hover {
-            background: #9eb19b;
-            transform: translateY(-2px);
+        .status-paid {
+            background: #dcfce7;
+            color: #166534;
         }
 
-        .no-purchases {
-            text-align: center;
-            padding: 40px 20px;
-            background: rgba(0, 39, 26, 0.4);
-            border-radius: 12px;
-            color: #9eb19b;
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
         }
 
-        @media (max-width: 768px) {
-            .menu-container {
-                display: none;
-                position: absolute;
-                top: 65px;
-                left: 0;
-                right: 0;
-                background-color: #9eb19b;
-                flex-direction: column;
-                padding: 20px;
-                gap: 1rem;
-            }
-
-            .menu-container.active {
-                display: flex;
-            }
-
-            .hamburger-menu {
-                display: block;
-            }
-
-            .hamburger-menu.active .bar1 {
-                transform: rotate(-45deg) translate(-5px, 6px);
-            }
-
-            .hamburger-menu.active .bar2 {
-                opacity: 0;
-            }
-
-            .hamburger-menu.active .bar3 {
-                transform: rotate(45deg) translate(-5px, -6px);
-            }
-
-            .customer-details {
+        @media (max-width: 1024px) {
+            .profile-content {
                 grid-template-columns: 1fr;
             }
 
-            .photo-container {
-                width: 120px;
-                height: 120px;
-            }
-
-            .placeholder-photo i {
-                font-size: 60px;
-            }
-
-            .bill-header {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
+            .profile-sidebar {
+                position: static;
             }
         }
 
-        @media (max-width: 480px) {
-            .customer-image {
-                width: 120px;
-                height: 120px;
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
             }
 
-            .detail-item span {
-                font-size: 1em;
+            .profile-header {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: flex-start;
             }
 
-            .detail-item label {
-                font-size: 0.9em;
+            .invoice-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
             }
 
-            .bill-items td,
-            .bill-items th {
-                padding: 8px;
-                font-size: 0.9em;
+            .invoice-table {
+                overflow-x: auto;
+                display: block;
             }
+        }
+
+        .print-btn {
+            background: var(--accent);
+            color: white;
+        }
+
+        .print-btn:hover {
+            background: #b5506a;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 
 <body>
     <nav>
-        <div class="logo-container">
-            <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png"
-                alt="Purohit Trading">
-        </div>
-        <div class="menu-container">
-            <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
-            <a href="{% url 'product_list' %}"><i class="fas fa-box-open"></i> Products</a>
-            <a href="{% url 'customer_list' %}"><i class="fas fa-users"></i> Customers</a>
-        </div>
-        <div class="hamburger-menu" onclick="toggleMenu()">
-            <div class="bar bar1"></div>
-            <div class="bar bar2"></div>
-            <div class="bar bar3"></div>
+        <div class="nav-content">
+            <div class="logo">
+                <img src="your-logo-url.png" alt="Purohit Trading">
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'home' %}"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="{% url 'customer_list' %}"><i class="fas fa-users"></i> Customers</a>
+                <a href="{% url 'product_list' %}"><i class="fas fa-cube"></i> Products</a>
+            </div>
         </div>
     </nav>
-    <div class="container">
-        <div class="customer-header">                       
-            <h1>{{ customer.cust_name }}'s Profile</h1>
-            <button class="back-btn" onclick="window.history.back()">← Back to List</button>
+
+    <div class="container animate-fade-in">
+        <div class="profile-header">
+            <h1>
+                <i class="fas fa-user-tie"></i>
+                {{ customer.cust_name }}'s Profile
+            </h1>
+            <div class="profile-actions">
+                <button class="btn btn-primary" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </button>
+                <button class="btn print-btn">
+                    <i class="fas fa-print"></i>
+                    Print Profile
+                </button>
+            </div>
         </div>
 
-        <div class="customer-details">
-            <!-- Passport Photo Section -->
-            <div class="passport-photo">
-                <label>Passport Photo</label>
-                <div class="photo-container">
+        <div class="profile-content">
+            <div class="profile-sidebar">
+                <div class="avatar-container">
                     {% if customer.passport_photo %}
-                    <img src="{{ customer.passport_photo.url }}" alt="Passport Photo" class="customer-image">
+                    <img src="{{ customer.passport_photo.url }}" class="avatar" alt="Profile Photo">
                     {% else %}
-                    <div class="placeholder-photo">
+                    <div class="avatar-placeholder">
                         <i class="fas fa-user-circle"></i>
                     </div>
                     {% endif %}
                 </div>
-            </div>
-
-            <!-- Customer Details Section -->
-            <div class="details-grid">
-                <div class="detail-item">
-                    <label><i class="fas fa-id-card"></i> Customer ID</label>
+                <div class="detail-card">
+                    <label>Customer ID</label>
                     <span>#{{ customer.id }}</span>
                 </div>
-                <div class="detail-item">
-                    <label><i class="fas fa-envelope"></i> Email</label>
-                    <span>{{ customer.cust_email }}</span>
-                </div>
-                <div class="detail-item">
-                    <label><i class="fas fa-phone"></i> Phone</label>
-                    <span>{{ customer.phone_no }}</span>
-                </div>
-                <div class="detail-item">
-                    <label><i class="fas fa-map-marker-alt"></i> Address</label>
-                    <span>{{ customer.address }}</span>
-                </div>
-                <div class="detail-item">
-                    <label><i class="fas fa-birthday-cake"></i> Date of Birth</label>
-                    <span>{{ customer.dob|date:"F j, Y" }}</span>
+                <div class="detail-card">
+                    <label>Member Since</label>
+                    <span>{{ customer.created_at|date:"M Y" }}</span>
                 </div>
             </div>
-        </div>
 
-        <!-- Purchase History Section -->
-        <div class="purchase-history">
-            <h2>Purchase History</h2>
-            {% for bill in bills %}
-            <div class="bill">
-                <div class="bill-header">
-                    <span class="bill-id">Bill #{{ bill.id }}</span>
-                    <span class="bill-date">{{ bill.date|date:"F j, Y" }}</span>
-                    <span class="bill-total">Total: ₹{{ bill.total }}</span>
+            <div class="profile-details">
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <label><i class="fas fa-envelope"></i> Email</label>
+                        <span>{{ customer.cust_email }}</span>
+                    </div>
+                    <div class="detail-card">
+                        <label><i class="fas fa-phone"></i> Phone</label>
+                        <span>{{ customer.phone_no }}</span>
+                    </div>
+                    <div class="detail-card">
+                        <label><i class="fas fa-map-marker-alt"></i> Address</label>
+                        <span>{{ customer.address }}</span>
+                    </div>
+                    <div class="detail-card">
+                        <label><i class="fas fa-birthday-cake"></i> Date of Birth</label>
+                        <span>{{ customer.dob|date:"F j, Y" }}</span>
+                    </div>
                 </div>
 
-                <table class="bill-items">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Unit Price</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for transaction in bill.transactions.all %}
-                        <tr>
-                            <td>{{ transaction.product.name }}</td>
-                            <td>{{ transaction.quantity }} {{ transaction.product.get_measurement_unit_display }}</td>
-                            <td>₹{{ transaction.product.price }}</td>
-                            <td>₹{{ transaction.amount }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="purchase-history">
+                    <h2>Transaction History</h2>
+                    {% for bill in bills %}
+                    <div class="invoice-card">
+                        <div class="invoice-header">
+                            <div class="invoice-id">Invoice #{{ bill.id }}</div>
+                            <div class="invoice-date">{{ bill.date|date:"M j, Y" }}</div>
+                            <div class="invoice-total">Total: ₹{{ bill.total }}</div>
+                            <div class="status-indicator status-paid">
+                                <i class="fas fa-check-circle"></i>
+                                Paid
+                            </div>
+                        </div>
+                        <table class="invoice-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for transaction in bill.transactions.all %}
+                                <tr>
+                                    <td>{{ transaction.product.name }}</td>
+                                    <td>{{ transaction.quantity }} {{ transaction.product.measurement_unit }}</td>
+                                    <td>₹{{ transaction.product.price }}</td>
+                                    <td>₹{{ transaction.amount }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% empty %}
+                    <div class="no-purchases">No transaction history found</div>
+                    {% endfor %}
+                </div>
             </div>
-            {% empty %}
-            <div class="no-purchases">No purchase history found</div>
-            {% endfor %}
         </div>
     </div>
-    <script>
-        function toggleMenu() {
-            const menuContainer = document.querySelector('.menu-container');
-            const hamburger = document.querySelector('.hamburger-menu');
-            menuContainer.classList.toggle('active');
-            hamburger.classList.toggle('active');
-        }
 
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+    <script>
+        // Add print functionality
+        document.querySelector('.print-btn').addEventListener('click', () => {
+            window.print();
+        });
+
+        // Add smooth animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
             });
+        });
+
+        document.querySelectorAll('.invoice-card').forEach((el) => {
+            observer.observe(el);
         });
     </script>
 </body>
