@@ -6,472 +6,268 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grocery Management System</title>
     <link rel="stylesheet" type="text/css" href="home.css">
-
-    <!-- text -->
     <link href="https://fonts.googleapis.com/css?family=Days One" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Jost" rel="stylesheet" type="text/css">
 
     <style>
-        * {
-            margin: 0px;
-            padding: 0px;
+        html {
+            scroll-behavior: smooth;
         }
 
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@400;600&display=swap');
 
-        body {
-            font-family: Arial, sans-serif;
+        :root {
+            --primary-color: #0A2463;
+            --secondary-color: #3E92CC;
+            --accent-color: #FFD700;
+            --background-light: #F8F9FA;
+            --text-dark: #212529;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background-color: #344e41;
-            /* background-color: #737373; */
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-dark);
         }
 
         header {
-            background-color: #02261a;
-            /* background-color: #6a7885; */
-            color: white;
+            background-color: var(--primary-color);
+            color: var(--text-light);
             text-align: center;
-            padding: 1rem;
-            font-size: 25px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 1.8rem;
         }
 
-        @media screen and (max-width: 1500px) {
-            #home .hcontainer .text {
-                margin-bottom: 200px;
-            }
-        }
-        @media screen and (max-width: 1050px) {
-            #home .hcontainer .text {
-                margin-bottom: 0px;
-            }
-        }
-
-        @media screen and (max-width: 868px) {
-            header {
-                font-size: 20px;
-            }
-        }
-
-        @media screen and (max-width: 450px) {
-            header {
-                font-size: 15px;
-            }
-        }
-        
         nav {
-            background-color: #9eb19b;
-            color: rgb(0, 0, 0);
-            padding: 0px;
+            background-color: var(--text-light);
+            padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: absolute;
-            top: 0;
-            z-index: 500;
-            width: 100%;
-            height: 65px;
+            height: 80px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
-        nav a {
-            margin: 8px 18px;
-            font-family: 'Jost', sans-serif;
-        }
-
-        /* logo in the nav bar */
         .logo-container img {
-            width: 55%;
-            height: auto;
-            max-width: 450px;
-            display: block;
-            margin: 0 auto;
+            height: 60px;
+            transition: transform 0.3s ease;
         }
 
-        /* Optional: Adjust the margin-left for larger screens if needed */
-        @media (min-width: 768px) {
-            .logo-container img {
-                margin-left: 20px;
-            }
-        }
-
-
-        .logo-container span {
-            margin-left: 10px;
-            font-weight: bold;
+        .logo-container img:hover {
+            transform: scale(1.05);
         }
 
         .menu-container {
             display: flex;
-            transition: 0.5s;
+            align-items: center;
+            margin-left: 3;
+            gap: 2rem;
         }
 
         .menu-container a {
-            color: rgb(0, 0, 0);
+            color: var(--text-dark);
             text-decoration: none;
-            padding: 0 15px;
-            font-weight: lighter;
-            font-size: 22px;
-        }
-
-        .menu-container a:hover {
-            color: #02261a;
-            text-decoration: none;
-            /* padding: 0 15px; */
-            font-weight: bolder;
-        }
-
-
-        /* Hamburger menu styles */
-        .hamburger-menu {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            transition: 0.5s;
-        }
-
-        .bar {
-            height: 3px;
-            width: 25px;
-            background-color: rgb(0, 0, 0);
-            margin: 5px 0;
-        }
-
-        /* Styles for the cross icon when the menu is open */
-        .hamburger-menu.change .bar1 {
-            transform: rotate(-45deg) translate(-5px, 6px);
-            width: 40px;
-            transition: 0.5s;
-        }
-
-        .hamburger-menu.change .bar2 {
-            transform: rotate(45deg) translate(-3px, -6px);
-            width: 40px;
-            transition: 0.5s;
-        }
-
-        .hamburger-menu.change .bar3 {
-            margin-right: 9px;
-            opacity: 0;
-        }
-
-
-        /* dropdown */
-
-        .dropdown {
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
             position: relative;
         }
 
-        .dropdown-toggle {
-            color: rgb(0, 0, 0);
-            text-decoration: none;
-            padding: 0 15px;
-            font-weight: lighter;
-            font-size: 20px;
-            cursor: pointer;
+        .menu-container a:hover {
+            background-color: #d6e3c7;
+            color: var(--primary-color);
         }
 
-        .dropdown-menu {
-            display: none;
+        .menu-container a::after {
+            content: '';
             position: absolute;
-            top: 100%;
+            bottom: -5px;
             left: 0;
-            background-color: #ffffff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
         }
 
-        .dropdown-menu a {
-            display: block;
-            padding: 10px 15px;
-            color: rgb(0, 0, 0);
-            text-decoration: none;
-            font-weight: lighter;
-            font-size: 20px;
-        }
-
-        /* Show the dropdown menu on hover */
-        .dropdown:hover .dropdown-menu {
-            display: block;
-        }
-
-
-        .product-directory {
-            display: none;
-            /* Initially hide the product directory */
-            background-color: #ffffff;
-            position: absolute;
-            top: 100%;
-            left: 0;
+        .menu-container a:hover::after {
             width: 100%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
-        .product-directory a {
-            display: block;
-            padding: 15px;
-            color: rgb(0, 0, 0);
-            text-decoration: none;
-            font-size: 18px;
-        }
-
-        @media only screen and (max-width: 768px) {
-            .menu-container {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 95%;
-                left: 0;
-                width: 100%;
-                background-color: #ffffff;
-                background-color: #bacfb7f5;
-                text-align: center;
-                overflow: scroll;
-                margin-top: 0px;
-                height: 1000%;
-                z-index: 1;
-                transition: height 0.3s ease-in-out;
-                margin-right: 20px;
-                align-items: center;
-            }
-
-            .menu-container a {
-                padding: 15px 0;
-                width: 100%;
-                display: block;
-            }
-
-            .hamburger-menu {
-                display: flex;
-                margin-right: 20px;
-            }
-
-            nav span {
-                color: white;
-                font-size: 150%;
-            }
-
-            .menu-container.show-menu a {
-                opacity: 1;
-            }   
-
-            .product-directory {
-                display: block;
-                background-color: transparent;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                z-index: 1000;
-                border: none;
-            }
-
-            .product-directory a {
-                display: block;
-                padding: 15px;
-                color: rgb(0, 0, 0);
-                text-decoration: none;
-                font-size: 15px;
-                text-align: start;
-                padding-left: 10%;
-            }
-
-            /* adding right arrow in a tag at the start of content */
-            .product-directory a::after {
-                content: "\f054";
-                font-family: "Font Awesome 5 Free";
-                font-weight: 100;
-                padding-left: 10px;
-                align-self: center;
-
-                /* centering from its parent in vertically */
-                align-items: center;
-                justify-content: center;
-                font-size: 20px;
-            }
-
-        }
-
-        section {
-            padding: 2rem;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 1rem;
+            margin: 2rem 0;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         th,
         td {
-            border: 1px solid #ddd;
-            padding: 0.5rem;
+            padding: 1rem;
             text-align: left;
+            border-bottom: 1px solid #e0e0e0;
         }
 
-        form {
-            margin-top: 1rem;
+        th {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            font-weight: 600;
         }
 
-        button {
-            background-color: #333;
-            color: white;
-            padding: 0.5rem;
-            border: none;
-            cursor: pointer;
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
         }
 
-        button:hover {
-            background-color: #555;
+        tr:hover {
+            background-color: #f1f8e9;
         }
 
-        #productTableBody {
-            background-color: #fff;
-            /* White background */
-        }
-
-        /*   Style for alternating rows */
-        #productTableBody tr:nth-child(even) {
-            background-color: #f2f2f2;
-            /* Light gray background for even rows */
-        }
-
-        /* Style for table header */
-        #productTableBody th {
-            background-color: #333;
-            /* Dark background for header */
-            color: white;
-        }
-
-        /* Hover effect for table rows */
-        #productTableBody tr:hover {
-            background-color: #ddd;
-            /* Darker background on hover */
-        }
-
-        /* Style for product name cells */
-        #productTableBody td:nth-child(2) {
-            color: #0066cc;
-            /* Change text color of product names */
-            font-weight: bold;
-        }
-
-        #home .hcontainer {
-            margin-top: 80px;
-            width: 100%;
-            height: 600px;
-            background-color: black;
-            background: url("https://i.ibb.co/3TB8w4J/bg-home.jpg") no-repeat center;
-            /* filter: brightness(30%); */
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
+        .button {
+            display: inline-flex;
             align-items: center;
+            justify-content: center;
+            padding: 1rem 2.5rem;
+            background-color: var(--accent-color);
+            color: var(--text-dark);
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-width: 200px;
+            text-align: center;
         }
 
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
 
-        #home .hcontainer .text {
-            /* margin: 50px; */
-            width: 650px;
-            /* height: 80%; */
-            /* background-color: black; */
-            color: white;
+        .button:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-container {
+            position: fixed;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            gap: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
         }
 
-        #home .hcontainer .text h2 {
-            margin: 25px;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 45px;
-            font-family: 'Days One', sans-serif;
-        }
-
-        @media screen and (max-width: 868px) {
-            #home .hcontainer .text h2 {
-                margin: 20px;
-                font-size: 35px;
-            }
-
-            section {
+        @media (max-width: 768px) {
+            .button-container {
+                position: static;
+                transform: none;
+                margin-top: 2rem;
+                background-color: transparent;
+                box-shadow: none;
                 padding: 1rem;
             }
         }
 
-        @media screen and (max-width: 450px) {
-            #home .hcontainer .text h2 {
-                margin: 20px;
-                font-size: 30px;
-            }
-
-            section {
-                padding: 0.5rem;
-            }
+        .button:hover {
+            background-color: #FFA726;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
         }
 
-        #home .hcontainer .btn {
-            margin: 50px;
-            width: 400px;
-            height: 80%;
-            /* background-color: black; */
-            color: white;
+        #home .hcontainer {
+            margin-top: 80px;
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                url("https://i.ibb.co/3TB8w4J/bg-home.jpg") center/cover fixed;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
-        }
-
-        #home .hcontainer .btn .button-container {
-
             text-align: center;
-            margin-top: 20px;
+            color: var(--text-light);
+            position: relative;
         }
 
-        #home .hcontainer .btn .button-container .button {
-            display: block;
-            margin: 0 auto;
-            padding: 10px 20px;
-            width: 230px;
-            text-decoration: none;
-            color: #fff;
-            color: black;
-            background-color: #97bb97;
-            /* background-color: #8c8d8f; */
-            border-radius: 5px;
-            font-size: 24px;
-            cursor: pointer;
-            margin-bottom: 30px;
-            font-family: 'Jost', sans-serif;
-            transition: all 0.3s ease-in-out;
-
+        #home .hcontainer .text {
+            max-width: 800px;
+            padding: 0 2rem;
+            z-index: 2;
         }
 
-        #home .hcontainer .btn .button-container .button:hover {
-            background-color: #608d6f;
-            /* background-color: #afafb1; */
+        #home .hcontainer .text h2 {
+            font-size: 3.5rem;
+            color: #F8F9FA;
+            margin-bottom: 35rem;
+            line-height: 1.2;
+            animation: fadeIn 1.5s ease-in-out;
         }
 
-        @media screen and (max-width: 868px) {
-            #home .hcontainer .btn .button-container .button {
-                width: 190px;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        @media screen and (max-width: 450px) {
-            #home .hcontainer .btn .button-container .button {
-                width: 170px;
-                font-size: 20px;
+        @media (max-width: 768px) {
+            .menu-container {
+                display: none;
+            }
+
+            .hamburger-menu {
+                display: flex;
+            }
+
+            #home .hcontainer .text h2 {
+                font-size: 2.5rem;
+            }
+
+            .button {
+                padding: 0.6rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                font-size: 1.2rem;
+            }
+
+            #home .hcontainer .text h2 {
+                font-size: 2rem;
+            }
+
+            .logo-container img {
+                height: 50px;
             }
         }
     </style>
-
     <script>
-        const menuToggle = document.querySelector(".menu-toggle");
-        const navUl = document.querySelector("ul");
-        // navbar script
         document.addEventListener('DOMContentLoaded', function () {
             const hamburgerMenu = document.querySelector(".hamburger-menu");
             const menuContainer = document.querySelector(".menu-container");
@@ -481,14 +277,8 @@
                 menuContainer.style.display = (menuContainer.style.display === "none" || menuContainer.style.display === "") ? "flex" : "none";
                 hamburgerMenu.classList.toggle("change");
             });
-
         });
 
-
-    </script>
-
-    <!-- Text Animation -->
-    <script>
         var i = 0;
         var txt = 'Welcome to our Grocery Management System!';
         var speed = 50;
@@ -501,15 +291,11 @@
             }
         }
 
-        // Call typeWriter when the webpage loads
         window.onload = function () {
             typeWriter();
         };
     </script>
-
 </head>
-
-{% load crispy_forms_tags %}
 
 <body>
     <nav>
@@ -518,13 +304,11 @@
                 alt="logo">
         </div>
         <div class="menu-container">
-
-
             <a href="#" onclick="showHome()">Home</a>
             <a href="#" onclick="showManageProduct()">Manage Products</a>
             <a href="#" onclick="showCustomerPage()">Manage Customer</a>
-
-
+            <a href="billing.html">BillForm</a>
+            <a href="transaction.html">Today's Transaction</a>
         </div>
         <div class="hamburger-menu" onclick="toggleMenu()">
             <div class="bar bar1"></div>
@@ -533,92 +317,13 @@
         </div>
     </nav>
 
-
-
     <section id="home">
-        <!-- Add more content as needed -->
         <div class="hcontainer">
             <div class="text">
-                <!-- <h2 id="demo">Welcome to our Grocery Management System!</h2> -->
                 <h2 id="demo"></h2>
-
-            </div>
-            <div class="btn">
-                <div class="button-container">
-                    <!-- <a href="analysis.html" class="button">Analysis</a> -->
-                    <a href="billing.html" class="button">BillForm</a>
-                    <a href="addcustomer.html" class="button">Add Customer</a>
-                    <a href="addproduct.html" class="button">Add Product</a>
-                    <a href="transaction.html" class="button">Today's Transaction</a>
-                </div>
             </div>
         </div>
     </section>
-
-
-    <!-- manageProduct -->
-    <section id="manageProduct" style="display: none;">
-        <h2>Manage Products
-            <button onclick="addProduct()">Add Product</button>
-            <button onclick="editProduct()">Edit Product</button>
-        </h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Product ID</th>
-                    <th>Product Name</th>
-                    <th>Product Price</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="productTableBody">
-                {% for product in Products %}
-                <tr>
-                    <td>{{ product.id }}</td>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.price }}</td>
-                    <td>
-                        <!-- <button onclick="deleteProduct(this, {{ product.id }})">Delete</button> -->
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
-
-    <!-- manage Customer -->
-    <section id="customerPage" style="display: none;">
-        <h2>Customer Page
-            <button onclick="addCustomer()">Add Product</button>
-            <button onclick="editCustomer()">Edit Product</button>
-        </h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Customer Name</th>
-                    <th>Passport Photo</th>
-                    <th>Phone Number</th>
-                    <th>Address</th>
-                    <th>Last Transaction</th>
-                </tr>
-            </thead>
-            <tbody id="customerTableBody">
-                {% for customer in Customers %}
-                <tr>
-                    <td>{{ customer.name }}</td>
-                    <td>{{ customer.phone_number }}</td>
-                    <td>{{ customer.address }}</td>
-                    <td>{{ customer.last_transaction }}</td>
-                    <td>{{ customer.passport_photo }}</td>
-                    <td>
-                        <!-- <button onclick="deleteProduct(this, {{ customer. }})">Delete</button> -->
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
-
 
     <script>
         function showHome() {
@@ -639,24 +344,6 @@
             window.location.href = 'addproduct.html';
         }
 
-        function addProductToCustomer() {
-            // Update the function name to match the form's "onclick" attribute
-            var productName = document.getElementById('customerProductName').value;
-            var customerTableBody = document.getElementById('customerTableBody');
-            var newRow = customerTableBody.insertRow();
-            var cell1 = newRow.insertCell(0);
-            var cell2 = newRow.insertCell(1);
-            var cell3 = newRow.insertCell(2);
-            cell1.innerHTML = 'Generated ID'; // You can generate an ID dynamically
-            cell2.innerHTML = productName;
-            cell3.innerHTML = '<button onclick="deleteProduct(this)">Delete</button>';
-        }
-
-        function deleteProduct(button) {
-            // Implement logic to delete a product from the table
-            var row = button.parentNode.parentNode;
-            row.parentNode.removeChild(row);
-        }
     </script>
 </body>
 

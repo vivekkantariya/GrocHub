@@ -9,12 +9,15 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #2B59C3;
-            --secondary: #253C78;
-            --accent: #D36582;
-            --background: #f8f9fa;
-            --text-dark: #2d3748;
-            --text-light: #718096;
+            --primary: #2E7D32;  /* Primary brand green */
+            --secondary: #1B5E20;  /* Darker green */
+            --accent: #FFA726;  /* Accent orange */
+            --background: #0A2E1C;  /* Deep forest green background */
+            --card-bg: #86bb7d;  /* Light cream-green for cards */
+            --text-dark: #243D24;  /* Dark green-gray for text */
+            --text-medium: #4A6354;  /* Medium contrast text */
+            --text-light: #6B8E6B;  /* Muted green for secondary text */
+            --border-light: #D1E5D4;  /* Light border color */
         }
 
         * {
@@ -31,7 +34,7 @@
         }
 
         nav {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background-color: var(--primary);
             padding: 0 2rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
@@ -46,12 +49,13 @@
         }
 
         .logo img {
-            height: 45px;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 50px;
+            width: auto;
+            transition: transform 0.3s ease;
         }
 
         .logo img:hover {
-            transform: rotate(-5deg);
+            transform: scale(1.05);
         }
 
         .nav-links {
@@ -70,7 +74,7 @@
         }
 
         .nav-links a:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .container {
@@ -85,14 +89,15 @@
             align-items: center;
             margin-bottom: 3rem;
             padding: 2rem;
-            background: white;
+            background: var(--card-bg);
             border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-light);
         }
 
         .profile-header h1 {
             font-size: 2rem;
-            color: var(--secondary);
+            color: var(--text-dark);
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -121,8 +126,9 @@
         }
 
         .btn-primary:hover {
-            background: #1e429f;
+            background: var(--secondary);
             transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
         }
 
         .profile-content {
@@ -132,10 +138,11 @@
         }
 
         .profile-sidebar {
-            background: white;
+            background: var(--card-bg);
             padding: 2rem;
             border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-light);
             position: sticky;
             top: 100px;
             height: fit-content;
@@ -161,7 +168,7 @@
             align-items: center;
             justify-content: center;
             height: 100%;
-            background: #e2e8f0;
+            background: #E3EFE6;
             border-radius: 1rem;
         }
 
@@ -171,10 +178,11 @@
         }
 
         .profile-details {
-            background: white;
+            background: var(--card-bg);
             padding: 2rem;
             border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-light);
         }
 
         .detail-grid {
@@ -185,14 +193,15 @@
 
         .detail-card {
             padding: 1.5rem;
-            background: #f8fafc;
+            background: white;
             border-radius: 0.75rem;
             border-left: 4px solid var(--primary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
 
         .detail-card label {
             display: block;
-            color: var(--text-light);
+            color: var(--text-medium);
             font-size: 0.875rem;
             margin-bottom: 0.5rem;
         }
@@ -209,7 +218,7 @@
 
         .purchase-history h2 {
             font-size: 1.5rem;
-            color: var(--secondary);
+            color: var(--text-dark);
             margin-bottom: 2rem;
             padding-bottom: 1rem;
             border-bottom: 3px solid var(--primary);
@@ -219,18 +228,19 @@
         .invoice-card {
             background: white;
             border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             margin-bottom: 1.5rem;
             overflow: hidden;
+            border: 1px solid var(--border-light);
         }
 
         .invoice-header {
-            background: #f8fafc;
+            background: #EFF7F0;
             padding: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid var(--border-light);
         }
 
         .invoice-id {
@@ -239,7 +249,7 @@
         }
 
         .invoice-date {
-            color: var(--text-light);
+            color: var(--text-medium);
         }
 
         .invoice-total {
@@ -250,19 +260,21 @@
         .invoice-table {
             width: 100%;
             border-collapse: collapse;
+            background: white;
         }
 
         .invoice-table th,
         .invoice-table td {
             padding: 1rem;
             text-align: left;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-dark);
         }
 
         .invoice-table th {
-            background: #f8fafc;
-            color: var(--text-light);
-            font-weight: 500;
+            background: #E3EFE6;
+            color: var(--text-dark);
+            font-weight: 600;
         }
 
         .status-indicator {
@@ -276,13 +288,13 @@
         }
 
         .status-paid {
-            background: #dcfce7;
-            color: #166534;
+            background: #C8E6C9;
+            color: #1B5E20;
         }
 
         .status-pending {
-            background: #fef3c7;
-            color: #92400e;
+            background: #FFF3E0;
+            color: #EF6C00;
         }
 
         @media (max-width: 1024px) {
@@ -320,11 +332,12 @@
 
         .print-btn {
             background: var(--accent);
-            color: white;
+            color: var(--text-dark);
         }
 
         .print-btn:hover {
-            background: #b5506a;
+            background: #FB8C00;
+            color: white;
         }
 
         .animate-fade-in {
@@ -342,7 +355,7 @@
     <nav>
         <div class="nav-content">
             <div class="logo">
-                <img src="your-logo-url.png" alt="Purohit Trading">
+                <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png" alt="Purohit Trading">
             </div>
             <div class="nav-links">
                 <a href="{% url 'home' %}"><i class="fas fa-home"></i> Dashboard</a>
@@ -453,6 +466,7 @@
         </div>
     </div>
 
+
     <script>
         // Add print functionality
         document.querySelector('.print-btn').addEventListener('click', () => {
@@ -473,5 +487,4 @@
         });
     </script>
 </body>
-
 </html>
