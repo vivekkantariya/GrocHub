@@ -9,15 +9,12 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #2E7D32;  /* Primary brand green */
-            --secondary: #1B5E20;  /* Darker green */
-            --accent: #FFA726;  /* Accent orange */
-            --background: #0A2E1C;  /* Deep forest green background */
-            --card-bg: #86bb7d;  /* Light cream-green for cards */
-            --text-dark: #243D24;  /* Dark green-gray for text */
-            --text-medium: #4A6354;  /* Medium contrast text */
-            --text-light: #6B8E6B;  /* Muted green for secondary text */
-            --border-light: #D1E5D4;  /* Light border color */
+            --primary: #2B59C3;
+            --secondary: #253C78;
+            --accent: #D36582;
+            --background: #f8f9fa;
+            --text-dark: #2d3748;
+            --text-light: #718096;
         }
 
         * {
@@ -65,7 +62,7 @@
         }
 
         .nav-links a {
-            color: white;
+            color: black;
             text-decoration: none;
             font-weight: 500;
             padding: 0.5rem 1rem;
@@ -74,7 +71,7 @@
         }
 
         .nav-links a:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(5, 5, 5, 0.15);
         }
 
         .container {
@@ -89,15 +86,14 @@
             align-items: center;
             margin-bottom: 3rem;
             padding: 2rem;
-            background: var(--card-bg);
+            background: white;
             border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .profile-header h1 {
             font-size: 2rem;
-            color: var(--text-dark);
+            color: var(--secondary);
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -126,9 +122,8 @@
         }
 
         .btn-primary:hover {
-            background: var(--secondary);
+            background: #1e429f;
             transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
         }
 
         .profile-content {
@@ -138,11 +133,10 @@
         }
 
         .profile-sidebar {
-            background: var(--card-bg);
+            background: white;
             padding: 2rem;
             border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 100px;
             height: fit-content;
@@ -168,7 +162,7 @@
             align-items: center;
             justify-content: center;
             height: 100%;
-            background: #E3EFE6;
+            background: #e2e8f0;
             border-radius: 1rem;
         }
 
@@ -178,11 +172,10 @@
         }
 
         .profile-details {
-            background: var(--card-bg);
+            background: white;
             padding: 2rem;
             border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .detail-grid {
@@ -193,15 +186,14 @@
 
         .detail-card {
             padding: 1.5rem;
-            background: white;
+            background: #f8fafc;
             border-radius: 0.75rem;
             border-left: 4px solid var(--primary);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
 
         .detail-card label {
             display: block;
-            color: var(--text-medium);
+            color: var(--text-light);
             font-size: 0.875rem;
             margin-bottom: 0.5rem;
         }
@@ -218,7 +210,7 @@
 
         .purchase-history h2 {
             font-size: 1.5rem;
-            color: var(--text-dark);
+            color: var(--secondary);
             margin-bottom: 2rem;
             padding-bottom: 1rem;
             border-bottom: 3px solid var(--primary);
@@ -228,19 +220,18 @@
         .invoice-card {
             background: white;
             border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             margin-bottom: 1.5rem;
             overflow: hidden;
-            border: 1px solid var(--border-light);
         }
 
         .invoice-header {
-            background: #EFF7F0;
+            background: #f8fafc;
             padding: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid var(--border-light);
+            border-bottom: 2px solid #e2e8f0;
         }
 
         .invoice-id {
@@ -249,7 +240,7 @@
         }
 
         .invoice-date {
-            color: var(--text-medium);
+            color: var(--text-light);
         }
 
         .invoice-total {
@@ -260,21 +251,19 @@
         .invoice-table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
         }
 
         .invoice-table th,
         .invoice-table td {
             padding: 1rem;
             text-align: left;
-            border-bottom: 1px solid var(--border-light);
-            color: var(--text-dark);
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .invoice-table th {
-            background: #E3EFE6;
-            color: var(--text-dark);
-            font-weight: 600;
+            background: #f8fafc;
+            color: var(--text-light);
+            font-weight: 500;
         }
 
         .status-indicator {
@@ -288,13 +277,13 @@
         }
 
         .status-paid {
-            background: #C8E6C9;
-            color: #1B5E20;
+            background: #dcfce7;
+            color: #166534;
         }
 
         .status-pending {
-            background: #FFF3E0;
-            color: #EF6C00;
+            background: #fef3c7;
+            color: #92400e;
         }
 
         @media (max-width: 1024px) {
@@ -332,12 +321,11 @@
 
         .print-btn {
             background: var(--accent);
-            color: var(--text-dark);
+            color: white;
         }
 
         .print-btn:hover {
-            background: #FB8C00;
-            color: white;
+            background: #b5506a;
         }
 
         .animate-fade-in {
@@ -345,8 +333,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -355,12 +350,15 @@
     <nav>
         <div class="nav-content">
             <div class="logo">
-                <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png" alt="Purohit Trading">
+                <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png"
+                    alt="Purohit Trading">
             </div>
             <div class="nav-links">
                 <a href="{% url 'home' %}"><i class="fas fa-home"></i> Dashboard</a>
-                <a href="{% url 'customer_list' %}"><i class="fas fa-users"></i> Customers</a>
+                <a href="billing.html">BillForm</a>
                 <a href="{% url 'product_list' %}"><i class="fas fa-cube"></i> Products</a>
+                <a href="{% url 'customer_list' %}"><i class="fas fa-users"></i> Customers</a>
+                <a href="transaction.html">Today's Transaction</a>
             </div>
         </div>
     </nav>
@@ -466,7 +464,6 @@
         </div>
     </div>
 
-
     <script>
         // Add print functionality
         document.querySelector('.print-btn').addEventListener('click', () => {
@@ -487,4 +484,5 @@
         });
     </script>
 </body>
+
 </html>
