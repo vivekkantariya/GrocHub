@@ -9,14 +9,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-       :root {
-    --primary-color: #2A9D8F;      /* Teal */
-    --secondary-color: #264653;    /* Dark Blue */
-    --accent-color: #E9C46A;       /* Gold */
-    --text-light: #F8F9FA;         /* Light Gray */
-    --background-light: #FFFFFF;   /* White */
-    --success-color: #4CAF50;      /* Green */
-}
+        :root {
+            --primary-color: #2A9D8F;
+            /* Teal */
+            --secondary-color: #264653;
+            /* Dark Blue */
+            --accent-color: #E9C46A;
+            /* Gold */
+            --text-light: #F8F9FA;
+            /* Light Gray */
+            --background-light: #FFFFFF;
+            /* White */
+            --success-color: #4CAF50;
+            /* Green */
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -71,38 +78,38 @@
         }
 
         .table-container {
-    max-height: 400px;
-    overflow-y: auto;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-.transaction-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-.transaction-table th {
-    position: sticky;
-    top: 0;
-    background: var(--primary-color);
-    color: white;
-    padding: 1rem;
-    text-align: left;
-}
+        .transaction-table th {
+            position: sticky;
+            top: 0;
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
 
-.transaction-table td {
-    padding: 0.8rem;
-    border-bottom: 1px solid #eee;
-}
+        .transaction-table td {
+            padding: 0.8rem;
+            border-bottom: 1px solid #eee;
+        }
 
-.transaction-table tr:hover {
-    background-color: rgba(0,0,0,0.03);
-}
+        .transaction-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
 
-.transaction-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
+        .transaction-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
 
         /* Dashboard Content */
         .dashboard-container {
@@ -206,6 +213,7 @@
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="logo">
@@ -254,14 +262,14 @@
                 <i class="fas fa-box-open"></i><br>
                 Manage Inventory
             </a>
+            <a href="analytics.html" class="action-btn">
+                <i class="fas fa-address-book"></i><br>
+                Manage Customers 
+            </a>
             <a href="transaction.html" class="action-btn">
                 <i class="fas fa-file-invoice"></i><br>
                 View Transactions
             </a>
-            <!-- <a href="analytics.html" class="action-btn">
-                <i class="fas fa-chart-pie"></i><br>
-                Sales Analytics
-            </a> -->
         </div>
 
         <!-- Recent Transactions -->
@@ -281,8 +289,8 @@
                     <tbody id="todaysTransactionTableBody">
                         {% for transaction in transactions %}
                         <tr>
-                            <td>{{ transaction.customer_name }}</td>
-                            <td>{{ transaction.product_name }}</td>
+                            <td>{{ transaction.customer }}</td>
+                            <td>{{ transaction.product.name }}</td>
                             <td>{{ transaction.amount }}</td>
                             <td>{{ transaction.quantity }}</td>
                             <td>{{ transaction.timestamp }}</td>

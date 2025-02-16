@@ -4,953 +4,746 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="https://fonts.googleapis.com/css?family=Days One" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Jost" rel="stylesheet" type="text/css">
-
-
-
     <title>Billing Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #02261a;
+        /* Inherit theme variables from home.html */
+        :root {
+            --primary-color: #2A9D8F;
+            --secondary-color: #264653;
+            --accent-color: #E9C46A;
+            --text-light: #F8F9FA;
+            --background-light: #FFFFFF;
+            --success-color: #4CAF50;
+            --border-color: #e5e7eb;
+            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.1);
+            /* New color variables */
+            --primary-light: #3BAF9F;
+            --button-gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            --container-border: 1px solid rgba(42, 157, 143, 0.15);
+            --focus-glow: 0 0 0 3px rgba(42, 157, 143, 0.2);
+            --table-header-bg: #2D9387;
+        }
+    
+        /* Shared Component Styles */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid rgba(42, 157, 143, 0.1);
+            box-shadow: 0 4px 20px rgba(38, 70, 83, 0.06);
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+    
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(38, 70, 83, 0.1);
+        }
+    
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
-
-        #container {
-            margin: 10px;
-            background-color: #7eaf964c;
-            padding: 20px;
-            border-radius: 20px;
-            margin-top: 85px;
+    
+        body {
+            background: #f5f5f5;
+            color: var(--secondary-color);
         }
-
-        nav {
-            background-color: #9eb19b;
-            color: rgb(0, 0, 0);
-            padding: 0px;
+    
+        /* Navigation */
+        .navbar {
+            background: var(--primary-color);
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        .logo img {
+            height: 45px;
+        }
+    
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+    
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+    
+        /* Main container styling */
+        #container {
+            background: linear-gradient(to bottom right, 
+                rgba(255, 255, 255, 0.9) 0%, 
+                rgba(242, 250, 249, 0.7) 100%);
+            backdrop-filter: blur(4px);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin: 2rem auto;
+            max-width: 1400px;
+            border: var(--container-border);
+        }
+    
+        h2 {
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            font-weight: 700;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.75rem;
+        }
+    
+        /* Form Structure */
+        .form-section {
+            margin-bottom: 3rem;
+            background: #f9fafb;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+    
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+    
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+    
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+    
+        input,
+        textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+    
+        /* Product Entry Section */
+        .product-entry {
+            display: grid;
+            grid-template-columns: 2fr 1fr auto;
+            gap: 1.5rem;
+            align-items: end;
+            margin-bottom: 2rem;
+        }
+    
+        /* Enhanced Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--background-light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 1.5rem 0;
+        }
+    
+        th {
+            background: var(--table-header-bg);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            letter-spacing: 0.5px;
+        }
+    
+        td {
+            padding: 0.8rem;
+            border-bottom: 1px solid #eee;
+        }
+    
+        tr:nth-child(even) {
+            background-color: rgba(242, 250, 249, 0.4);
+        }
+    
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+    
+        /* Button styling */
+        button {
+            background: var(--button-gradient);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(42, 157, 143, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+    
+        button:hover {
+            background: var(--button-gradient);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(42, 157, 143, 0.4);
+        }
+        
+        .secondary {
+            background: var(--button-gradient);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(42, 157, 143, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+    
+        .secondary:hover {
+            background: var(--button-gradient);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(42, 157, 143, 0.4);
+        }
+
+        button[type="submit"]::after {
+            content: '';
             position: absolute;
             top: 0;
-            z-index: 500;
-            width: 100%;
-            height: 65px;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                transparent
+            );
+            transition: left 0.6s ease;
         }
-
-
-        nav a {
-            margin: 8px 18px;
-            font-family: 'Jost', sans-serif;
+    
+        button[type="submit"]:hover::after {
+            left: 100%;
         }
-
-        /* logo in the nav bar */
-        .logo-container img {
-            width: 55%;
-            height: auto;
-            max-width: 450px;
-            display: block;
-            margin: 0 auto;
+    
+    
+        /* Total Display */
+        .total-display {
+            text-align: right;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(42, 157, 143, 0.05);
+            border: 1px solid rgba(42, 157, 143, 0.1);
+            border-radius: 8px;
         }
-
-        /* Optional: Adjust the margin-left for larger screens if needed */
-        @media (min-width: 768px) {
-            .logo-container img {
-                margin-left: 20px;
-            }
+    
+        .total-display span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            text-shadow: 0 2px 4px rgba(42, 157, 143, 0.1);
         }
-
-
-        .logo-container span {
-            margin-left: 10px;
-            font-weight: bold;
+    
+        /* Form elements styling */
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: var(--focus-glow);
         }
-
-        .menu-container {
-            display: flex;
-            transition: 0.5s;
-        }
-
-        .menu-container a {
-            color: rgb(0, 0, 0);
-            text-decoration: none;
-            padding: 0 15px;
-            font-weight: lighter;
-            font-size: 22px;
-        }
-
-        .menu-container a:hover {
-            color: #02261a;
-            text-decoration: none;
-            /* padding: 0 15px; */
-            font-weight: bolder;
-        }
-
-
-        /* Hamburger menu styles */
-        .hamburger-menu {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            transition: 0.5s;
-        }
-
-        .bar {
-            height: 3px;
-            width: 25px;
-            background-color: rgb(0, 0, 0);
-            margin: 5px 0;
-        }
-
-        /* Styles for the cross icon when the menu is open */
-        .hamburger-menu.change .bar1 {
-            transform: rotate(-45deg) translate(-5px, 6px);
-            width: 40px;
-            transition: 0.5s;
-        }
-
-        .hamburger-menu.change .bar2 {
-            transform: rotate(45deg) translate(-3px, -6px);
-            width: 40px;
-            transition: 0.5s;
-        }
-
-        .hamburger-menu.change .bar3 {
-            margin-right: 9px;
-            opacity: 0;
-        }
-
-
-        /* dropdown */
-
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-toggle {
-            color: rgb(0, 0, 0);
-            text-decoration: none;
-            padding: 0 15px;
-            font-weight: lighter;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: #ffffff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 10px 15px;
-            color: rgb(0, 0, 0);
-            text-decoration: none;
-            font-weight: lighter;
-            font-size: 20px;
-        }
-
-        /* Show the dropdown menu on hover */
-        .dropdown:hover .dropdown-menu {
-            display: block;
-        }
-
-
-        .product-directory {
-            display: none;
-            /* Initially hide the product directory */
-            background-color: #ffffff;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
+    
+        /* Product suggestions */
         #productSuggestions {
             position: absolute;
+            background: var(--background-light);
             border: 1px solid #ddd;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 40%;
             max-height: 200px;
             overflow-y: auto;
-            background-color: rgba(255, 255, 255, 0.941);
-            z-index: 1000;
-            width: 40vh;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
+    
         .suggestion-item {
-            padding: 8px 12px;
+            padding: 0.8rem;
             cursor: pointer;
             transition: background-color 0.2s;
         }
-
-        .suggestion-item:hover,
-        .suggestion-item.selected {
-            background-color: #97bb97;
+    
+        .suggestion-item:hover {
+            background-color: rgba(42, 157, 143, 0.06);
         }
-
-
-        .product-directory a {
-            display: block;
-            padding: 15px;
-            color: rgb(0, 0, 0);
-            text-decoration: none;
-            font-size: 18px;
-        }
-
-
-
-        /* Media query for responsiveness */
-        @media only screen and (max-width: 768px) {
-            .menu-container {
+    
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
                 display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 95%;
-                left: 0;
-                width: 100%;
-                background-color: #ffffff;
-                background-color: #bacfb7f5;
-                text-align: center;
-                overflow: scroll;
-                margin-top: 0px;
-                height: 1000%;
-                z-index: 1;
-                transition: height 0.3s ease-in-out;
-                margin-right: 20px;
-                align-items: center;
             }
-
-            .menu-container a {
-                padding: 15px 0;
-                width: 100%;
-                display: block;
-            }
-
+    
             .hamburger-menu {
-                display: flex;
-                margin-right: 20px;
-            }
-
-            nav span {
+                display: block;
                 color: white;
-                font-size: 150%;
+                font-size: 1.5rem;
+                cursor: pointer;
+                transition: transform 0.3s ease;
             }
-
-            .menu-container.show-menu a {
-                opacity: 1;
+    
+            .hamburger-menu:hover {
+                transform: scale(1.1);
             }
-
-            .table-container {
-                overflow-x: auto;
-                /* Enables horizontal scrolling */
-                -webkit-overflow-scrolling: touch;
-                /* Smooth scrolling for iOS */
+    
+            #container {
+                margin: 1rem;
+                padding: 1rem;
             }
-
-            .table {
-                min-width: 100%;
-                /* Ensures the table is full-width but can scroll if needed */
-            }
-
-
-            table {
-                display: block;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
-
-            th,
-            td {
-                padding: 10px 15px;
-            }
-
-            /* Adjust table headers for smaller screens */
-            th {
-                font-size: 14px;
-            }
-
-            td {
-                font-size: 14px;
-            }
-
-            .product-directory {
-                display: block;
-                background-color: transparent;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                z-index: 1000;
-                border: none;
-            }
-
-            .product-directory a {
-                display: block;
-                padding: 15px;
-                color: rgb(0, 0, 0);
-                text-decoration: none;
-                font-size: 15px;
-                text-align: start;
-                padding-left: 10%;
-            }
-
-            /* adding right arrow in a tag at the start of content */
-            .product-directory a::after {
-                content: "\f054";
-                font-family: "Font Awesome 5 Free";
-                font-weight: 100;
-                padding-left: 10px;
-                align-self: center;
-
-                /* centering from its parent in vertically */
-                align-items: center;
-                justify-content: center;
-                font-size: 20px;
-            }
-
-        }
-
-
-        .billinfo {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .pair {
-            width: 50%;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 22px;
-            color: white;
-        }
-
-        input[type="tel"],
-        input[type="text"],
-        textarea {
-            width: 90%;
-            padding: 6px 15px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #ffffff26;
-            font-size: 20px;
-        }
-
-        #customerName.input_text {
-            width: 90%;
-            padding: 6px 15px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #ffffff26;
-            font-size: 20px;
-        }
-
-        #quantity {
-            width: 90%;
-            padding: 6px 15px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #ffffff26;
-            font-size: 20px;
-
-        }
-
-        textarea {
-            resize: vertical;
-        }
-
-        h2 {
-            font-size: 32px;
-            color: white;
-            font-family: 'Raleway', sans-serif;
-            background: #02261a;
-            padding: 10px 16px;
-            border-radius: 10px;
-        }
-
-
-        table {
-            width: 100%;
-            background: white;
-            border-collapse: collapse;
-            margin-top: 20px;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-
-        thead {
-            background-color: #f2f2f2;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        tbody tr:nth-child(even) {
-            background-color: #5881571d;
-        }
-
-        tbody tr:hover {
-            background-color: #58815741;
-        }
-
-
-        label#grandTotal {
-            display: block;
-            margin-bottom: 5px;
-            color: white;
-            font-size: 22px;
-            font-family: 'Raleway', sans-serif;
-            margin-bottom: 20px;
-        }
-
-        button {
-            margin-top: 10px;
-            width: 200px;
-            height: 45px;
-            background-color: #97bb97;
-            display: block;
-            color: black;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 9px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-        }
-
-        #products {
-            width: 90%;
-            /* Add this line to adjust the width */
-            padding: 6px 15px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #ffffff26;
-            font-size: 20px;
-        }
-
-        button:hover {
-            background-color: #608d6f;
-
-        }
-
-        .product-info {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .product-info-column {
-            width: calc(50% - 10px);
-            /* Adjust the width as needed, considering margins */
-            margin-right: 20px;
-            /* Add margin between the columns */
-        }
-
-
-        @media screen and (max-width: 750px) {
-
-
-            .pair {
-                width: 500px;
-            }
-
-            .container {
-                margin: 15px;
-            }
-
-            .product-info-column {
-                width: 100%;
-                /* Full width on smaller screens */
-                margin-right: 0;
-                /* No margin on smaller screens */
-            }
-
-            input,
-            textarea {
-                width: 90%;
-            }
-
-            #products {
-                width: 90%;
-
-            }
-        }
-
-        @media screen and (max-width: 450px) {
-
-
-            h2 {
-                font-size: 26px;
-            }
-
-            th,
-            td {
-                padding: 8px 10px;
-                /* Reduce padding */
-                font-size: 12px;
-                /* Smaller font size */
-            }
-
-            table {
-                font-size: 12px;
-            }
-
-            .container {
-                margin: 5px;
-                padding: 10px;
-            }
-
+    
             .pair {
                 width: 100%;
-                /* Ensure full width for each pair */
             }
-
-            input,
-            textarea {
-                width: 90%;
-                padding: 5px 10px;
-                font-size: 14px;
-            }
-
-            button {
-                width: 150px;
-                height: 35px;
-                font-size: 16px;
-            }
-
-            #products {
-                width: 90%;
-            }
-
-
-        }
-
-        @media screen and (max-width: 455px) {
-
-            /* Ensure the table fits within the container */
+    
             table {
-                width: 100%;
-                max-width: 100%;
-                background: white;
-                border-collapse: collapse;
-                margin-top: 20px;
-                border-radius: 8px;
-                overflow: hidden;
-                margin-bottom: 30px;
                 display: block;
                 overflow-x: auto;
-                /* Enable horizontal scrolling */
             }
-
-            /* Adjust table headers and cells */
-            th,
-            td {
-                padding: 8px 10px;
-                font-size: 12px;
-            }
-
-            /* Ensure that the container doesn't cut off the table */
-            .container {
-                overflow-x: auto;
-                /* Allow horizontal scrolling if the table overflows */
-            }
+        }
+    
+        .required {
+            color: #E76F51;
+            font-weight: 700;
+            margin-left: 3px;
         }
     </style>
-
-    <script>
-        const menuToggle = document.querySelector(".menu-toggle");
-        const navUl = document.querySelector("ul");
-        // navbar script
-        document.addEventListener('DOMContentLoaded', function () {
-            const hamburgerMenu = document.querySelector(".hamburger-menu");
-            const menuContainer = document.querySelector(".menu-container");
-
-            hamburgerMenu.addEventListener("click", () => {
-                menuContainer.style.transition = "all 0.5s ease-in-out";
-                menuContainer.style.display = (menuContainer.style.display === "none" || menuContainer.style.display === "") ? "flex" : "none";
-                hamburgerMenu.classList.toggle("change");
-            });
-
-        });
-
-    </script>
-
 </head>
 
 <body>
-    <nav>
-        <div class="logo-container">
+    <!-- Keep the existing navbar structure -->
+    <nav class="navbar">
+        <div class="logo">
             <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png"
-                alt="Purohit Trading">
+                alt="Grochub">
         </div>
-        <div class="menu-container">
-            <a href="{% url 'home' %}" onclick="showHome()">Home</a>
-            <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
-            <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="billing.html"><i class="fas fa-receipt"></i> Billing</a>
+            <a href="{% url 'product_list' %}"><i class="fas fa-cube"></i> Products</a>
+            <a href="{% url 'customer_list' %}"><i class="fas fa-users"></i> Customers</a>
+            <a href="transaction.html"><i class="fas fa-chart-line"></i> Analytics</a>
         </div>
-        <div class="hamburger-menu" onclick="toggleMenu()">
-            <div class="bar bar1"></div>
-            <div class="bar bar2"></div>
-            <div class="bar bar3"></div>
-        </div>
+        <i class="fas fa-bars hamburger-menu"></i>
     </nav>
 
     <div id="container">
-        <h2>Billing Information</h2>
-        <!-- billing.html -->
+        <h2>Create New Invoice</h2>
+
         <form id="billingForm" method="post" action="{% url 'generate_bill' %}">
             {% csrf_token %}
-            <div class="billinfo">
-                <div class="pair">
-                    <label for="customer_name">Customer Name:</label>
-                    <input type="text" id="customer_name" name="customer_name" required>
-                    <label for="customer_email">Email Address:</label>
-                    <input type="text" id="customer_email" name="customer_email" required>
-                </div>
-                <div class="pair">
-                    <label for="phoneNumber">Phone Number:</label>
-                    <input type="tel" id="phoneNumber" name="phone_no" required>
-                    <label for="address">Address:</label>
-                    <textarea id="address" name="address" rows="4" required></textarea>
-                </div>
-            </div>
-            <hr>
-            <h2>Product Details</h2>
-            <div class="product-info">
-                <div class="pair">
-                    <label for="products">Product Name:</label>
-                    <input type="text" id="products" name="products" required autocomplete="off">
-                    <div id="productSuggestions"></div>
-                </div>
-                <div class="pair">
-                    <label for="quantity">Quantity or Measurement Unit:</label>
-                    <input type="number" id="quantity" name="quantity" required step="0.01">
-                </div>
-                <div class="btn"></div>
-                <button type="button" id="addProductBtn">Add Product</button>
-            </div>
-            <table id="productTable">
-                <thead>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Price</th>
-                        <th>Quantity or Measurement Unit</th>
-                        <th>Subtotal</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-            <label id="grandTotal">Grand Total: $0.00</label>
-            <button type="submit">Generate Bill</button>
-        </form>
 
+            <div class="card">
+                <h3>Customer Information</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="customer_name">Full Name <span class="required">*</span></label>
+                        <input type="text" id="customer_name" name="customer_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="customer_email" name="customer_email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number <span class="required">*</span></label>
+                        <input type="tel" id="phoneNumber" name="phone_no" pattern="[0-9]{10}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Billing Address <span class="required">*</span></label>
+                        <textarea id="address" name="address" rows="3" required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Invoice Items</h3>
+
+                <div class="product-entry">
+                    <div class="form-group">
+                        <label>Search Product</label>
+                        <div class="search-wrapper">
+                            <input type="text" id="products" autocomplete="off">
+                            <div id="productSuggestions"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="number" id="quantity" step="0.01" min="0.01">
+                    </div>
+                    <button type="button" id="addProductBtn" class="secondary">Add Item</button>
+                </div>
+
+                <table id="productTable">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+
+                <div class="total-display">
+                    Grand Total: <span id="grandTotal">$0.00</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button type="reset" class="secondary">Clear Form</button>
+                <button type="submit">Generate Invoice</button>
+            </div>
+        </form>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            window.total = 0;
+        class BillingApp {
+            constructor() {
+                this.total = 0;
+                this.selectedIndex = -1;
+                this.suggestions = [];
+                this.initialize();
+            }
 
-            document.getElementById('addProductBtn').addEventListener('click', addProduct);
+            initialize() {
+                this.cacheElements();
+                this.setupEventListeners();
+                this.setupAutocomplete();
+            }
 
-            // NEW: Enhanced Product Suggestions Autocomplete
-            const productInput = document.getElementById('products');
-            const suggestionsContainer = document.getElementById('productSuggestions');
-            let suggestions = [];
-            let selectedIndex = -1;
+            cacheElements() {
+                this.elements = {
+                    productInput: document.getElementById('products'),
+                    suggestionsContainer: document.getElementById('productSuggestions'),
+                    addProductBtn: document.getElementById('addProductBtn'),
+                    billingForm: document.getElementById('billingForm'),
+                    quantityInput: document.getElementById('quantity'),
+                    grandTotal: document.getElementById('grandTotal'),
+                    customerEmail: document.getElementById('customer_email'),
+                    productTable: document.getElementById('productTable').querySelector('tbody')
+                };
+            }
 
-            productInput.addEventListener('input', function () {
-                const productNameInput = this.value;
+            setupEventListeners() {
+                this.elements.addProductBtn.addEventListener('click', () => this.addProduct());
+                this.elements.billingForm.addEventListener('submit', (e) => this.handleSubmit(e));
+                $(this.elements.customerEmail).on('blur', () => this.handleCustomerLookup());
+            }
 
-                if (productNameInput.trim() === '') {
-                    suggestionsContainer.innerHTML = '';
+            setupAutocomplete() {
+                this.elements.productInput.addEventListener('input', () => this.handleProductInput());
+                this.elements.productInput.addEventListener('keydown', (e) => this.handleKeyboardNav(e));
+                document.addEventListener('click', (e) => this.handleOutsideClick(e));
+            }
+
+            // Autocomplete functionality
+            async handleProductInput() {
+                const searchTerm = this.elements.productInput.value.trim();
+                if (!searchTerm) {
+                    this.clearSuggestions();
                     return;
                 }
 
-                // Fetch suggestions from the server
-                $.ajax({
+                try {
+                    const data = await this.fetchProductSuggestions(searchTerm);
+                    this.displaySuggestions(data);
+                } catch (error) {
+                    this.showError('Failed to fetch product suggestions');
+                }
+            }
+
+            async fetchProductSuggestions(searchTerm) {
+                return $.ajax({
                     url: '/get_product_suggestions/',
-                    data: { search: productNameInput },
-                    dataType: 'json',
-                    success: function (data) {
-                        suggestions = data;
-                        suggestionsContainer.innerHTML = ''; // Clear previous suggestions
-                        selectedIndex = -1;
-
-                        if (data.length > 0) {
-                            data.forEach((product, index) => {
-                                const suggestion = document.createElement('div');
-                                suggestion.className = 'suggestion-item';
-                                suggestion.textContent = product.name;
-                                suggestion.setAttribute('data-index', index);
-
-                                // On clicking a suggestion, autofill the product name
-                                suggestion.addEventListener('click', function () {
-                                    selectSuggestion(index);
-                                });
-
-                                suggestionsContainer.appendChild(suggestion);
-                            });
-                        }
-                    },
-                    error: function (xhr) {
-                        console.error('Error fetching product suggestions:', xhr.responseText);
-                    }
+                    data: { search: searchTerm },
+                    dataType: 'json'
                 });
-            });
+            }
 
-            // Keyboard navigation for suggestions
-            productInput.addEventListener('keydown', function (e) {
-                if (suggestionsContainer.children.length === 0) return;
+            displaySuggestions(products) {
+                this.suggestions = products;
+                this.elements.suggestionsContainer.innerHTML = '';
+
+                products.forEach((product, index) => {
+                    const suggestion = document.createElement('div');
+                    suggestion.className = 'suggestion-item';
+                    suggestion.textContent = product.name;
+                    suggestion.addEventListener('click', () => this.selectSuggestion(index));
+                    this.elements.suggestionsContainer.appendChild(suggestion);
+                });
+            }
+
+            handleKeyboardNav(e) {
+                if (!this.suggestions.length) return;
 
                 switch (e.key) {
-                    case 'ArrowDown':
-                        e.preventDefault();
-                        navigateSuggestions(1);
-                        break;
-                    case 'ArrowUp':
-                        e.preventDefault();
-                        navigateSuggestions(-1);
-                        break;
-                    case 'Enter':
-                        if (selectedIndex !== -1) {
-                            e.preventDefault();
-                            selectSuggestion(selectedIndex);
-                        }
-                        break;
-                    case 'Escape':
-                        suggestionsContainer.innerHTML = '';
-                        selectedIndex = -1;
-                        break;
+                    case 'ArrowDown': this.navigateSuggestions(1); break;
+                    case 'ArrowUp': this.navigateSuggestions(-1); break;
+                    case 'Enter': this.confirmSelection(e); break;
+                    case 'Escape': this.clearSuggestions(); break;
                 }
-            });
-
-            function navigateSuggestions(direction) {
-                const suggestionItems = suggestionsContainer.querySelectorAll('.suggestion-item');
-
-                // Remove previous selection
-                if (selectedIndex !== -1) {
-                    suggestionItems[selectedIndex].classList.remove('selected');
-                }
-
-                // Calculate new index
-                selectedIndex += direction;
-
-                // Wrap around handling
-                if (selectedIndex < 0) {
-                    selectedIndex = suggestionItems.length - 1;
-                } else if (selectedIndex >= suggestionItems.length) {
-                    selectedIndex = 0;
-                }
-
-                // Highlight new selection
-                const newSelectedItem = suggestionItems[selectedIndex];
-                newSelectedItem.classList.add('selected');
-
-                // Scroll to keep selected item in view
-                newSelectedItem.scrollIntoView({ block: 'nearest' });
             }
 
-            function selectSuggestion(index) {
-                productInput.value = suggestions[index].name;
-                suggestionsContainer.innerHTML = '';
-                selectedIndex = -1;
+            navigateSuggestions(direction) {
+                const items = this.elements.suggestionsContainer.children;
+                if (this.selectedIndex > -1) items[this.selectedIndex].classList.remove('selected');
+
+                this.selectedIndex = (this.selectedIndex + direction + items.length) % items.length;
+                items[this.selectedIndex].classList.add('selected');
+                items[this.selectedIndex].scrollIntoView({ block: 'nearest' });
             }
 
-            // Close suggestions when clicking outside
-            document.addEventListener('click', function (e) {
-                if (!productInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
-                    suggestionsContainer.innerHTML = '';
+            confirmSelection(e) {
+                if (this.selectedIndex > -1) {
+                    e.preventDefault();
+                    this.selectSuggestion(this.selectedIndex);
                 }
-            });
+            }
 
-            // Existing code for adding product remains the same
-            function addProduct() {
-                const productName = document.getElementById('products').value.trim();
-                const quantity = parseFloat(document.getElementById('quantity').value);
+            selectSuggestion(index) {
+                this.elements.productInput.value = this.suggestions[index].name;
+                this.clearSuggestions();
+            }
 
-                if (productName === '' || quantity <= 0) {
-                    alert('Please enter valid product details.');
-                    return;
+            clearSuggestions() {
+                this.elements.suggestionsContainer.innerHTML = '';
+                this.suggestions = [];
+                this.selectedIndex = -1;
+            }
+
+            handleOutsideClick(e) {
+                if (!e.target.closest('#products, #productSuggestions')) {
+                    this.clearSuggestions();
                 }
+            }
 
-                // Fetch product details from the server with case-insensitive and trimmed search
-                $.ajax({
-                    url: '/get_product_suggestions/',
-                    data: { search: productName },
-                    dataType: 'json',
-                    success: function (data) {
-                        // Find a product that matches case-insensitively and trimmed
-                        const matchedProduct = data.find(product =>
-                            product.name.trim().toLowerCase() === productName.toLowerCase()
-                        );
+            // Product management
+            async addProduct() {
+                const productName = this.elements.productInput.value.trim();
+                const quantity = parseFloat(this.elements.quantityInput.value);
 
-                        if (matchedProduct) {
-                            const tableBody = document.getElementById('productTable').querySelector('tbody');
-                            const newRow = tableBody.insertRow();
+                if (!this.validateProductInput(productName, quantity)) return;
 
-                            newRow.innerHTML = `
-                    <td>${matchedProduct.name}</td>
-                    <td>$${matchedProduct.price.toFixed(2)}</td>
-                    <td>${quantity}</td>
-                    <td>$${(quantity * matchedProduct.price).toFixed(2)}</td>
-                    <td><button type="button">Remove</button></td>
-                `;
+                try {
+                    const product = await this.findProduct(productName);
+                    this.addProductToTable(product, quantity);
+                    this.resetProductInputs();
+                } catch (error) {
+                    this.showError(error.message);
+                }
+            }
 
-                            window.total += quantity * matchedProduct.price;
-                            updateGrandTotal();
+            validateProductInput(name, quantity) {
+                if (!name || quantity <= 0) {
+                    this.showError('Please enter valid product details');
+                    return false;
+                }
+                return true;
+            }
 
-                            // Event listener for the remove button
-                            newRow.querySelector('button').addEventListener('click', function () {
-                                removeProduct(this);
-                            });
+            async findProduct(name) {
+                const data = await this.fetchProductSuggestions(name);
+                const product = data.find(p => p.name.trim().toLowerCase() === name.toLowerCase());
 
-                        } else {
-                            alert(`Product "${productName}" not found. Please check the spelling or select from suggestions.`);
-                        }
-                    },
-                    error: function (xhr) {
-                        console.error('Error fetching product details:', xhr.responseText);
-                        alert('An error occurred while fetching product details.');
-                    }
+                if (!product) throw new Error(`Product "${name}" not found`);
+                return product;
+            }
+
+            addProductToTable(product, quantity) {
+                const subtotal = quantity * product.price;
+                const row = this.createTableRow(product, quantity, subtotal);
+
+                this.elements.productTable.appendChild(row);
+                this.updateTotal(subtotal);
+                this.attachRemoveHandler(row);
+            }
+
+            createTableRow(product, quantity, subtotal) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+            <td>${product.name}</td>
+            <td>${this.formatCurrency(product.price)}</td>
+            <td>${quantity}</td>
+            <td>${this.formatCurrency(subtotal)}</td>
+            <td><button type="button">Remove</button></td>
+        `;
+                return row;
+            }
+
+            attachRemoveHandler(row) {
+                row.querySelector('button').addEventListener('click', () => {
+                    this.removeProduct(row);
                 });
             }
-            function removeProduct(button) {
-                const row = button.closest('tr');
-                const price = parseFloat(row.cells[3].textContent.replace('$', ''));
 
-                window.total -= price;
+            removeProduct(row) {
+                const subtotal = parseFloat(row.cells[3].textContent.replace(/[^0-9.-]+/g, ""));
+                this.updateTotal(-subtotal);
                 row.remove();
-                updateGrandTotal();
             }
 
-            function updateGrandTotal() {
-                document.getElementById('grandTotal').textContent = `Grand Total: $${window.total.toFixed(2)}`;
+            updateTotal(amount) {
+                this.total += amount;
+                this.elements.grandTotal.textContent = `Grand Total: ${this.formatCurrency(this.total)}`;
             }
 
-            window.generateBill = function (event) {
-                event.preventDefault();
+            formatCurrency(amount) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(amount);
+            }
 
-                const productTable = document.getElementById('productTable');
-                const products = [];
+            resetProductInputs() {
+                this.elements.productInput.value = '';
+                this.elements.quantityInput.value = '';
+            }
 
-                const rows = productTable.querySelectorAll('tbody tr');
-                rows.forEach(row => {
-                    const product = {
-                        name: row.cells[0].textContent.trim(),
-                        price: parseFloat(row.cells[1].textContent.replace('$', '').trim()),
-                        quantity: parseFloat(row.cells[2].textContent.trim()),
-                        subtotal: parseFloat(row.cells[3].textContent.replace('$', '').trim()),
-                    };
-                    products.push(product);
-                });
+            // Form handling
+            async handleSubmit(e) {
+                e.preventDefault();
 
-                if (products.length === 0) {
-                    alert('Please add at least one product to generate the bill.');
-                    return;
+                if (!this.validateForm()) return;
+
+                try {
+                    const formData = this.prepareFormData();
+                    const response = await this.submitForm(formData);
+
+                    if (response.success) {
+                        this.handleSuccess(response);
+                    } else {
+                        this.showError(response.error);
+                    }
+                } catch (error) {
+                    this.showError('Failed to submit form');
                 }
+            }
 
-                const formData = new FormData(document.getElementById('billingForm'));
+            validateForm() {
+                if (this.total <= 0) {
+                    this.showError('Please add at least one product');
+                    return false;
+                }
+                return true;
+            }
+
+            prepareFormData() {
+                const formData = new FormData(this.elements.billingForm);
+                const products = this.getProductData();
+
                 formData.append('products', JSON.stringify(products));
-                formData.append('grand_total', window.total);
+                formData.append('grand_total', this.total);
+                return formData;
+            }
 
-                $.ajax({
+            getProductData() {
+                return Array.from(this.elements.productTable.rows).map(row => ({
+                    name: row.cells[0].textContent.trim(),
+                    price: parseFloat(row.cells[1].textContent.replace(/[^0-9.-]+/g, "")),
+                    quantity: parseFloat(row.cells[2].textContent),
+                    subtotal: parseFloat(row.cells[3].textContent.replace(/[^0-9.-]+/g, ""))
+                }));
+            }
+
+            async submitForm(formData) {
+                return $.ajax({
                     url: '/generate_bill/',
                     type: 'POST',
-                    headers: {
-                        'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
-                    },
+                    headers: { 'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val() },
                     data: formData,
                     processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        if (data.success) {
-                            alert(data.message);
-                        } else {
-                            alert("Error: " + data.error);
-                        }
-                    },
-                    error: function (xhr) {
-                        alert("An error occurred: " + xhr.responseText);
-                    }
+                    contentType: false
                 });
-            };
+            }
 
-            document.getElementById('billingForm').addEventListener('submit', function (event) {
-                event.preventDefault();
-                generateBill(event);
-            });
+            // Customer lookup
+            async handleCustomerLookup() {
+                const email = this.elements.customerEmail.value;
+                if (!this.validateEmail(email)) return;
 
-            // Existing customer email autofill code remains the same
-            $('#customer_email').on('blur', function () {
-                var email = $(this).val();
-                $.ajax({
-                    url: '/get_customer_details/',
-                    data: { email: email },
-                    dataType: 'json',
-                    success: function (response) {
-                        if (response.success) {
-                            $('#customer_name').val(response.customer_name);
-                            $('#phoneNumber').val(response.phone_no);
-                            $('#address').val(response.address);
-                        }
-                    }
-                });
-            });
-        });
-
-        function sendBillByEmail(customerEmail, billContent) {
-            console.log("Sending email with the following data:");
-            console.log({ customer_email: customerEmail, bill_content: billContent });
-
-            $.ajax({
-                url: '/send_bill_email/',
-                type: 'POST',
-                data: {
-                    customer_email: customerEmail,
-                    bill_content: billContent,
-                    csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
-                },
-                success: function (response) {
-                    console.log("Server Response:", response);
-                    if (response.success) {
-                        alert('Bill sent successfully!');
-                    } else {
-                        alert('Error sending the bill: ' + response.error);
-                    }
-                },
-                error: function (xhr) {
-                    console.error('AJAX Error:', xhr.responseText);
-                    alert('An error occurred: ' + xhr.responseText);
+                try {
+                    const response = await this.fetchCustomerDetails(email);
+                    if (response.success) this.populateCustomerFields(response);
+                } catch (error) {
+                    this.showError('Failed to fetch customer details');
                 }
-            });
+            }
+
+            validateEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+
+            async fetchCustomerDetails(email) {
+                return $.ajax({
+                    url: '/get_customer_details/',
+                    data: { email },
+                    dataType: 'json'
+                });
+            }
+
+            populateCustomerFields(response) {
+                $('#customer_name').val(response.customer_name);
+                $('#phoneNumber').val(response.phone_no);
+                $('#address').val(response.address);
+            }
+
+            // Utilities
+            showError(message) {
+                alert(`Error: ${message}`);
+            }
+
+            handleSuccess(response) {
+                alert(response.message);
+                // Optionally reset form
+                this.elements.billingForm.reset();
+                this.elements.productTable.innerHTML = '';
+                this.total = 0;
+                this.updateTotal(0);
+            }
         }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', () => new BillingApp());
     </script>
 </body>
 

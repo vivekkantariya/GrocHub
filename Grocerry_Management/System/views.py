@@ -25,6 +25,16 @@ from django.http import HttpResponse
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+def home(request):
+    # Fetch today's transactions
+    transactions = Transaction.objects.filter(timestamp__date=timezone.now().date())
+    
+    # Pass transactions to the template
+    context = {
+        'transactions': transactions,
+    }
+    return render(request, 'home.html', context)
+
 def homeView(request, undefined_path=None):
     print(f"Unexpected request with undefined_path: {undefined_path}")
     return render(request, 'home.html')

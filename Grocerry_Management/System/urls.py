@@ -3,13 +3,14 @@ from .views import (
     homeView, product_list, customer_list, loginView, 
     addproductView, addcustomerView, add_customerView, add_productView,
     transactionView, AnalysisView, bill_view, get_product_suggestions, generate_bill,
-    get_monthly_income, get_real_time_customers, remove_product , remove_customer, get_daily_customer_buying
+    get_monthly_income, home, get_real_time_customers, remove_product , remove_customer, get_daily_customer_buying
 )
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
+    path('', home, name='home'),
     path('', homeView, name='home'),
     path('loginpage/', loginView, name='loginpage'),
     path('products.html', product_list, name='product_list'), 
