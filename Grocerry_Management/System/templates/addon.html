@@ -9,12 +9,12 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #2B59C3;
-            --secondary: #253C78;
-            --accent: #D36582;
-            --background: #f8f9fa;
-            --text-dark: #2d3748;
-            --text-light: #718096;
+            --primary-color: #2A9D8F;
+            --secondary-color: #264653;
+            --accent-color: #E9C46A;
+            --text-light: #F8F9FA;
+            --background-light: #FFFFFF;
+            --success-color: #4CAF50;
         }
 
         * {
@@ -25,13 +25,13 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--background);
-            color: var(--text-dark);
+            background-color: var(--background-light);
+            color: var(--secondary-color);
             line-height: 1.6;
         }
 
         nav {
-            background-color: var(--primary);
+            background-color: var(--primary-color);
             padding: 0 2rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
@@ -62,7 +62,7 @@
         }
 
         .nav-links a {
-            color: black;
+            color: var(--text-light);
             text-decoration: none;
             font-weight: 500;
             padding: 0.5rem 1rem;
@@ -71,7 +71,7 @@
         }
 
         .nav-links a:hover {
-            background: rgba(5, 5, 5, 0.15);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .container {
@@ -86,14 +86,14 @@
             align-items: center;
             margin-bottom: 3rem;
             padding: 2rem;
-            background: white;
+            background: var(--background-light);
             border-radius: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .profile-header h1 {
             font-size: 2rem;
-            color: var(--secondary);
+            color: var(--secondary-color);
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -117,12 +117,12 @@
         }
 
         .btn-primary {
-            background: var(--primary);
-            color: white;
+            background: var(--primary-color);
+            color: var(--text-light);
         }
 
         .btn-primary:hover {
-            background: #1e429f;
+            background: #1e7a6e;
             transform: translateY(-1px);
         }
 
@@ -133,7 +133,7 @@
         }
 
         .profile-sidebar {
-            background: white;
+            background: var(--background-light);
             padding: 2rem;
             border-radius: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -152,7 +152,7 @@
             height: 300px;
             border-radius: 1rem;
             object-fit: cover;
-            border: 3px solid var(--primary);
+            border: 3px solid var(--primary-color);
             background: #e2e8f0;
             padding: 0.5rem;
         }
@@ -172,7 +172,7 @@
         }
 
         .profile-details {
-            background: white;
+            background: var(--background-light);
             padding: 2rem;
             border-radius: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -188,12 +188,12 @@
             padding: 1.5rem;
             background: #f8fafc;
             border-radius: 0.75rem;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--primary-color);
         }
 
         .detail-card label {
             display: block;
-            color: var(--text-light);
+            color: var(--secondary-color);
             font-size: 0.875rem;
             margin-bottom: 0.5rem;
         }
@@ -201,7 +201,7 @@
         .detail-card span {
             font-size: 1.125rem;
             font-weight: 600;
-            color: var(--text-dark);
+            color: var(--secondary-color);
         }
 
         .purchase-history {
@@ -210,15 +210,15 @@
 
         .purchase-history h2 {
             font-size: 1.5rem;
-            color: var(--secondary);
+            color: var(--secondary-color);
             margin-bottom: 2rem;
             padding-bottom: 1rem;
-            border-bottom: 3px solid var(--primary);
+            border-bottom: 3px solid var(--primary-color);
             display: inline-block;
         }
 
         .invoice-card {
-            background: white;
+            background: var(--background-light);
             border-radius: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             margin-bottom: 1.5rem;
@@ -236,16 +236,16 @@
 
         .invoice-id {
             font-weight: 600;
-            color: var(--primary);
+            color: var(--primary-color);
         }
 
         .invoice-date {
-            color: var(--text-light);
+            color: var(--secondary-color);
         }
 
         .invoice-total {
             font-weight: 700;
-            color: var(--secondary);
+            color: var(--secondary-color);
         }
 
         .invoice-table {
@@ -262,7 +262,7 @@
 
         .invoice-table th {
             background: #f8fafc;
-            color: var(--text-light);
+            color: var(--secondary-color);
             font-weight: 500;
         }
 
@@ -320,12 +320,12 @@
         }
 
         .print-btn {
-            background: var(--accent);
-            color: white;
+            background: var(--accent-color);
+            color: var(--secondary-color);
         }
 
         .print-btn:hover {
-            background: #b5506a;
+            background: #d4a83d;
         }
 
         .animate-fade-in {
