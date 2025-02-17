@@ -6,469 +6,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="https://fonts.googleapis.com/css?family=Days One" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Jost" rel="stylesheet" type="text/css">
-
-
-
     <title>Add Product</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
+        /* Inherit theme variables from home.html */
+        :root {
+            --primary-color: #2A9D8F;
+            --secondary-color: #264653;
+            --accent-color: #E9C46A;
+            --text-light: #F8F9FA;
+            --background-light: #FFFFFF;
+            --success-color: #4CAF50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #02261a;
+            background: #f5f5f5;
+            color: var(--secondary-color);
         }
 
-        .container {
-            margin: 40px;
-            background-color: #7eaf964c;
-            height: 400px;
-            padding: 20px;
-            border-radius: 20px;
-            margin-top: 130px;
-        }
-
-
-
-        nav {
-            background-color: #9eb19b;
-            color: rgb(0, 0, 0);
-            padding: 0px;
+        /* Navigation - Match home.html exactly */
+        .navbar {
+            background: var(--primary-color);
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: absolute;
-            top: 0;
-            z-index: 500;
-            width: 100%;
-            height: 65px;
-            margin-left: -8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        nav a {
-            margin: 8px 18px;
-            font-family: 'Jost', sans-serif;
+        .logo img {
+            height: 45px;
         }
 
-        /* logo in the nav bar */
-        .logo-container img {
-            width: 55%;
-            height: auto;
-            max-width: 450px;
-            display: block;
-            margin: 0 auto;
-        }
-
-        /* Optional: Adjust the margin-left for larger screens if needed */
-        @media (min-width: 768px) {
-            .logo-container img {
-                margin-left: 20px;
-            }
-        }
-
-
-        .logo-container span {
-            margin-left: 10px;
-            font-weight: bold;
-        }
-
-        .menu-container {
+        .nav-links {
             display: flex;
-            transition: 0.5s;
+            gap: 2rem;
+            align-items: center;
         }
 
-        .menu-container a {
-            color: rgb(0, 0, 0);
+        .nav-links a {
+            color: var(--text-light);
             text-decoration: none;
-            padding: 0 15px;
-            font-weight: lighter;
-            font-size: 22px;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .menu-container a:hover {
-            color: #02261a;
-            text-decoration: none;
-            /* padding: 0 15px; */
-            font-weight: bolder;
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.15);
         }
 
-
-        /* Hamburger menu styles */
-        .hamburger-menu {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            transition: 0.5s;
+        /* Main container styling */
+        .container {
+            background: var(--background-light);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 2rem auto;
+            max-width: 1400px;
         }
 
-        .bar {
-            height: 3px;
-            width: 25px;
-            background-color: rgb(0, 0, 0);
-            margin: 5px 0;
+        h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 600;
         }
 
-        /* Styles for the cross icon when the menu is open */
-        .hamburger-menu.change .bar1 {
-            transform: rotate(-45deg) translate(-5px, 6px);
-            width: 40px;
-            transition: 0.5s;
-        }
-
-        .hamburger-menu.change .bar2 {
-            transform: rotate(45deg) translate(-3px, -6px);
-            width: 40px;
-            transition: 0.5s;
-        }
-
-        .hamburger-menu.change .bar3 {
-            margin-right: 9px;
-            opacity: 0;
-        }
-
-
-        /* dropdown */
-
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-toggle {
-            color: rgb(0, 0, 0);
-            text-decoration: none;
-            padding: 0 15px;
-            font-weight: lighter;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: #ffffff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 10px 15px;
-            color: rgb(0, 0, 0);
-            text-decoration: none;
-            font-weight: lighter;
-            font-size: 20px;
-        }
-
-        /* Show the dropdown menu on hover */
-        .dropdown:hover .dropdown-menu {
-            display: block;
-        }
-
-
-        .product-directory {
-            display: none;
-            /* Initially hide the product directory */
-            background-color: #ffffff;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
-        .product-directory a {
-            display: block;
-            padding: 15px;
-            color: rgb(0, 0, 0);
-            text-decoration: none;
-            font-size: 18px;
-        }
-
-
-
-        /* Media query for responsiveness */
-        @media only screen and (max-width: 768px) {
-            .menu-container {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 95%;
-                left: 0;
-                width: 100%;
-                background-color: #ffffff;
-                background-color: #bacfb7f5;
-                text-align: center;
-                overflow: scroll;
-                margin-top: 0px;
-                height: 1000%;
-                z-index: 1;
-                transition: height 0.3s ease-in-out;
-                margin-right: 20px;
-                align-items: center;
-            }
-
-            .menu-container a {
-                padding: 15px 0;
-                width: 100%;
-                display: block;
-            }
-
-            .hamburger-menu {
-                display: flex;
-                margin-right: 20px;
-            }
-
-            nav span {
-                color: white;
-                font-size: 150%;
-            }
-
-            .menu-container.show-menu a {
-                opacity: 1;
-            }
-
-            /* showing products */
-
-
-            .product-directory {
-                display: block;
-                background-color: transparent;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                z-index: 1000;
-                border: none;
-            }
-
-            .product-directory a {
-                display: block;
-                padding: 15px;
-                color: rgb(0, 0, 0);
-                text-decoration: none;
-                font-size: 15px;
-                text-align: start;
-                padding-left: 10%;
-            }
-
-            /* adding right arrow in a tag at the start of content */
-            .product-directory a::after {
-                content: "\f054";
-                font-family: "Font Awesome 5 Free";
-                font-weight: 100;
-                padding-left: 10px;
-                align-self: center;
-
-                /* centering from its parent in vertically */
-                align-items: center;
-                justify-content: center;
-                font-size: 20px;
-            }
-
-        }
-
-
+        /* Form elements styling */
         form {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
         }
 
         .pair {
-            width: 50%;
+            display: contents; /* Use grid layout */
         }
-
-
-
-        h2 {
-            font-size: 32px;
-            color: white;
-            font-family: 'Raleway', sans-serif;
-            background: #00271abe;
-            padding: 10px 16px;
-            border-radius: 10px;
-        }
-
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 22px;
-            color: white;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--secondary-color);
         }
 
         input,
-        textarea {
-            width: 90%;
-            padding: 6px 15px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #ffffff26;
-            font-size: 20px;
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--background-light);
         }
 
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(42, 157, 143, 0.2);
+        }
 
+        /* Button styling */
         button {
-            margin-top: 10px;
-            width: 200px;
-            height: 45px;
-            background-color: #80bc94;
-            display: block;
-            color: black;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 9px 15px;
+            background: var(--primary-color);
+            color: white;
             border: none;
-            border-radius: 4px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s ease-in-out;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            grid-column: span 2;
+            justify-self: end;
+            width: auto;
         }
-
 
         button:hover {
-            background-color: #9eb19b;
-
+            background: #238276;
+            transform: translateY(-1px);
         }
 
-        .btn {
-            width: 100%;
+        /* Custom measurement input */
+        #custom_measurement,
+        #customMeasurementLabel {
+            display: none;
         }
 
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
 
-        @media screen and (max-width: 750px) {
-
-
-            .pair {
-                width: 500px;
+            .hamburger-menu {
+                display: block;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
             }
 
             .container {
-                margin: 5px;
-                margin-top: 100px;
+                margin: 1rem;
+                padding: 1rem;
             }
 
-
-            input,
-            textarea {
-                width: 100%;
-            }
-
-        }
-
-        @media screen and (max-width: 450px) {
-
-
-            h2 {
-                font-size: 26px;
-            }
-
-            .container {
-                /* margin: 5px;
-                padding: 14px;
-                margin-top: 50px; */
-                height: 500px;
-
-            }
-
-            input,
-            textarea {
-                width: 100%;
-                padding: 5px 10px;
-                font-size: 14px;
+            form {
+                grid-template-columns: 1fr;
             }
 
             button {
-                width: 150px;
-                height: 35px;
-                font-size: 16px;
+                grid-column: span 1;
+                width: 100%;
             }
-
-        }
-
-        @media screen and (max-width: 400px) {
-
-
-            h2 {
-                /* font-size: 26px; */
-            }
-
-            .container {
-                margin-top: 100px;
-            }
-        }
-
-        @media screen and (max-width: 350px) {
-
-
-            h2 {
-                /* font-size: 26px; */
-            }
-
-            .container {
-                margin-top: 100px;
-                /* margin: 5px; */
-                /* padding: 10px;  */
-            }
-
-            input,
-            textarea {
-                /* width: 100%;
-    padding: 5px 10px;
-    font-size: 14px; */
-            }
-
-            button {
-                /* width: 150px;
-    height: 35px;
-    font-size: 16px; */
-            }
-
         }
     </style>
-
-    <script>
-        const menuToggle = document.querySelector(".menu-toggle");
-        const navUl = document.querySelector("ul");
-        // navbar script
-        document.addEventListener('DOMContentLoaded', function () {
-            const hamburgerMenu = document.querySelector(".hamburger-menu");
-            const menuContainer = document.querySelector(".menu-container");
-
-            hamburgerMenu.addEventListener("click", () => {
-                menuContainer.style.transition = "all 0.5s ease-in-out";
-                menuContainer.style.display = (menuContainer.style.display === "none" || menuContainer.style.display === "") ? "flex" : "none";
-                hamburgerMenu.classList.toggle("change");
-            });
-
-        });
-
-    </script>
-
-
 </head>
 
 <body>
-    <nav>
-        <div class="logo-container">
+    <!-- Updated navbar to match home.html -->
+    <nav class="navbar">
+        <div class="logo">
             <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png"
-                alt="Purohit Trading">
+                alt="Grochub">
         </div>
-        <div class="menu-container">
-            <a href="{% url 'home' %}" onclick="showHome()">Home</a>
-            <a href="{% url 'product_list' %}" onclick="showManageProduct()">Manage Products</a>
-            <a href="{% url 'customer_list' %}" onclick="showCustomerPage()">Manage Customer</a>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="billing.html"><i class="fas fa-receipt"></i> Billing</a>
+            <a href="{% url 'product_list' %}"><i class="fas fa-cube"></i> Products</a>
+            <a href="{% url 'customer_list' %}"><i class="fas fa-users"></i> Customers</a>
+            <a href="transaction.html"><i class="fas fa-chart-line"></i> Analytics</a>
         </div>
-        <div class="hamburger-menu" onclick="toggleMenu()">
-            <div class="bar bar1"></div>
-            <div class="bar bar2"></div>
-            <div class="bar bar3"></div>
-        </div>
+        <i class="fas fa-bars hamburger-menu"></i>
     </nav>
 
     <div class="container">
@@ -481,11 +207,10 @@
 
                 <label for="price">Price:</label>
                 <input type="number" id="price" name="price" step="0.01" required>
-            </div>
 
-            <div class="pair">
                 <label for="description">Description:</label>
-                <textarea id="description" name="description" rows="4" cols="50"></textarea>
+                <textarea id="description" name="description" rows="4"></textarea>
+
                 <label for="measurement">Measurement:</label>
                 <select id="measurement" name="measurement_unit">
                     <option value="250g">250 Gram</option>
@@ -494,21 +219,22 @@
                     <option value="5kg">5 KG</option>
                     <option value="custom">Custom</option>
                 </select>
+
+                <label for="custom_measurement" id="customMeasurementLabel">Custom Measurement:</label>
+                <input type="text" id="custom_measurement" name="custom_measurement">
             </div>
 
-            <div class="pair">
-                <label for="custom_measurement" id="customMeasurementLabel" style="display: none;">Custom
-                    Measurement:</label>
-                <input type="text" id="custom_measurement" name="custom_measurement" style="display: none;">
-            </div>
-
-            <div class="btn">
-                <button type="submit">Add Product</button>
-            </div>
+            <button type="submit">Add Product</button>
         </form>
     </div>
 
     <script>
+        // Mobile menu toggle from home.html
+        document.querySelector('.hamburger-menu').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        // Custom measurement toggle
         const measurementSelect = document.getElementById('measurement');
         const customMeasurementInput = document.getElementById('custom_measurement');
         const customMeasurementLabel = document.getElementById('customMeasurementLabel');

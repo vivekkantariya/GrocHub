@@ -26,6 +26,10 @@
             --focus-glow: 0 0 0 3px rgba(42, 157, 143, 0.2);
             --table-header-bg: #2D9387;
         }
+
+        .action-buttons{
+            text-align: right;
+        }
     
         /* Shared Component Styles */
         .card {
@@ -215,6 +219,7 @@
         
         .secondary {
             background: var(--button-gradient);
+            margin-bottom: 25px;
             color: white;
             border: none;
             padding: 0.8rem 1.5rem;
@@ -425,11 +430,11 @@
                 <div class="total-display">
                     Grand Total: <span id="grandTotal">$0.00</span>
                 </div>
-            </div>
-
-            <div class="action-buttons">
-                <button type="reset" class="secondary">Clear Form</button>
-                <button type="submit">Generate Invoice</button>
+                
+                <div class="action-buttons">
+                    <button type="reset" class="secondary">Clear Form</button>
+                    <button type="submit">Generate Invoice</button>
+                </div>
             </div>
         </form>
     </div>
