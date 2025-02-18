@@ -8,13 +8,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
+         :root {
             --primary-color: #2A9D8F;
             --secondary-color: #264653;
             --accent-color: #E9C46A;
             --text-light: #F8F9FA;
             --background-light: #FFFFFF;
             --success-color: #4CAF50;
+            --gradient-primary: linear-gradient(135deg, #2A9D8F 0%, #264653 100%);
         }
 
         * {
@@ -30,50 +31,55 @@
             line-height: 1.6;
         }
 
-        nav {
-            background-color: var(--primary-color);
-            padding: 0 2rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 70px;
+       /* Navigation - Match home.html exactly */
+       .navbar {
+            background: var(--gradient-primary);
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .logo img {
-            height: 50px;
-            width: auto;
-            transition: transform 0.3s ease;
-        }
-
-        .logo img:hover {
-            transform: scale(1.05);
+            height: 45px;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
             align-items: center;
         }
 
         .nav-links a {
             color: var(--text-light);
             text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .nav-links a:hover {
             background: rgba(255, 255, 255, 0.15);
         }
 
+        .hamburger-menu {
+            display: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
         .container {
             max-width: 1200px;
             margin: 100px auto 3rem;
@@ -347,20 +353,20 @@
 </head>
 
 <body>
-    <nav>
-        <div class="nav-content">
-            <div class="logo">
-                <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png"
-                    alt="Purohit Trading">
-            </div>
-            <div class="nav-links">
-                <a href="{% url 'home' %}"><i class="fas fa-home"></i> Dashboard</a>
-                <a href="billing.html">BillForm</a>
-                <a href="{% url 'product_list' %}"><i class="fas fa-cube"></i> Products</a>
-                <a href="{% url 'customer_list' %}"><i class="fas fa-users"></i> Customers</a>
-                <a href="transaction.html">Today's Transaction</a>
-            </div>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="https://i.ibb.co/bRnDCR8/Screenshot-2024-01-15-151540-transformed-removebg-preview-transformed.png"
+                alt="Grochub">
         </div>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="billing.html"><i class="fas fa-receipt"></i> Billing</a>
+            <a href="{% url 'product_list' %}"><i class="fas fa-cube"></i> Products</a>
+            <a href="{% url 'customer_list' %}"><i class="fas fa-users"></i> Customers</a>
+            <a href="transaction.html"><i class="fas fa-chart-line"></i> Analytics</a>
+        </div>
+        <i class="fas fa-bars hamburger-menu"></i>
     </nav>
 
     <div class="container animate-fade-in">
