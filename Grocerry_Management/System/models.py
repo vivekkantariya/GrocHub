@@ -1,4 +1,8 @@
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
 
 class Customer(models.Model):
     REGULAR = 'R'
@@ -73,3 +77,41 @@ class Transaction(models.Model):
     # models.py (add to Transaction model)
     def get_total(self):
         return self.quantity * self.product.price
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db import models
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("Email is required")
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_admin", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        return self.create_user(email, password, **extra_fields)
+
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)
+
+    # Required fields for Django's authentication system
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []  # No extra fields required
+
+    def __str__(self):
+        return self.email
+
+    @property
+    def is_staff(self):
+        return self.is_admin

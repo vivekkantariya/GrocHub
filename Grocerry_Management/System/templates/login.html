@@ -1,57 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Sign Up</title>
+    <title>Login</title>
     <style>
+        :root {
+            --primary-color: #2A9D8F;
+            --secondary-color: #264653;
+            --accent-color: #E9C46A;
+            --text-light: #F8F9FA;
+            --background-light: #FFFFFF;
+            --success-color: #4CAF50;
+            --gradient-primary: linear-gradient(135deg, #2A9D8F 0%, #264653 100%);
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #757575, #eeeeee);
+            background: var(--text-light);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            color: #444;
+            color: var(--text-light);
         }
+
         .container {
-            background: #ffffff;
+            background: var(--background-light);
             padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
             width: 100%;
             max-width: 400px;
             text-align: center;
         }
+
         h2 {
-            margin-bottom: 20px;
-            color: #333;
+            color: var(--secondary-color);
             font-size: 24px;
-            font-weight: 600;
+            font-weight: bold;
         }
+
         label {
             display: block;
             margin-bottom: 8px;
             font-size: 14px;
-            font-weight: 600;
-            color: #666;
+            font-weight: bold;
+            color: var(--secondary-color);
             text-align: left;
         }
+
         input {
             width: 100%;
-            padding: 12px 14px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--secondary-color);
             border-radius: 8px;
             font-size: 14px;
+            color: var(--secondary-color);
+            background: #F1F1F1;
         }
+
         button {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #546e7a, #343434);
-            color: #fff;
+            background: var(--gradient-primary);
+            color: var(--text-light);
             border: none;
             border-radius: 8px;
             font-size: 16px;
@@ -59,53 +76,76 @@
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
+
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
         }
+
         .toggle-link {
             margin-top: 15px;
             font-size: 14px;
-            color: #6e8efb;
+            color: var(--primary-color);
             cursor: pointer;
             display: block;
         }
+
         .toggle-link:hover {
             text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <form id="login-form">
-            <h2>Welcome Back</h2>
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username" placeholder="Enter your username" required>
+        <form id="login-form" method="POST" action="{% url 'loginpage' %}">
+            {% csrf_token %}
+            <h2>Login</h2>
+            <label for="username_or_email">Username or Email</label>
+            <input type="text" name="username_or_email" id="username_or_email"
+                placeholder="Enter your username or email" required>
             <label for="password">Password</label>
             <input type="password" name="password" id="password" placeholder="Enter your password" required>
             <button type="submit">Login</button>
-            <span class="toggle-link" onclick="toggleForm('signup-form')">Don't have an account? Sign up</span>
-        </form>
-
-        <form id="signup-form" style="display: none;">
-            <h2>Create an Account</h2>
-            <label for="new-username">Username</label>
-            <input type="text" name="new-username" id="new-username" placeholder="Choose a username" required>
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" placeholder="Enter your email" required>
-            <label for="new-password">Password</label>
-            <input type="password" name="new-password" id="new-password" placeholder="Create a password" required>
-            <button type="submit">Sign Up</button>
-            <span class="toggle-link" onclick="toggleForm('login-form')">Already have an account? Login</span>
         </form>
     </div>
 
     <script>
-        function toggleForm(formId) {
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('signup-form').style.display = 'none';
-            document.getElementById(formId).style.display = 'block';
-        }
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("Page loaded");
+
+            const form = document.getElementById("login-form");
+
+            form.addEventListener("submit", function (event) {
+                // event.preventDefault();  // Comment this out for actual submission
+                console.log("Form submission triggered");
+
+                let usernameOrEmail = document.getElementById("username_or_email").value.trim();
+                let password = document.getElementById("password").value.trim();
+
+                console.log("Username or Email:", usernameOrEmail);
+                console.log("Password:", password ? "Entered" : "Not Entered");
+
+                if (!usernameOrEmail) {
+                    console.warn("Username or email field is empty!");
+                    alert("Please enter your username or email.");
+                    return;
+                }
+
+                if (!password) {
+                    console.warn("Password field is empty!");
+                    alert("Please enter your password.");
+                    return;
+                }
+
+                // Simulate form submission for debugging
+                console.log("Form submitted successfully!");
+
+                // Uncomment this line for actual form submission
+                form.submit();
+            });
+        });
     </script>
 </body>
+
 </html>

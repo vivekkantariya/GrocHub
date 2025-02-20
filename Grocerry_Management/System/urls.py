@@ -1,18 +1,17 @@
 from django.urls import path
 from .views import (
-    homeView, product_list, customer_list, loginView, 
+    product_list, customer_list,  
     addproductView, addcustomerView, add_customerView, add_productView,
     transactionView, AnalysisView, bill_view, get_product_suggestions, generate_bill,
-    get_monthly_income, home, get_real_time_customers, remove_product , remove_customer, get_daily_customer_buying
+    get_monthly_income, home,login_view, get_real_time_customers, remove_product , remove_customer, get_daily_customer_buying
 )
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    path('', home, name='home'),
-    path('', homeView, name='home'),
-    path('loginpage/', loginView, name='loginpage'),
+    path("", login_view, name="loginpage"),
+    path("home/", home, name="home"),
     path('products.html', product_list, name='product_list'), 
     path('remove_product/<int:product_id>/', views.remove_product, name='remove_product'),
     path('remove_customer/<str:email>/', views.remove_customer, name='remove_customer'),
@@ -35,7 +34,7 @@ urlpatterns = [
     path('customers/<int:customer_id>/', views.customer_detail, name='customer_detail'),
     path('customers/<int:customer_id>/', views.customer_detail, name='customer_detail'),
     # path('stock/', views.stock_view, name='stock'),  # Stock page
-    path('<path:undefined_path>/', views.homeView, name='home'),
+    # path('<path:undefined_path>/', views.homeView, name='home'),
 
 ]
 

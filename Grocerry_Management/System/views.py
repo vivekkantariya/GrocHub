@@ -24,7 +24,16 @@ from xhtml2pdf import pisa  # Make sure this is installed
 from django.http import HttpResponse
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from .models import CustomUser
 
+@login_required
 def home(request):
     # Fetch today's transactions
     transactions = Transaction.objects.filter(timestamp__date=timezone.now().date())
@@ -34,12 +43,38 @@ def home(request):
         'transactions': transactions,
     }
     return render(request, 'home.html', context)
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
 
-def homeView(request, undefined_path=None):
-    print(f"Unexpected request with undefined_path: {undefined_path}")
-    return render(request, 'home.html')
+User = get_user_model()
 
-def loginView(request):
+def login_view(request):
+    if request.method == "POST":
+        email_or_username = request.POST.get("username_or_email")
+        password = request.POST.get("password")
+
+        print(f"Trying to authenticate with: {email_or_username}")
+
+        user = None
+
+        # First, check if the input is an email or a username
+        if User.objects.filter(email=email_or_username).exists():
+            try:
+                user = User.objects.get(email=email_or_username)
+                user = authenticate(request, email=user.email, password=password)  # Authenticate using email
+            except User.DoesNotExist:
+                pass
+        else:
+            user = authenticate(request, username=email_or_username, password=password)  # Authenticate using username
+
+        if user is not None:
+            login(request, user)
+            return redirect("home")
+        else:
+            print("Authentication failed")
+            return render(request, "login.html", {"error": "Invalid credentials"})
+
     return render(request, "login.html")
 
 def product_list(request):

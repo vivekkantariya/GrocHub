@@ -26,6 +26,9 @@ SECRET_KEY = 'django-insecure-&jocc*f(2kb2zmn-c!=pg7ua*(-om&rox@r=jca@&4n7^w14x1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+AUTH_USER_MODEL = "System.CustomUser"  # Change based on your app name
+
+
 ALLOWED_HOSTS = ["*"]
 
 MEDIA_URL = '/media/'
@@ -80,6 +83,11 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

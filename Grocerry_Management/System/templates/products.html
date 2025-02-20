@@ -291,6 +291,18 @@
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
+                flex-direction: column;
+                background: var(--gradient-primary);
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 1rem;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
             }
 
             .hamburger-menu {
@@ -533,6 +545,10 @@
             document.getElementById('searchInput').value = '';
             filterTable();
         }
+
+        document.querySelector('.hamburger-menu').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
     </script>
 </body>
 

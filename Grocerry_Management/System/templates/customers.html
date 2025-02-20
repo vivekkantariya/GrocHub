@@ -298,6 +298,18 @@
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
+                flex-direction: column;
+                background: var(--gradient-primary);
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 1rem;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
             }
 
             .hamburger-menu {
@@ -357,13 +369,14 @@
 
         <div class="nav-links">
             <a href="{% url 'home' %}"><i class="fas fa-home"></i> Dashboard</a>
-            <a href="billing.html"><i class="fas fa-receipt"></i> Billing</a>
+            <a href="{% url 'billing' %}"><i class="fas fa-receipt"></i> Billing</a>
             <a href="{% url 'product_list' %}"><i class="fas fa-cube"></i> Products</a>
             <a href="{% url 'customer_list' %}"><i class="fas fa-users"></i> Customers</a>
-            <a href="transaction.html"><i class="fas fa-chart-line"></i> Analytics</a>
+            <a href="{% url 'transactions' %}"><i class="fas fa-chart-line"></i> Analytics</a>
         </div>
         <i class="fas fa-bars hamburger-menu"></i>
     </nav>
+
 
     <!-- Header -->
     <header>
@@ -563,6 +576,11 @@
             return cookieValue ? cookieValue.pop() : '';
         }
 
+
+        document.querySelector('.hamburger-menu').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
         // Function to toggle the menu on mobile
         function toggleMenu() {
             const menuContainer = document.querySelector(".menu-container");
@@ -615,6 +633,15 @@
                     console.error(`Error removing Customer: ${error}`);
                 });
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const hamburgerMenu = document.getElementById('hamburgerMenu');
+            const navLinks = document.getElementById('navLinks');
+
+            hamburgerMenu.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        });
 
     </script>
 
