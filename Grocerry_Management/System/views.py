@@ -77,18 +77,22 @@ def login_view(request):
 
     return render(request, "login.html")
 
+@login_required
 def product_list(request):
     products = Product.objects.all()
     print(products)  # Debug statement
     return render(request, 'products.html', {'product': products})
 
+@login_required
 def customer_list(request):
     customers = Customer.objects.all()
     return render(request, 'customers.html', {'customer': customers})
 
+@login_required
 def addproductView(request):
     return render(request, 'addproduct.html')
 
+@login_required
 def addcustomerView(request):
     return render(request, 'addcustomer.html')
 
@@ -135,6 +139,7 @@ def add_productView(request):
         return redirect('product_list')  # Redirect to the product list page
     return render(request, 'addproduct.html')
 
+@login_required
 def transactionView(request):
     start_time = timezone.now() - timedelta(days=1)
 
@@ -160,9 +165,11 @@ def transactionView(request):
 
     return render(request, 'transaction.html', {'transactions': transaction_data})
 
+@login_required
 def AnalysisView(request):
     return render(request, 'analysis.html')
 
+@login_required
 def bill_view(request):
     return render(request, 'billing.html')
 
