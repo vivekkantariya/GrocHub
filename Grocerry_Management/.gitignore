@@ -1,0 +1,25 @@
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Ignore environment variable file
+.env
+
+# Ignore virtual environment folder (adjust if yours has a different name)
+venv/
+env/
+
+# Ignore IDE/editor settings
+.vscode/
+.idea/
+
+# Ignore compiled files
+*.log
+*.pot
+*.pyc
+*.pyo
+
+# Ignore static and media files if generated
+/static/
+/media/
