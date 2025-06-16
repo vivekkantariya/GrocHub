@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +29,6 @@ SECRET_KEY = 'django-insecure-&jocc*f(2kb2zmn-c!=pg7ua*(-om&rox@r=jca@&4n7^w14x1
 DEBUG = True
 
 AUTH_USER_MODEL = "System.CustomUser"  # Change based on your app name
-
 
 ALLOWED_HOSTS = ["*"]
 
@@ -59,12 +60,11 @@ MIDDLEWARE = [
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'grochubbusiness@gmail.com'
-EMAIL_HOST_PASSWORD = 'cocm thxn vhet hfmr'
-EMAIL_DEBUG = True 
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 
 ROOT_URLCONF = 'Grocerry_Management.urls'
 
